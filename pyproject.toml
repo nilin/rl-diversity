@@ -1,0 +1,43 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "diversity-muon"
+version = "0.1.0"
+description = "Cheap Maze RLVR experiments for testing Muon against AdamW diversity collapse."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "accelerate>=1.8",
+  "datasets>=3.6",
+  "numpy>=1.26",
+  "torch>=2.9",
+  "transformers>=4.52",
+  "trl>=1.4",
+  "wandb>=0.19",
+  "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0",
+  "ruff>=0.11",
+]
+vllm = [
+  "vllm>=0.9",
+]
+
+[project.scripts]
+diversity-train = "diversity_muon.train_grpo:main"
+diversity-eval = "diversity_muon.eval_diversity:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/diversity_muon"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
