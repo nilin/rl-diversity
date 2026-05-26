@@ -1,0 +1,478 @@
+Running AdamW Multi-RLVR 30-step run
+The following values were not passed to `accelerate launch` and had defaults used instead:
+	`--num_processes` was set to a value of `1`
+	`--num_machines` was set to a value of `1`
+	`--mixed_precision` was set to a value of `'no'`
+	`--dynamo_backend` was set to a value of `'no'`
+To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
+`torch_dtype` is deprecated! Use `dtype` instead!
+Map:   0%|          | 0/128 [00:00<?, ? examples/s]Map: 100%|██████████| 128/128 [00:00<00:00, 4071.86 examples/s]
+Map:   0%|          | 0/32 [00:00<?, ? examples/s]Map: 100%|██████████| 32/32 [00:00<00:00, 4104.14 examples/s]
+The tokenizer has new PAD/BOS/EOS tokens that differ from the model config and generation config. The model config and generation config were aligned accordingly, being updated with the tokenizer's values. Updated tokens: {'bos_token_id': None, 'pad_token_id': 151643}.
+`generation_config` default values have been modified to match model-specific defaults: {'temperature': 0.6, 'top_p': 0.95}. If this is not desired, please set these values explicitly.
+{'loss': -0.0463, 'grad_norm': 14.625, 'learning_rate': 1e-06, 'num_tokens': 7306.0, 'completions/mean_length': 59.625, 'completions/min_length': 55.0, 'completions/max_length': 107.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 59.625, 'completions/min_terminated_length': 55.0, 'completions/max_terminated_length': 107.0, 'rewards/maze_multirlvr_reward/mean': 0.17812499403953552, 'rewards/maze_multirlvr_reward/std': 0.3188357651233673, 'reward': 0.17812499403953552, 'reward_std': 0.3299563527107239, 'frac_reward_zero_std': 0.0, 'kl': 0.0007587621294078417, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.015625}
+{'loss': 0.009, 'grad_norm': 13.625, 'learning_rate': 1e-06, 'num_tokens': 14542.0, 'completions/mean_length': 56.25, 'completions/min_length': 49.0, 'completions/max_length': 59.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 56.25, 'completions/min_terminated_length': 49.0, 'completions/max_terminated_length': 59.0, 'rewards/maze_multirlvr_reward/mean': 0.1770833432674408, 'rewards/maze_multirlvr_reward/std': 0.2932496666908264, 'reward': 0.1770833432674408, 'reward_std': 0.2995794415473938, 'frac_reward_zero_std': 0.0, 'kl': 0.0006648132402915508, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.03125}
+{'loss': 0.0, 'grad_norm': 0.0029144287109375, 'learning_rate': 1e-06, 'num_tokens': 21852.0, 'completions/mean_length': 60.875, 'completions/min_length': 50.0, 'completions/max_length': 147.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 60.875, 'completions/min_terminated_length': 50.0, 'completions/max_terminated_length': 147.0, 'rewards/maze_multirlvr_reward/mean': 0.0, 'rewards/maze_multirlvr_reward/std': 0.0, 'reward': 0.0, 'reward_std': 0.0, 'frac_reward_zero_std': 1.0, 'kl': 0.0009287099383072928, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.046875}
+{'loss': -0.0812, 'grad_norm': 6.5, 'learning_rate': 1e-06, 'num_tokens': 29128.0, 'completions/mean_length': 60.25, 'completions/min_length': 48.0, 'completions/max_length': 117.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 60.25, 'completions/min_terminated_length': 48.0, 'completions/max_terminated_length': 117.0, 'rewards/maze_multirlvr_reward/mean': 0.0859375, 'rewards/maze_multirlvr_reward/std': 0.2348259687423706, 'reward': 0.0859375, 'reward_std': 0.15912532806396484, 'frac_reward_zero_std': 0.5, 'kl': 0.0010278412082698196, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.0625}
+{'loss': 0.0027, 'grad_norm': 6.96875, 'learning_rate': 1e-06, 'num_tokens': 36360.0, 'completions/mean_length': 56.0, 'completions/min_length': 51.0, 'completions/max_length': 61.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 56.0, 'completions/min_terminated_length': 51.0, 'completions/max_terminated_length': 61.0, 'rewards/maze_multirlvr_reward/mean': 0.28125, 'rewards/maze_multirlvr_reward/std': 0.375, 'reward': 0.28125, 'reward_std': 0.1735912710428238, 'frac_reward_zero_std': 0.5, 'kl': 0.0010834338318090886, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.078125}
+{'loss': 0.0076, 'grad_norm': 7.40625, 'learning_rate': 1e-06, 'num_tokens': 43576.0, 'completions/mean_length': 55.5, 'completions/min_length': 49.0, 'completions/max_length': 59.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 55.5, 'completions/min_terminated_length': 49.0, 'completions/max_terminated_length': 59.0, 'rewards/maze_multirlvr_reward/mean': 0.2604166865348816, 'rewards/maze_multirlvr_reward/std': 0.356000155210495, 'reward': 0.2604166865348816, 'reward_std': 0.17070989310741425, 'frac_reward_zero_std': 0.5, 'kl': 0.0016454289725515991, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.09375}
+{'loss': -0.0008, 'grad_norm': 7.25, 'learning_rate': 1e-06, 'num_tokens': 50797.0, 'completions/mean_length': 55.8125, 'completions/min_length': 51.0, 'completions/max_length': 60.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 55.8125, 'completions/min_terminated_length': 51.0, 'completions/max_terminated_length': 60.0, 'rewards/maze_multirlvr_reward/mean': 0.13124999403953552, 'rewards/maze_multirlvr_reward/std': 0.2821790277957916, 'reward': 0.13124999403953552, 'reward_std': 0.18114221096038818, 'frac_reward_zero_std': 0.5, 'kl': 0.001320662908256054, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.109375}
+{'loss': 0.0098, 'grad_norm': 7.9375, 'learning_rate': 1e-06, 'num_tokens': 58041.0, 'completions/mean_length': 56.75, 'completions/min_length': 55.0, 'completions/max_length': 61.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 56.75, 'completions/min_terminated_length': 55.0, 'completions/max_terminated_length': 61.0, 'rewards/maze_multirlvr_reward/mean': 0.2760416865348816, 'rewards/maze_multirlvr_reward/std': 0.36857929825782776, 'reward': 0.2760416865348816, 'reward_std': 0.17098207771778107, 'frac_reward_zero_std': 0.5, 'kl': 0.002089191199047491, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.125}
+{'loss': 0.0859, 'grad_norm': 8.3125, 'learning_rate': 1e-06, 'num_tokens': 65495.0, 'completions/mean_length': 70.375, 'completions/min_length': 55.0, 'completions/max_length': 169.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 70.375, 'completions/min_terminated_length': 55.0, 'completions/max_terminated_length': 169.0, 'rewards/maze_multirlvr_reward/mean': 0.21875, 'rewards/maze_multirlvr_reward/std': 0.335099458694458, 'reward': 0.21875, 'reward_std': 0.18114221096038818, 'frac_reward_zero_std': 0.5, 'kl': 0.0018936394189950079, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.140625}
+{'loss': 0.0, 'grad_norm': 0.005096435546875, 'learning_rate': 1e-06, 'num_tokens': 72757.0, 'completions/mean_length': 57.375, 'completions/min_length': 50.0, 'completions/max_length': 92.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 57.375, 'completions/min_terminated_length': 50.0, 'completions/max_terminated_length': 92.0, 'rewards/maze_multirlvr_reward/mean': 0.0, 'rewards/maze_multirlvr_reward/std': 0.0, 'reward': 0.0, 'reward_std': 0.0, 'frac_reward_zero_std': 1.0, 'kl': 0.0024043043958954513, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.15625}
+{'loss': -0.0043, 'grad_norm': 7.84375, 'learning_rate': 1e-06, 'num_tokens': 80107.0, 'completions/mean_length': 62.875, 'completions/min_length': 49.0, 'completions/max_length': 114.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 62.875, 'completions/min_terminated_length': 49.0, 'completions/max_terminated_length': 114.0, 'rewards/maze_multirlvr_reward/mean': 0.17499999701976776, 'rewards/maze_multirlvr_reward/std': 0.3130494952201843, 'reward': 0.17499999701976776, 'reward_std': 0.18708285689353943, 'frac_reward_zero_std': 0.5, 'kl': 0.0036268160911276937, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.171875}
+{'loss': -0.0005, 'grad_norm': 6.0625, 'learning_rate': 1e-06, 'num_tokens': 87328.0, 'completions/mean_length': 55.3125, 'completions/min_length': 55.0, 'completions/max_length': 56.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 55.3125, 'completions/min_terminated_length': 55.0, 'completions/max_terminated_length': 56.0, 'rewards/maze_multirlvr_reward/mean': 0.25, 'rewards/maze_multirlvr_reward/std': 0.3333333432674408, 'reward': 0.25, 'reward_std': 0.15430335700511932, 'frac_reward_zero_std': 0.5, 'kl': 0.0031729156034998596, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.1875}
+{'loss': 0.0, 'grad_norm': 0.0037994384765625, 'learning_rate': 1e-06, 'num_tokens': 94534.0, 'completions/mean_length': 55.375, 'completions/min_length': 55.0, 'completions/max_length': 58.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 55.375, 'completions/min_terminated_length': 55.0, 'completions/max_terminated_length': 58.0, 'rewards/maze_multirlvr_reward/mean': 0.375, 'rewards/maze_multirlvr_reward/std': 0.3872983455657959, 'reward': 0.375, 'reward_std': 0.0, 'frac_reward_zero_std': 1.0, 'kl': 0.0023833966988604516, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.203125}
+{'loss': 0.0, 'grad_norm': 0.00762939453125, 'learning_rate': 1e-06, 'num_tokens': 101767.0, 'completions/mean_length': 56.0625, 'completions/min_length': 55.0, 'completions/max_length': 59.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 56.0625, 'completions/min_terminated_length': 55.0, 'completions/max_terminated_length': 59.0, 'rewards/maze_multirlvr_reward/mean': 0.0, 'rewards/maze_multirlvr_reward/std': 0.0, 'reward': 0.0, 'reward_std': 0.0, 'frac_reward_zero_std': 1.0, 'kl': 0.0037682504625990987, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.21875}
+{'loss': 0.0, 'grad_norm': 0.004364013671875, 'learning_rate': 1e-06, 'num_tokens': 108998.0, 'completions/mean_length': 55.9375, 'completions/min_length': 55.0, 'completions/max_length': 64.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 55.9375, 'completions/min_terminated_length': 55.0, 'completions/max_terminated_length': 64.0, 'rewards/maze_multirlvr_reward/mean': 0.0, 'rewards/maze_multirlvr_reward/std': 0.0, 'reward': 0.0, 'reward_std': 0.0, 'frac_reward_zero_std': 1.0, 'kl': 0.0031790933571755886, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.234375}
+{'loss': 0.0, 'grad_norm': 0.00689697265625, 'learning_rate': 1e-06, 'num_tokens': 116543.0, 'completions/mean_length': 75.0625, 'completions/min_length': 55.0, 'completions/max_length': 214.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 75.0625, 'completions/min_terminated_length': 55.0, 'completions/max_terminated_length': 214.0, 'rewards/maze_multirlvr_reward/mean': 0.0, 'rewards/maze_multirlvr_reward/std': 0.0, 'reward': 0.0, 'reward_std': 0.0, 'frac_reward_zero_std': 1.0, 'kl': 0.003993536112830043, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.25}
+{'loss': -0.0394, 'grad_norm': 7.78125, 'learning_rate': 1e-06, 'num_tokens': 123808.0, 'completions/mean_length': 58.0625, 'completions/min_length': 49.0, 'completions/max_length': 103.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 58.0625, 'completions/min_terminated_length': 49.0, 'completions/max_terminated_length': 103.0, 'rewards/maze_multirlvr_reward/mean': 0.1875, 'rewards/maze_multirlvr_reward/std': 0.3354102075099945, 'reward': 0.1875, 'reward_std': 0.20044593513011932, 'frac_reward_zero_std': 0.5, 'kl': 0.0038486970588564873, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.265625}
+{'loss': 0.0674, 'grad_norm': 7.15625, 'learning_rate': 1e-06, 'num_tokens': 131263.0, 'completions/mean_length': 69.4375, 'completions/min_length': 55.0, 'completions/max_length': 145.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 69.4375, 'completions/min_terminated_length': 55.0, 'completions/max_terminated_length': 145.0, 'rewards/maze_multirlvr_reward/mean': 0.5677083730697632, 'rewards/maze_multirlvr_reward/std': 0.2841797173023224, 'reward': 0.5677083730697632, 'reward_std': 0.19408094882965088, 'frac_reward_zero_std': 0.5, 'kl': 0.008454525144770741, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.28125}
+{'loss': -0.0098, 'grad_norm': 13.0, 'learning_rate': 1e-06, 'num_tokens': 138489.0, 'completions/mean_length': 55.125, 'completions/min_length': 52.0, 'completions/max_length': 60.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 55.125, 'completions/min_terminated_length': 52.0, 'completions/max_terminated_length': 60.0, 'rewards/maze_multirlvr_reward/mean': 0.5437500476837158, 'rewards/maze_multirlvr_reward/std': 0.32499998807907104, 'reward': 0.543749988079071, 'reward_std': 0.3356097936630249, 'frac_reward_zero_std': 0.0, 'kl': 0.003913773980457336, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.296875}
+{'loss': -0.0696, 'grad_norm': 10.5625, 'learning_rate': 1e-06, 'num_tokens': 145805.0, 'completions/mean_length': 61.75, 'completions/min_length': 52.0, 'completions/max_length': 113.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 61.75, 'completions/min_terminated_length': 52.0, 'completions/max_terminated_length': 113.0, 'rewards/maze_multirlvr_reward/mean': 0.5979166626930237, 'rewards/maze_multirlvr_reward/std': 0.23395749926567078, 'reward': 0.5979166626930237, 'reward_std': 0.2415948212146759, 'frac_reward_zero_std': 0.0, 'kl': 0.004509489692281932, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.3125}
+{'loss': -0.0511, 'grad_norm': 13.5, 'learning_rate': 1e-06, 'num_tokens': 153374.0, 'completions/mean_length': 77.0625, 'completions/min_length': 48.0, 'completions/max_length': 224.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 77.0625, 'completions/min_terminated_length': 48.0, 'completions/max_terminated_length': 224.0, 'rewards/maze_multirlvr_reward/mean': 0.45000001788139343, 'rewards/maze_multirlvr_reward/std': 0.36055511236190796, 'reward': 0.44999998807907104, 'reward_std': 0.36246442794799805, 'frac_reward_zero_std': 0.0, 'kl': 0.005428632837720215, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.328125}
+{'loss': 0.1125, 'grad_norm': 10.8125, 'learning_rate': 1e-06, 'num_tokens': 160782.0, 'completions/mean_length': 67.5, 'completions/min_length': 49.0, 'completions/max_length': 199.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 67.5, 'completions/min_terminated_length': 49.0, 'completions/max_terminated_length': 199.0, 'rewards/maze_multirlvr_reward/mean': 0.5249999761581421, 'rewards/maze_multirlvr_reward/std': 0.3130495250225067, 'reward': 0.5249999761581421, 'reward_std': 0.3048858940601349, 'frac_reward_zero_std': 0.0, 'kl': 0.003970698278862983, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.34375}
+{'loss': 0.0169, 'grad_norm': 6.0625, 'learning_rate': 1e-06, 'num_tokens': 168062.0, 'completions/mean_length': 59.5, 'completions/min_length': 55.0, 'completions/max_length': 116.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 59.5, 'completions/min_terminated_length': 55.0, 'completions/max_terminated_length': 116.0, 'rewards/maze_multirlvr_reward/mean': 0.17499999701976776, 'rewards/maze_multirlvr_reward/std': 0.3130494952201843, 'reward': 0.17499999701976776, 'reward_std': 0.18708287179470062, 'frac_reward_zero_std': 0.5, 'kl': 0.007049031148198992, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.359375}
+{'loss': 0.0102, 'grad_norm': 4.03125, 'learning_rate': 1e-06, 'num_tokens': 175343.0, 'completions/mean_length': 58.5625, 'completions/min_length': 50.0, 'completions/max_length': 110.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 58.5625, 'completions/min_terminated_length': 50.0, 'completions/max_terminated_length': 110.0, 'rewards/maze_multirlvr_reward/mean': 0.37187498807907104, 'rewards/maze_multirlvr_reward/std': 0.3842606544494629, 'reward': 0.37187498807907104, 'reward_std': 0.008838832378387451, 'frac_reward_zero_std': 0.5, 'kl': 0.0055003834422677755, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.375}
+{'loss': 0.0, 'grad_norm': 0.004974365234375, 'learning_rate': 1e-06, 'num_tokens': 182609.0, 'completions/mean_length': 58.125, 'completions/min_length': 55.0, 'completions/max_length': 101.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 58.125, 'completions/min_terminated_length': 55.0, 'completions/max_terminated_length': 101.0, 'rewards/maze_multirlvr_reward/mean': 0.0, 'rewards/maze_multirlvr_reward/std': 0.0, 'reward': 0.0, 'reward_std': 0.0, 'frac_reward_zero_std': 1.0, 'kl': 0.004696973483078182, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.390625}
+{'loss': 0.1209, 'grad_norm': 6.84375, 'learning_rate': 1e-06, 'num_tokens': 189990.0, 'completions/mean_length': 65.3125, 'completions/min_length': 55.0, 'completions/max_length': 145.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 65.3125, 'completions/min_terminated_length': 55.0, 'completions/max_terminated_length': 145.0, 'rewards/maze_multirlvr_reward/mean': 0.328125, 'rewards/maze_multirlvr_reward/std': 0.3842606544494629, 'reward': 0.328125, 'reward_std': 0.13258251547813416, 'frac_reward_zero_std': 0.5, 'kl': 0.009413116960786283, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.40625}
+{'loss': 0.0128, 'grad_norm': 10.0, 'learning_rate': 1e-06, 'num_tokens': 197344.0, 'completions/mean_length': 64.625, 'completions/min_length': 45.0, 'completions/max_length': 136.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 64.625, 'completions/min_terminated_length': 45.0, 'completions/max_terminated_length': 136.0, 'rewards/maze_multirlvr_reward/mean': 0.5640625357627869, 'rewards/maze_multirlvr_reward/std': 0.2799134850502014, 'reward': 0.5640624761581421, 'reward_std': 0.28286901116371155, 'frac_reward_zero_std': 0.0, 'kl': 0.0054523778962902725, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.421875}
+{'loss': -0.0842, 'grad_norm': 5.4375, 'learning_rate': 1e-06, 'num_tokens': 204712.0, 'completions/mean_length': 65.5, 'completions/min_length': 48.0, 'completions/max_length': 228.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 65.5, 'completions/min_terminated_length': 48.0, 'completions/max_terminated_length': 228.0, 'rewards/maze_multirlvr_reward/mean': 0.5958333015441895, 'rewards/maze_multirlvr_reward/std': 0.23313485085964203, 'reward': 0.5958333015441895, 'reward_std': 0.16201850771903992, 'frac_reward_zero_std': 0.5, 'kl': 0.005134819890372455, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.4375}
+{'loss': -0.0134, 'grad_norm': 5.65625, 'learning_rate': 1e-06, 'num_tokens': 211932.0, 'completions/mean_length': 54.75, 'completions/min_length': 49.0, 'completions/max_length': 57.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 54.75, 'completions/min_terminated_length': 49.0, 'completions/max_terminated_length': 57.0, 'rewards/maze_multirlvr_reward/mean': 0.2916666865348816, 'rewards/maze_multirlvr_reward/std': 0.3415650427341461, 'reward': 0.2916666865348816, 'reward_std': 0.1178511381149292, 'frac_reward_zero_std': 0.5, 'kl': 0.006315026083029807, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.453125}
+{'loss': 0.0057, 'grad_norm': 6.625, 'learning_rate': 1e-06, 'num_tokens': 219155.0, 'completions/mean_length': 54.9375, 'completions/min_length': 50.0, 'completions/max_length': 58.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 54.9375, 'completions/min_terminated_length': 50.0, 'completions/max_terminated_length': 58.0, 'rewards/maze_multirlvr_reward/mean': 0.26249998807907104, 'rewards/maze_multirlvr_reward/std': 0.3499999940395355, 'reward': 0.26249998807907104, 'reward_std': 0.16201850771903992, 'frac_reward_zero_std': 0.5, 'kl': 0.009343624114990234, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.46875}
+{'train_runtime': 315.4561, 'train_samples_per_second': 1.522, 'train_steps_per_second': 0.095, 'train_loss': 0.0020245051932647586, 'epoch': 0.46875}
+Running Muon Multi-RLVR 30-step run
+The following values were not passed to `accelerate launch` and had defaults used instead:
+	`--num_processes` was set to a value of `1`
+	`--num_machines` was set to a value of `1`
+	`--mixed_precision` was set to a value of `'no'`
+	`--dynamo_backend` was set to a value of `'no'`
+To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
+`torch_dtype` is deprecated! Use `dtype` instead!
+Map:   0%|          | 0/128 [00:00<?, ? examples/s]Map: 100%|██████████| 128/128 [00:00<00:00, 4169.97 examples/s]
+Map:   0%|          | 0/32 [00:00<?, ? examples/s]Map: 100%|██████████| 32/32 [00:00<00:00, 4820.69 examples/s]
+The tokenizer has new PAD/BOS/EOS tokens that differ from the model config and generation config. The model config and generation config were aligned accordingly, being updated with the tokenizer's values. Updated tokens: {'bos_token_id': None, 'pad_token_id': 151643}.
+`generation_config` default values have been modified to match model-specific defaults: {'temperature': 0.6, 'top_p': 0.95}. If this is not desired, please set these values explicitly.
+{'loss': -0.0913, 'grad_norm': 13.6875, 'learning_rate': 1e-06, 'num_tokens': 7304.0, 'completions/mean_length': 59.5, 'completions/min_length': 55.0, 'completions/max_length': 107.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 59.5, 'completions/min_terminated_length': 55.0, 'completions/max_terminated_length': 107.0, 'rewards/maze_multirlvr_reward/mean': 0.13437500596046448, 'rewards/maze_multirlvr_reward/std': 0.28908979892730713, 'reward': 0.13437500596046448, 'reward_std': 0.2946010231971741, 'frac_reward_zero_std': 0.0, 'kl': 0.00076499734132085, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.015625}
+{'loss': 0.0091, 'grad_norm': 18.0, 'learning_rate': 1e-06, 'num_tokens': 14540.0, 'completions/mean_length': 56.25, 'completions/min_length': 49.0, 'completions/max_length': 60.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 56.25, 'completions/min_terminated_length': 49.0, 'completions/max_terminated_length': 60.0, 'rewards/maze_multirlvr_reward/mean': 0.203125, 'rewards/maze_multirlvr_reward/std': 0.32484862208366394, 'reward': 0.203125, 'reward_std': 0.3180849254131317, 'frac_reward_zero_std': 0.0, 'kl': 0.0005221998653723858, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.03125}
+{'loss': -0.1259, 'grad_norm': 9.75, 'learning_rate': 1e-06, 'num_tokens': 21857.0, 'completions/mean_length': 61.3125, 'completions/min_length': 54.0, 'completions/max_length': 129.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 61.3125, 'completions/min_terminated_length': 54.0, 'completions/max_terminated_length': 129.0, 'rewards/maze_multirlvr_reward/mean': 0.0885416716337204, 'rewards/maze_multirlvr_reward/std': 0.2424197942018509, 'reward': 0.0885416716337204, 'reward_std': 0.25043365359306335, 'frac_reward_zero_std': 0.0, 'kl': 0.0003709974917001091, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.046875}
+{'loss': 0.0632, 'grad_norm': 5.1875, 'learning_rate': 1e-06, 'num_tokens': 29259.0, 'completions/mean_length': 68.125, 'completions/min_length': 55.0, 'completions/max_length': 165.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 68.125, 'completions/min_terminated_length': 55.0, 'completions/max_terminated_length': 165.0, 'rewards/maze_multirlvr_reward/mean': 0.14947916567325592, 'rewards/maze_multirlvr_reward/std': 0.2774590253829956, 'reward': 0.14947916567325592, 'reward_std': 0.1687398999929428, 'frac_reward_zero_std': 0.5, 'kl': 0.0004156709328526631, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.0625}
+{'loss': 0.0128, 'grad_norm': 8.1875, 'learning_rate': 1e-06, 'num_tokens': 36516.0, 'completions/mean_length': 57.5625, 'completions/min_length': 51.0, 'completions/max_length': 61.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 57.5625, 'completions/min_terminated_length': 51.0, 'completions/max_terminated_length': 61.0, 'rewards/maze_multirlvr_reward/mean': 0.15703125298023224, 'rewards/maze_multirlvr_reward/std': 0.296436071395874, 'reward': 0.15703125298023224, 'reward_std': 0.18161717057228088, 'frac_reward_zero_std': 0.5, 'kl': 0.0005054439243394881, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.078125}
+{'loss': 0.0009, 'grad_norm': 7.65625, 'learning_rate': 1e-06, 'num_tokens': 43742.0, 'completions/mean_length': 56.125, 'completions/min_length': 49.0, 'completions/max_length': 60.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 56.125, 'completions/min_terminated_length': 49.0, 'completions/max_terminated_length': 60.0, 'rewards/maze_multirlvr_reward/mean': 0.1875, 'rewards/maze_multirlvr_reward/std': 0.3354102075099945, 'reward': 0.1875, 'reward_std': 0.20044593513011932, 'frac_reward_zero_std': 0.5, 'kl': 0.000338722464221064, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.09375}
+{'loss': -0.067, 'grad_norm': 6.125, 'learning_rate': 1e-06, 'num_tokens': 51009.0, 'completions/mean_length': 58.6875, 'completions/min_length': 47.0, 'completions/max_length': 116.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 58.6875, 'completions/min_terminated_length': 47.0, 'completions/max_terminated_length': 116.0, 'rewards/maze_multirlvr_reward/mean': 0.13046875596046448, 'rewards/maze_multirlvr_reward/std': 0.2805117666721344, 'reward': 0.13046875596046448, 'reward_std': 0.1800743043422699, 'frac_reward_zero_std': 0.5, 'kl': 0.00035595618828665465, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.109375}
+{'loss': -0.0097, 'grad_norm': 6.90625, 'learning_rate': 1e-06, 'num_tokens': 58241.0, 'completions/mean_length': 56.0, 'completions/min_length': 50.0, 'completions/max_length': 62.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 56.0, 'completions/min_terminated_length': 50.0, 'completions/max_terminated_length': 62.0, 'rewards/maze_multirlvr_reward/mean': 0.046875, 'rewards/maze_multirlvr_reward/std': 0.1875, 'reward': 0.046875, 'reward_std': 0.13258251547813416, 'frac_reward_zero_std': 0.5, 'kl': 0.0004848159878747538, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.125}
+{'loss': -0.0246, 'grad_norm': 9.3125, 'learning_rate': 1e-06, 'num_tokens': 65545.0, 'completions/mean_length': 61.0, 'completions/min_length': 55.0, 'completions/max_length': 114.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 61.0, 'completions/min_terminated_length': 55.0, 'completions/max_terminated_length': 114.0, 'rewards/maze_multirlvr_reward/mean': 0.21875, 'rewards/maze_multirlvr_reward/std': 0.335099458694458, 'reward': 0.21875, 'reward_std': 0.18114221096038818, 'frac_reward_zero_std': 0.5, 'kl': 0.0003741290820471477, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.140625}
+{'loss': 0.0, 'grad_norm': 0.00067901611328125, 'learning_rate': 1e-06, 'num_tokens': 72795.0, 'completions/mean_length': 56.625, 'completions/min_length': 55.0, 'completions/max_length': 59.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 56.625, 'completions/min_terminated_length': 55.0, 'completions/max_terminated_length': 59.0, 'rewards/maze_multirlvr_reward/mean': 0.0, 'rewards/maze_multirlvr_reward/std': 0.0, 'reward': 0.0, 'reward_std': 0.0, 'frac_reward_zero_std': 1.0, 'kl': 0.000361700433131773, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.15625}
+{'loss': 0.0022, 'grad_norm': 9.125, 'learning_rate': 1e-06, 'num_tokens': 80033.0, 'completions/mean_length': 55.875, 'completions/min_length': 50.0, 'completions/max_length': 59.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 55.875, 'completions/min_terminated_length': 50.0, 'completions/max_terminated_length': 59.0, 'rewards/maze_multirlvr_reward/mean': 0.13124999403953552, 'rewards/maze_multirlvr_reward/std': 0.2821790277957916, 'reward': 0.13124999403953552, 'reward_std': 0.18114221096038818, 'frac_reward_zero_std': 0.5, 'kl': 0.0004992184331058525, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.171875}
+{'loss': 0.0084, 'grad_norm': 8.125, 'learning_rate': 1e-06, 'num_tokens': 87265.0, 'completions/mean_length': 56.0, 'completions/min_length': 49.0, 'completions/max_length': 61.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 56.0, 'completions/min_terminated_length': 49.0, 'completions/max_terminated_length': 61.0, 'rewards/maze_multirlvr_reward/mean': 0.1145833432674408, 'rewards/maze_multirlvr_reward/std': 0.24883991479873657, 'reward': 0.1145833432674408, 'reward_std': 0.1602174937725067, 'frac_reward_zero_std': 0.5, 'kl': 0.0004893356090178713, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.1875}
+{'loss': 0.0057, 'grad_norm': 9.5, 'learning_rate': 1e-06, 'num_tokens': 94480.0, 'completions/mean_length': 55.9375, 'completions/min_length': 50.0, 'completions/max_length': 60.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 55.9375, 'completions/min_terminated_length': 50.0, 'completions/max_terminated_length': 60.0, 'rewards/maze_multirlvr_reward/mean': 0.140625, 'rewards/maze_multirlvr_reward/std': 0.30233466625213623, 'reward': 0.140625, 'reward_std': 0.19408094882965088, 'frac_reward_zero_std': 0.5, 'kl': 0.0004488981212489307, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.203125}
+{'loss': 0.0, 'grad_norm': 0.003265380859375, 'learning_rate': 1e-06, 'num_tokens': 101696.0, 'completions/mean_length': 55.0, 'completions/min_length': 48.0, 'completions/max_length': 61.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 55.0, 'completions/min_terminated_length': 48.0, 'completions/max_terminated_length': 61.0, 'rewards/maze_multirlvr_reward/mean': 0.0, 'rewards/maze_multirlvr_reward/std': 0.0, 'reward': 0.0, 'reward_std': 0.0, 'frac_reward_zero_std': 1.0, 'kl': 0.0008952588977990672, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.21875}
+{'loss': 0.0, 'grad_norm': 0.00128173828125, 'learning_rate': 1e-06, 'num_tokens': 108928.0, 'completions/mean_length': 56.0, 'completions/min_length': 54.0, 'completions/max_length': 58.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 56.0, 'completions/min_terminated_length': 54.0, 'completions/max_terminated_length': 58.0, 'rewards/maze_multirlvr_reward/mean': 0.0, 'rewards/maze_multirlvr_reward/std': 0.0, 'reward': 0.0, 'reward_std': 0.0, 'frac_reward_zero_std': 1.0, 'kl': 0.00036953071685275063, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.234375}
+{'loss': 0.0, 'grad_norm': 0.00146484375, 'learning_rate': 1e-06, 'num_tokens': 116171.0, 'completions/mean_length': 56.1875, 'completions/min_length': 49.0, 'completions/max_length': 59.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 56.1875, 'completions/min_terminated_length': 49.0, 'completions/max_terminated_length': 59.0, 'rewards/maze_multirlvr_reward/mean': 0.0, 'rewards/maze_multirlvr_reward/std': 0.0, 'reward': 0.0, 'reward_std': 0.0, 'frac_reward_zero_std': 1.0, 'kl': 0.0006402913786587305, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.25}
+{'loss': 0.0634, 'grad_norm': 4.1875, 'learning_rate': 1e-06, 'num_tokens': 123512.0, 'completions/mean_length': 62.8125, 'completions/min_length': 55.0, 'completions/max_length': 145.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 62.8125, 'completions/min_terminated_length': 55.0, 'completions/max_terminated_length': 145.0, 'rewards/maze_multirlvr_reward/mean': 0.0833333358168602, 'rewards/maze_multirlvr_reward/std': 0.2277100384235382, 'reward': 0.0833333358168602, 'reward_std': 0.15430335700511932, 'frac_reward_zero_std': 0.5, 'kl': 0.00043641063530230895, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.265625}
+{'loss': -0.0475, 'grad_norm': 17.25, 'learning_rate': 1e-06, 'num_tokens': 130838.0, 'completions/mean_length': 61.375, 'completions/min_length': 54.0, 'completions/max_length': 143.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 61.375, 'completions/min_terminated_length': 54.0, 'completions/max_terminated_length': 143.0, 'rewards/maze_multirlvr_reward/mean': 0.3125, 'rewards/maze_multirlvr_reward/std': 0.3670452833175659, 'reward': 0.3125, 'reward_std': 0.3729623556137085, 'frac_reward_zero_std': 0.0, 'kl': 0.0005851190799148753, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.28125}
+{'loss': 0.0047, 'grad_norm': 7.625, 'learning_rate': 1e-06, 'num_tokens': 138091.0, 'completions/mean_length': 56.8125, 'completions/min_length': 55.0, 'completions/max_length': 60.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 56.8125, 'completions/min_terminated_length': 55.0, 'completions/max_terminated_length': 60.0, 'rewards/maze_multirlvr_reward/mean': 0.07109375298023224, 'rewards/maze_multirlvr_reward/std': 0.20008951425552368, 'reward': 0.07109375298023224, 'reward_std': 0.2010834813117981, 'frac_reward_zero_std': 0.0, 'kl': 0.0006138593453215435, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.296875}
+{'loss': 0.0021, 'grad_norm': 13.1875, 'learning_rate': 1e-06, 'num_tokens': 145403.0, 'completions/mean_length': 61.5, 'completions/min_length': 55.0, 'completions/max_length': 131.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 61.5, 'completions/min_terminated_length': 55.0, 'completions/max_terminated_length': 131.0, 'rewards/maze_multirlvr_reward/mean': 0.25208333134651184, 'rewards/maze_multirlvr_reward/std': 0.3362029194831848, 'reward': 0.25208333134651184, 'reward_std': 0.2962600588798523, 'frac_reward_zero_std': 0.0, 'kl': 0.00040340459236176684, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.3125}
+{'loss': 0.0046, 'grad_norm': 8.8125, 'learning_rate': 1e-06, 'num_tokens': 152643.0, 'completions/mean_length': 56.5, 'completions/min_length': 47.0, 'completions/max_length': 60.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 56.5, 'completions/min_terminated_length': 47.0, 'completions/max_terminated_length': 60.0, 'rewards/maze_multirlvr_reward/mean': 0.17604167759418488, 'rewards/maze_multirlvr_reward/std': 0.31528759002685547, 'reward': 0.17604166269302368, 'reward_std': 0.31092363595962524, 'frac_reward_zero_std': 0.0, 'kl': 0.0012169469482614659, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.328125}
+{'loss': 0.0233, 'grad_norm': 9.0, 'learning_rate': 1e-06, 'num_tokens': 160019.0, 'completions/mean_length': 65.5, 'completions/min_length': 49.0, 'completions/max_length': 148.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 65.5, 'completions/min_terminated_length': 49.0, 'completions/max_terminated_length': 148.0, 'rewards/maze_multirlvr_reward/mean': 0.17135417461395264, 'rewards/maze_multirlvr_reward/std': 0.3065899610519409, 'reward': 0.17135417461395264, 'reward_std': 0.3173489570617676, 'frac_reward_zero_std': 0.0, 'kl': 0.00047358493611682206, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.34375}
+{'loss': 0.0021, 'grad_norm': 10.0, 'learning_rate': 1e-06, 'num_tokens': 167253.0, 'completions/mean_length': 56.625, 'completions/min_length': 51.0, 'completions/max_length': 60.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 56.625, 'completions/min_terminated_length': 51.0, 'completions/max_terminated_length': 60.0, 'rewards/maze_multirlvr_reward/mean': 0.13124999403953552, 'rewards/maze_multirlvr_reward/std': 0.2821790277957916, 'reward': 0.13124999403953552, 'reward_std': 0.18114221096038818, 'frac_reward_zero_std': 0.5, 'kl': 0.0007523622407461517, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.359375}
+{'loss': 0.0127, 'grad_norm': 6.96875, 'learning_rate': 1e-06, 'num_tokens': 174490.0, 'completions/mean_length': 55.8125, 'completions/min_length': 48.0, 'completions/max_length': 60.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 55.8125, 'completions/min_terminated_length': 48.0, 'completions/max_terminated_length': 60.0, 'rewards/maze_multirlvr_reward/mean': 0.140625, 'rewards/maze_multirlvr_reward/std': 0.30233466625213623, 'reward': 0.140625, 'reward_std': 0.19408094882965088, 'frac_reward_zero_std': 0.5, 'kl': 0.0005906423975829966, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.375}
+{'loss': 0.0, 'grad_norm': 0.002166748046875, 'learning_rate': 1e-06, 'num_tokens': 181720.0, 'completions/mean_length': 55.875, 'completions/min_length': 49.0, 'completions/max_length': 62.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 55.875, 'completions/min_terminated_length': 49.0, 'completions/max_terminated_length': 62.0, 'rewards/maze_multirlvr_reward/mean': 0.0, 'rewards/maze_multirlvr_reward/std': 0.0, 'reward': 0.0, 'reward_std': 0.0, 'frac_reward_zero_std': 1.0, 'kl': 0.0005364190437830985, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.390625}
+{'loss': 0.0022, 'grad_norm': 7.0625, 'learning_rate': 1e-06, 'num_tokens': 188959.0, 'completions/mean_length': 56.4375, 'completions/min_length': 55.0, 'completions/max_length': 60.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 56.4375, 'completions/min_terminated_length': 55.0, 'completions/max_terminated_length': 60.0, 'rewards/maze_multirlvr_reward/mean': 0.08984375, 'rewards/maze_multirlvr_reward/std': 0.24576491117477417, 'reward': 0.08984375, 'reward_std': 0.1665678173303604, 'frac_reward_zero_std': 0.5, 'kl': 0.00045471904741134495, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.40625}
+{'loss': 0.007, 'grad_norm': 7.25, 'learning_rate': 1e-06, 'num_tokens': 196184.0, 'completions/mean_length': 56.5625, 'completions/min_length': 51.0, 'completions/max_length': 61.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 56.5625, 'completions/min_terminated_length': 51.0, 'completions/max_terminated_length': 61.0, 'rewards/maze_multirlvr_reward/mean': 0.13046875596046448, 'rewards/maze_multirlvr_reward/std': 0.2805117666721344, 'reward': 0.13046875596046448, 'reward_std': 0.1800743043422699, 'frac_reward_zero_std': 0.5, 'kl': 0.0005982578441035002, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.421875}
+{'loss': -0.0094, 'grad_norm': 16.625, 'learning_rate': 1e-06, 'num_tokens': 203377.0, 'completions/mean_length': 54.5625, 'completions/min_length': 46.0, 'completions/max_length': 59.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 54.5625, 'completions/min_terminated_length': 46.0, 'completions/max_terminated_length': 59.0, 'rewards/maze_multirlvr_reward/mean': 0.27291667461395264, 'rewards/maze_multirlvr_reward/std': 0.3322691321372986, 'reward': 0.27291667461395264, 'reward_std': 0.3275952935218811, 'frac_reward_zero_std': 0.0, 'kl': 0.0004974027033313178, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.4375}
+{'loss': 0.0066, 'grad_norm': 10.5625, 'learning_rate': 1e-06, 'num_tokens': 210629.0, 'completions/mean_length': 56.75, 'completions/min_length': 55.0, 'completions/max_length': 61.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 56.75, 'completions/min_terminated_length': 55.0, 'completions/max_terminated_length': 61.0, 'rewards/maze_multirlvr_reward/mean': 0.1666666716337204, 'rewards/maze_multirlvr_reward/std': 0.2981424033641815, 'reward': 0.1666666716337204, 'reward_std': 0.17817416787147522, 'frac_reward_zero_std': 0.5, 'kl': 0.00047024844388943166, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.453125}
+{'loss': 0.0265, 'grad_norm': 5.90625, 'learning_rate': 1e-06, 'num_tokens': 217906.0, 'completions/mean_length': 58.3125, 'completions/min_length': 48.0, 'completions/max_length': 96.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 58.3125, 'completions/min_terminated_length': 48.0, 'completions/max_terminated_length': 96.0, 'rewards/maze_multirlvr_reward/mean': 0.08749999850988388, 'rewards/maze_multirlvr_reward/std': 0.2390955090522766, 'reward': 0.08749999850988388, 'reward_std': 0.16201850771903992, 'frac_reward_zero_std': 0.5, 'kl': 0.0006436395924538374, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.46875}
+{'train_runtime': 214.0339, 'train_samples_per_second': 2.243, 'train_steps_per_second': 0.14, 'train_loss': -0.003932142043060101, 'epoch': 0.46875}
+Running AdamW VPO 30-step run
+The following values were not passed to `accelerate launch` and had defaults used instead:
+	`--num_processes` was set to a value of `1`
+	`--num_machines` was set to a value of `1`
+	`--mixed_precision` was set to a value of `'no'`
+	`--dynamo_backend` was set to a value of `'no'`
+To avoid this warning pass in values for each of the problematic parameters or run `accelerate config`.
+`torch_dtype` is deprecated! Use `dtype` instead!
+Map:   0%|          | 0/128 [00:00<?, ? examples/s]Map: 100%|██████████| 128/128 [00:00<00:00, 4403.83 examples/s]
+Map:   0%|          | 0/32 [00:00<?, ? examples/s]Map: 100%|██████████| 32/32 [00:00<00:00, 4826.59 examples/s]
+The tokenizer has new PAD/BOS/EOS tokens that differ from the model config and generation config. The model config and generation config were aligned accordingly, being updated with the tokenizer's values. Updated tokens: {'bos_token_id': None, 'pad_token_id': 151643}.
+`generation_config` default values have been modified to match model-specific defaults: {'temperature': 0.6, 'top_p': 0.95}. If this is not desired, please set these values explicitly.
+{'loss': -0.0537, 'grad_norm': 13.9375, 'learning_rate': 1e-06, 'num_tokens': 7305.0, 'completions/mean_length': 59.5625, 'completions/min_length': 55.0, 'completions/max_length': 107.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 59.5625, 'completions/min_terminated_length': 55.0, 'completions/max_terminated_length': 107.0, 'rewards/maze_vpo_reward/mean': 0.1940980702638626, 'rewards/maze_vpo_reward/std': 0.34853219985961914, 'reward': 0.1940980702638626, 'reward_std': 0.36075133085250854, 'frac_reward_zero_std': 0.0, 'kl': 0.0007640624098712578, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.015625}
+{'loss': 0.0032, 'grad_norm': 18.75, 'learning_rate': 1e-06, 'num_tokens': 14534.0, 'completions/mean_length': 55.8125, 'completions/min_length': 49.0, 'completions/max_length': 59.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 55.8125, 'completions/min_terminated_length': 49.0, 'completions/max_terminated_length': 59.0, 'rewards/maze_vpo_reward/mean': 0.23133651912212372, 'rewards/maze_vpo_reward/std': 0.3557465970516205, 'reward': 0.23133651912212372, 'reward_std': 0.36168012022972107, 'frac_reward_zero_std': 0.0, 'kl': 0.0005475576181197539, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.03125}
+{'loss': -0.0068, 'grad_norm': 11.5, 'learning_rate': 1e-06, 'num_tokens': 21765.0, 'completions/mean_length': 55.9375, 'completions/min_length': 51.0, 'completions/max_length': 60.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 55.9375, 'completions/min_terminated_length': 51.0, 'completions/max_terminated_length': 60.0, 'rewards/maze_vpo_reward/mean': 0.05116846784949303, 'rewards/maze_vpo_reward/std': 0.2046738713979721, 'reward': 0.05116846784949303, 'reward_std': 0.14472627639770508, 'frac_reward_zero_std': 0.5, 'kl': 0.0006389890913851559, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.046875}
+{'loss': 0.0322, 'grad_norm': 7.75, 'learning_rate': 1e-06, 'num_tokens': 29043.0, 'completions/mean_length': 60.375, 'completions/min_length': 54.0, 'completions/max_length': 103.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 60.375, 'completions/min_terminated_length': 54.0, 'completions/max_terminated_length': 103.0, 'rewards/maze_vpo_reward/mean': 0.0937645435333252, 'rewards/maze_vpo_reward/std': 0.2562236487865448, 'reward': 0.0937645435333252, 'reward_std': 0.17362621426582336, 'frac_reward_zero_std': 0.5, 'kl': 0.0009881008008960634, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.0625}
+{'loss': 0.0595, 'grad_norm': 8.25, 'learning_rate': 1e-06, 'num_tokens': 36471.0, 'completions/mean_length': 68.25, 'completions/min_length': 49.0, 'completions/max_length': 128.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 68.25, 'completions/min_terminated_length': 49.0, 'completions/max_terminated_length': 128.0, 'rewards/maze_vpo_reward/mean': 0.30699780583381653, 'rewards/maze_vpo_reward/std': 0.4099094271659851, 'reward': 0.30699780583381653, 'reward_std': 0.19015251100063324, 'frac_reward_zero_std': 0.5, 'kl': 0.0012163944193162024, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.078125}
+{'loss': 0.0485, 'grad_norm': 6.96875, 'learning_rate': 1e-06, 'num_tokens': 43751.0, 'completions/mean_length': 59.5, 'completions/min_length': 50.0, 'completions/max_length': 121.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 59.5, 'completions/min_terminated_length': 50.0, 'completions/max_terminated_length': 121.0, 'rewards/maze_vpo_reward/mean': 0.15445761382579803, 'rewards/maze_vpo_reward/std': 0.33248183131217957, 'reward': 0.15445761382579803, 'reward_std': 0.2135121375322342, 'frac_reward_zero_std': 0.5, 'kl': 0.001798960700398311, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.09375}
+{'loss': -0.053, 'grad_norm': 10.5, 'learning_rate': 1e-06, 'num_tokens': 51082.0, 'completions/mean_length': 62.6875, 'completions/min_length': 52.0, 'completions/max_length': 117.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 62.6875, 'completions/min_terminated_length': 52.0, 'completions/max_terminated_length': 117.0, 'rewards/maze_vpo_reward/mean': 0.2997281551361084, 'rewards/maze_vpo_reward/std': 0.39994779229164124, 'reward': 0.2997281551361084, 'reward_std': 0.1853550225496292, 'frac_reward_zero_std': 0.5, 'kl': 0.002043590968241915, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.109375}
+{'loss': 0.0223, 'grad_norm': 9.6875, 'learning_rate': 1e-06, 'num_tokens': 58317.0, 'completions/mean_length': 56.1875, 'completions/min_length': 46.0, 'completions/max_length': 60.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 56.1875, 'completions/min_terminated_length': 46.0, 'completions/max_terminated_length': 60.0, 'rewards/maze_vpo_reward/mean': 0.2906283140182495, 'rewards/maze_vpo_reward/std': 0.3900465965270996, 'reward': 0.2906283140182495, 'reward_std': 0.1823074072599411, 'frac_reward_zero_std': 0.5, 'kl': 0.0019279089465271682, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.125}
+{'loss': 0.0057, 'grad_norm': 5.15625, 'learning_rate': 1e-06, 'num_tokens': 65543.0, 'completions/mean_length': 56.125, 'completions/min_length': 55.0, 'completions/max_length': 61.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 56.125, 'completions/min_terminated_length': 55.0, 'completions/max_terminated_length': 61.0, 'rewards/maze_vpo_reward/mean': 0.3382946848869324, 'rewards/maze_vpo_reward/std': 0.39705607295036316, 'reward': 0.3382946848869324, 'reward_std': 0.13806183636188507, 'frac_reward_zero_std': 0.5, 'kl': 0.0020873192115686834, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.140625}
+{'loss': 0.0, 'grad_norm': 0.005126953125, 'learning_rate': 1e-06, 'num_tokens': 72820.0, 'completions/mean_length': 58.3125, 'completions/min_length': 51.0, 'completions/max_length': 101.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 58.3125, 'completions/min_terminated_length': 51.0, 'completions/max_terminated_length': 101.0, 'rewards/maze_vpo_reward/mean': 0.0, 'rewards/maze_vpo_reward/std': 0.0, 'reward': 0.0, 'reward_std': 0.0, 'frac_reward_zero_std': 1.0, 'kl': 0.0024378406815230846, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.15625}
+{'loss': -0.0044, 'grad_norm': 8.0625, 'learning_rate': 1e-06, 'num_tokens': 80050.0, 'completions/mean_length': 55.375, 'completions/min_length': 48.0, 'completions/max_length': 60.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 55.375, 'completions/min_terminated_length': 48.0, 'completions/max_terminated_length': 60.0, 'rewards/maze_vpo_reward/mean': 0.24450889229774475, 'rewards/maze_vpo_reward/std': 0.37631431221961975, 'reward': 0.24450889229774475, 'reward_std': 0.20420871675014496, 'frac_reward_zero_std': 0.5, 'kl': 0.0027942380984313786, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.171875}
+{'loss': 0.0067, 'grad_norm': 6.4375, 'learning_rate': 1e-06, 'num_tokens': 87274.0, 'completions/mean_length': 55.5, 'completions/min_length': 55.0, 'completions/max_length': 61.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 55.5, 'completions/min_terminated_length': 55.0, 'completions/max_terminated_length': 61.0, 'rewards/maze_vpo_reward/mean': 0.27460402250289917, 'rewards/maze_vpo_reward/std': 0.36631089448928833, 'reward': 0.27460402250289917, 'reward_std': 0.16968846321105957, 'frac_reward_zero_std': 0.5, 'kl': 0.003316546615678817, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.1875}
+{'loss': 0.0092, 'grad_norm': 6.03125, 'learning_rate': 1e-06, 'num_tokens': 94540.0, 'completions/mean_length': 59.125, 'completions/min_length': 55.0, 'completions/max_length': 120.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 59.125, 'completions/min_terminated_length': 55.0, 'completions/max_terminated_length': 120.0, 'rewards/maze_vpo_reward/mean': 0.3659491539001465, 'rewards/maze_vpo_reward/std': 0.4288486838340759, 'reward': 0.3659491539001465, 'reward_std': 0.14832010865211487, 'frac_reward_zero_std': 0.5, 'kl': 0.0032274528057314456, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.203125}
+{'loss': 0.0, 'grad_norm': 0.00927734375, 'learning_rate': 1e-06, 'num_tokens': 101772.0, 'completions/mean_length': 56.0, 'completions/min_length': 55.0, 'completions/max_length': 58.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 56.0, 'completions/min_terminated_length': 55.0, 'completions/max_terminated_length': 58.0, 'rewards/maze_vpo_reward/mean': 0.0, 'rewards/maze_vpo_reward/std': 0.0, 'reward': 0.0, 'reward_std': 0.0, 'frac_reward_zero_std': 1.0, 'kl': 0.004842534428462386, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.21875}
+{'loss': 0.0, 'grad_norm': 0.00823974609375, 'learning_rate': 1e-06, 'num_tokens': 109003.0, 'completions/mean_length': 55.9375, 'completions/min_length': 55.0, 'completions/max_length': 60.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 55.9375, 'completions/min_terminated_length': 55.0, 'completions/max_terminated_length': 60.0, 'rewards/maze_vpo_reward/mean': 0.0, 'rewards/maze_vpo_reward/std': 0.0, 'reward': 0.0, 'reward_std': 0.0, 'frac_reward_zero_std': 1.0, 'kl': 0.004443650192115456, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.234375}
+{'loss': 0.0, 'grad_norm': 0.005889892578125, 'learning_rate': 1e-06, 'num_tokens': 116547.0, 'completions/mean_length': 75.0, 'completions/min_length': 51.0, 'completions/max_length': 233.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 75.0, 'completions/min_terminated_length': 51.0, 'completions/max_terminated_length': 233.0, 'rewards/maze_vpo_reward/mean': 0.0, 'rewards/maze_vpo_reward/std': 0.0, 'reward': 0.0, 'reward_std': 0.0, 'frac_reward_zero_std': 1.0, 'kl': 0.005355815694201738, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.25}
+{'loss': -0.0041, 'grad_norm': 7.75, 'learning_rate': 1e-06, 'num_tokens': 123758.0, 'completions/mean_length': 54.6875, 'completions/min_length': 47.0, 'completions/max_length': 58.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 54.6875, 'completions/min_terminated_length': 47.0, 'completions/max_terminated_length': 58.0, 'rewards/maze_vpo_reward/mean': 0.2516520023345947, 'rewards/maze_vpo_reward/std': 0.38615450263023376, 'reward': 0.2516520023345947, 'reward_std': 0.20903433859348297, 'frac_reward_zero_std': 0.5, 'kl': 0.005630485713481903, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.265625}
+{'loss': 0.0214, 'grad_norm': 15.75, 'learning_rate': 1e-06, 'num_tokens': 130999.0, 'completions/mean_length': 56.0625, 'completions/min_length': 55.0, 'completions/max_length': 61.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 56.0625, 'completions/min_terminated_length': 55.0, 'completions/max_terminated_length': 61.0, 'rewards/maze_vpo_reward/mean': 0.5764667391777039, 'rewards/maze_vpo_reward/std': 0.34770628809928894, 'reward': 0.5764667391777039, 'reward_std': 0.34271806478500366, 'frac_reward_zero_std': 0.0, 'kl': 0.0050126020796597, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.28125}
+{'loss': 0.0058, 'grad_norm': 6.0625, 'learning_rate': 1e-06, 'num_tokens': 138231.0, 'completions/mean_length': 55.5, 'completions/min_length': 55.0, 'completions/max_length': 58.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 55.5, 'completions/min_terminated_length': 55.0, 'completions/max_terminated_length': 58.0, 'rewards/maze_vpo_reward/mean': 0.7581419944763184, 'rewards/maze_vpo_reward/std': 0.2113274335861206, 'reward': 0.7581419944763184, 'reward_std': 0.16835099458694458, 'frac_reward_zero_std': 0.0, 'kl': 0.005482447217218578, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.296875}
+{'loss': -0.0312, 'grad_norm': 12.4375, 'learning_rate': 1e-06, 'num_tokens': 145495.0, 'completions/mean_length': 58.5, 'completions/min_length': 54.0, 'completions/max_length': 106.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 58.5, 'completions/min_terminated_length': 54.0, 'completions/max_terminated_length': 106.0, 'rewards/maze_vpo_reward/mean': 0.6048330068588257, 'rewards/maze_vpo_reward/std': 0.30483192205429077, 'reward': 0.6048330068588257, 'reward_std': 0.30923303961753845, 'frac_reward_zero_std': 0.0, 'kl': 0.004851961741223931, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.3125}
+{'loss': -0.0267, 'grad_norm': 10.0625, 'learning_rate': 1e-06, 'num_tokens': 152774.0, 'completions/mean_length': 58.9375, 'completions/min_length': 52.0, 'completions/max_length': 115.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 58.9375, 'completions/min_terminated_length': 52.0, 'completions/max_terminated_length': 115.0, 'rewards/maze_vpo_reward/mean': 0.6575342416763306, 'rewards/maze_vpo_reward/std': 0.32772934436798096, 'reward': 0.6575342416763306, 'reward_std': 0.32964247465133667, 'frac_reward_zero_std': 0.0, 'kl': 0.005858733551576734, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.328125}
+{'loss': -0.0044, 'grad_norm': 8.4375, 'learning_rate': 1e-06, 'num_tokens': 159981.0, 'completions/mean_length': 54.9375, 'completions/min_length': 50.0, 'completions/max_length': 57.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 54.9375, 'completions/min_terminated_length': 50.0, 'completions/max_terminated_length': 57.0, 'rewards/maze_vpo_reward/mean': 0.6878175735473633, 'rewards/maze_vpo_reward/std': 0.26989197731018066, 'reward': 0.6878175735473633, 'reward_std': 0.19966459274291992, 'frac_reward_zero_std': 0.0, 'kl': 0.005361309973523021, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.34375}
+{'loss': -0.0101, 'grad_norm': 6.40625, 'learning_rate': 1e-06, 'num_tokens': 167329.0, 'completions/mean_length': 63.75, 'completions/min_length': 55.0, 'completions/max_length': 122.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 63.75, 'completions/min_terminated_length': 55.0, 'completions/max_terminated_length': 122.0, 'rewards/maze_vpo_reward/mean': 0.34289613366127014, 'rewards/maze_vpo_reward/std': 0.4018091559410095, 'reward': 0.34289613366127014, 'reward_std': 0.13893921673297882, 'frac_reward_zero_std': 0.5, 'kl': 0.005864102044142783, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.359375}
+{'loss': 0.0143, 'grad_norm': 12.3125, 'learning_rate': 1e-06, 'num_tokens': 174641.0, 'completions/mean_length': 60.5, 'completions/min_length': 53.0, 'completions/max_length': 144.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 60.5, 'completions/min_terminated_length': 53.0, 'completions/max_terminated_length': 144.0, 'rewards/maze_vpo_reward/mean': 0.36446866393089294, 'rewards/maze_vpo_reward/std': 0.4269438087940216, 'reward': 0.36446866393089294, 'reward_std': 0.1474565863609314, 'frac_reward_zero_std': 0.5, 'kl': 0.005387153709307313, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.375}Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/rl-diversity/src/diversity_muon/train_grpo.py", line 111, in <module>
+    main()
+  File "/rl-diversity/src/diversity_muon/train_grpo.py", line 107, in main
+    trainer.train()
+  File "/rl-diversity/.venv/lib/python3.11/site-packages/transformers/trainer.py", line 2325, in train
+    return inner_training_loop(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/rl-diversity/.venv/lib/python3.11/site-packages/transformers/trainer.py", line 2756, in _inner_training_loop
+    self._maybe_log_save_evaluate(
+  File "/rl-diversity/.venv/lib/python3.11/site-packages/transformers/trainer.py", line 3228, in _maybe_log_save_evaluate
+    self._save_checkpoint(model, trial)
+  File "/rl-diversity/.venv/lib/python3.11/site-packages/trl/trainer/grpo_trainer.py", line 1493, in _save_checkpoint
+    super()._save_checkpoint(model, trial)
+  File "/rl-diversity/.venv/lib/python3.11/site-packages/transformers/trainer.py", line 3325, in _save_checkpoint
+    self.save_model(output_dir, _internal_call=True)
+  File "/rl-diversity/.venv/lib/python3.11/site-packages/transformers/trainer.py", line 4227, in save_model
+    self._save(output_dir)
+  File "/rl-diversity/.venv/lib/python3.11/site-packages/transformers/trainer.py", line 4331, in _save
+    self.model.save_pretrained(
+  File "/rl-diversity/.venv/lib/python3.11/site-packages/transformers/modeling_utils.py", line 4173, in save_pretrained
+    safe_save_file(shard, os.path.join(save_directory, shard_file), metadata=metadata)
+  File "/rl-diversity/.venv/lib/python3.11/site-packages/safetensors/torch.py", line 307, in save_file
+    serialize_file(_flatten(tensors), filename, metadata=metadata)
+safetensors_rust.SafetensorError: Error while serializing: I/O error: No space left on device (os error 28)
+
+{'loss': 0.0, 'grad_norm': 0.00799560546875, 'learning_rate': 1e-06, 'num_tokens': 181946.0, 'completions/mean_length': 60.5625, 'completions/min_length': 55.0, 'completions/max_length': 135.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 60.5625, 'completions/min_terminated_length': 55.0, 'completions/max_terminated_length': 135.0, 'rewards/maze_vpo_reward/mean': 0.0, 'rewards/maze_vpo_reward/std': 0.0, 'reward': 0.0, 'reward_std': 0.0, 'frac_reward_zero_std': 1.0, 'kl': 0.006223716773092747, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.390625}
+{'loss': 0.0092, 'grad_norm': 6.03125, 'learning_rate': 1e-06, 'num_tokens': 189166.0, 'completions/mean_length': 55.25, 'completions/min_length': 49.0, 'completions/max_length': 59.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 55.25, 'completions/min_terminated_length': 49.0, 'completions/max_terminated_length': 59.0, 'rewards/maze_vpo_reward/mean': 0.38555434346199036, 'rewards/maze_vpo_reward/std': 0.4120561182498932, 'reward': 0.38555434346199036, 'reward_std': 0.07755628228187561, 'frac_reward_zero_std': 0.5, 'kl': 0.008508293656632304, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.40625}
+{'loss': 0.0219, 'grad_norm': 5.6875, 'learning_rate': 1e-06, 'num_tokens': 196445.0, 'completions/mean_length': 59.9375, 'completions/min_length': 49.0, 'completions/max_length': 139.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 59.9375, 'completions/min_terminated_length': 49.0, 'completions/max_terminated_length': 139.0, 'rewards/maze_vpo_reward/mean': 0.7305738925933838, 'rewards/maze_vpo_reward/std': 0.19605842232704163, 'reward': 0.7305738925933838, 'reward_std': 0.15053583681583405, 'frac_reward_zero_std': 0.0, 'kl': 0.006329342606477439, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.421875}
+{'loss': -0.067, 'grad_norm': 9.3125, 'learning_rate': 1e-06, 'num_tokens': 203751.0, 'completions/mean_length': 61.625, 'completions/min_length': 54.0, 'completions/max_length': 158.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 61.625, 'completions/min_terminated_length': 54.0, 'completions/max_terminated_length': 158.0, 'rewards/maze_vpo_reward/mean': 0.581425666809082, 'rewards/maze_vpo_reward/std': 0.31161147356033325, 'reward': 0.5814257264137268, 'reward_std': 0.31149035692214966, 'frac_reward_zero_std': 0.0, 'kl': 0.005572415655478835, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.4375}
+{'loss': 0.0248, 'grad_norm': 8.125, 'learning_rate': 1e-06, 'num_tokens': 211095.0, 'completions/mean_length': 62.5, 'completions/min_length': 55.0, 'completions/max_length': 155.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 62.5, 'completions/min_terminated_length': 55.0, 'completions/max_terminated_length': 155.0, 'rewards/maze_vpo_reward/mean': 0.2579640746116638, 'rewards/maze_vpo_reward/std': 0.35513508319854736, 'reward': 0.2579640746116638, 'reward_std': 0.17186856269836426, 'frac_reward_zero_std': 0.5, 'kl': 0.010455440729856491, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.453125}
+{'loss': 0.0024, 'grad_norm': 7.0, 'learning_rate': 1e-06, 'num_tokens': 218336.0, 'completions/mean_length': 56.0625, 'completions/min_length': 54.0, 'completions/max_length': 67.0, 'completions/clipped_ratio': 0.0, 'completions/mean_terminated_length': 56.0625, 'completions/min_terminated_length': 54.0, 'completions/max_terminated_length': 67.0, 'rewards/maze_vpo_reward/mean': 0.2941499650478363, 'rewards/maze_vpo_reward/std': 0.3936644494533539, 'reward': 0.2941499650478363, 'reward_std': 0.18324345350265503, 'frac_reward_zero_std': 0.5, 'kl': 0.010314857587218285, 'clip_ratio/low_mean': 0.0, 'clip_ratio/low_min': 0.0, 'clip_ratio/high_mean': 0.0, 'clip_ratio/high_max': 0.0, 'clip_ratio/region_mean': 0.0, 'epoch': 0.46875}
+Traceback (most recent call last):
+  File "/rl-diversity/.venv/bin/accelerate", line 6, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/rl-diversity/.venv/lib/python3.11/site-packages/accelerate/commands/accelerate_cli.py", line 50, in main
+    args.func(args)
+  File "/rl-diversity/.venv/lib/python3.11/site-packages/accelerate/commands/launch.py", line 1405, in launch_command
+    simple_launcher(args)
+  File "/rl-diversity/.venv/lib/python3.11/site-packages/accelerate/commands/launch.py", line 993, in simple_launcher
+    raise subprocess.CalledProcessError(returncode=process.returncode, cmd=cmd)
+subprocess.CalledProcessError: Command '['/rl-diversity/.venv/bin/python', '-m', 'diversity_muon.train_grpo', '--config', '/tmp/min5_30_adam_vpo.yaml']' returned non-zero exit status 1.
+Evaluating AdamW Multi-RLVR 30-step
+`torch_dtype` is deprecated! Use `dtype` instead!
+{
+  "model": "outputs/min5_30_adam_multirlvr/checkpoint-30",
+  "num_prompts": 16,
+  "samples_per_prompt": 5,
+  "mean_diversity": 0.7209523755879629,
+  "mean_best_at_3": 0.23124999925494194,
+  "mean_best_at_5": 0.23124999925494194,
+  "mean_best_at_10": 0.3656249977648258,
+  "mean_best_at_30": 0.4085937477648258,
+  "prompts": [
+    {
+      "seed": 4242,
+      "diversity": 0.0,
+      "best_at_3": 0.0,
+      "best_at_5": 0.0,
+      "best_at_10": 0.0,
+      "best_at_30": 0.0
+    },
+    {
+      "seed": 4243,
+      "diversity": 0.0,
+      "best_at_3": 0.0,
+      "best_at_5": 0.0,
+      "best_at_10": 0.0,
+      "best_at_30": 0.0
+    },
+    {
+      "seed": 4244,
+      "diversity": 1.6457142795835222,
+      "best_at_3": 0.75,
+      "best_at_5": 0.75,
+      "best_at_10": 0.75,
+      "best_at_30": 0.75
+    },
+    {
+      "seed": 4245,
+      "diversity": 0.0,
+      "best_at_3": 0.0,
+      "best_at_5": 0.0,
+      "best_at_10": 0.0,
+      "best_at_30": 0.0
+    },
+    {
+      "seed": 4246,
+      "diversity": 1.6285714285714286,
+      "best_at_3": 0.75,
+      "best_at_5": 0.75,
+      "best_at_10": 0.75,
+      "best_at_30": 0.75
+    },
+    {
+      "seed": 4247,
+      "diversity": 1.0790476072402226,
+      "best_at_3": 0.699999988079071,
+      "best_at_5": 0.699999988079071,
+      "best_at_10": 0.699999988079071,
+      "best_at_30": 0.699999988079071
+    },
+    {
+      "seed": 4248,
+      "diversity": 0.0,
+      "best_at_3": 0.0,
+      "best_at_5": 0.0,
+      "best_at_10": 0.0,
+      "best_at_30": 0.0
+    },
+    {
+      "seed": 4249,
+      "diversity": 0.0,
+      "best_at_3": 0.0,
+      "best_at_5": 0.0,
+      "best_at_10": 0.0,
+      "best_at_30": 0.0
+    },
+    {
+      "seed": 4250,
+      "diversity": 1.417142847606114,
+      "best_at_3": 0.0,
+      "best_at_5": 0.0,
+      "best_at_10": 0.75,
+      "best_at_30": 0.75
+    },
+    {
+      "seed": 4251,
+      "diversity": 1.0952380725315638,
+      "best_at_3": 0.75,
+      "best_at_5": 0.75,
+      "best_at_10": 0.75,
+      "best_at_30": 0.75
+    },
+    {
+      "seed": 4252,
+      "diversity": 0.0,
+      "best_at_3": 0.0,
+      "best_at_5": 0.0,
+      "best_at_10": 0.0,
+      "best_at_30": 0.0
+    },
+    {
+      "seed": 4253,
+      "diversity": 0.36666666666666664,
+      "best_at_3": 0.0,
+      "best_at_5": 0.0,
+      "best_at_10": 0.0,
+      "best_at_30": 0.6875
+    },
+    {
+      "seed": 4254,
+      "diversity": 1.5352380752563477,
+      "best_at_3": 0.75,
+      "best_at_5": 0.75,
+      "best_at_10": 0.75,
+      "best_at_30": 0.75
+    },
+    {
+      "seed": 4255,
+      "diversity": 0.0,
+      "best_at_3": 0.0,
+      "best_at_5": 0.0,
+      "best_at_10": 0.0,
+      "best_at_30": 0.0
+    },
+    {
+      "seed": 4256,
+      "diversity": 1.1885714292526246,
+      "best_at_3": 0.0,
+      "best_at_5": 0.0,
+      "best_at_10": 0.699999988079071,
+      "best_at_30": 0.699999988079071
+    },
+    {
+      "seed": 4257,
+      "diversity": 1.5790476026989164,
+      "best_at_3": 0.0,
+      "best_at_5": 0.0,
+      "best_at_10": 0.699999988079071,
+      "best_at_30": 0.699999988079071
+    }
+  ]
+}
+Evaluating Muon Multi-RLVR 30-step
+`torch_dtype` is deprecated! Use `dtype` instead!
+{
+  "model": "outputs/min5_30_muon_multirlvr/checkpoint-30",
+  "num_prompts": 16,
+  "samples_per_prompt": 5,
+  "mean_diversity": 0.36216269774096355,
+  "mean_best_at_3": 0.18046874925494194,
+  "mean_best_at_5": 0.22734374925494194,
+  "mean_best_at_10": 0.34401041455566883,
+  "mean_best_at_30": 0.34791666455566883,
+  "prompts": [
+    {
+      "seed": 4242,
+      "diversity": 0.0,
+      "best_at_3": 0.0,
+      "best_at_5": 0.0,
+      "best_at_10": 0.0,
+      "best_at_30": 0.0
+    },
+    {
+      "seed": 4243,
+      "diversity": 0.0,
+      "best_at_3": 0.0,
+      "best_at_5": 0.0,
+      "best_at_10": 0.0,
+      "best_at_30": 0.0
+    },
+    {
+      "seed": 4244,
+      "diversity": 0.24888890584309895,
+      "best_at_3": 0.0,
+      "best_at_5": 0.0,
+      "best_at_10": 0.46666666865348816,
+      "best_at_30": 0.46666666865348816
+    },
+    {
+      "seed": 4245,
+      "diversity": 0.0,
+      "best_at_3": 0.0,
+      "best_at_5": 0.0,
+      "best_at_10": 0.0,
+      "best_at_30": 0.0
+    },
+    {
+      "seed": 4246,
+      "diversity": 1.111428569612049,
+      "best_at_3": 0.6875,
+      "best_at_5": 0.6875,
+      "best_at_10": 0.6875,
+      "best_at_30": 0.75
+    },
+    {
+      "seed": 4247,
+      "diversity": 0.9838095120021275,
+      "best_at_3": 0.0,
+      "best_at_5": 0.0,
+      "best_at_10": 0.699999988079071,
+      "best_at_30": 0.699999988079071
+    },
+    {
+      "seed": 4248,
+      "diversity": 0.0,
+      "best_at_3": 0.0,
+      "best_at_5": 0.0,
+      "best_at_10": 0.0,
+      "best_at_30": 0.0
+    },
+    {
+      "seed": 4249,
+      "diversity": 0.0,
+      "best_at_3": 0.0,
+      "best_at_5": 0.0,
+      "best_at_10": 0.0,
+      "best_at_30": 0.0
+    },
+    {
+      "seed": 4250,
+      "diversity": 1.146666659627642,
+      "best_at_3": 0.0,
+      "best_at_5": 0.75,
+      "best_at_10": 0.75,
+      "best_at_30": 0.75
+    },
+    {
+      "seed": 4251,
+      "diversity": 0.0,
+      "best_at_3": 0.0,
+      "best_at_5": 0.0,
+      "best_at_10": 0.0,
+      "best_at_30": 0.0
+    },
+    {
+      "seed": 4252,
+      "diversity": 0.0,
+      "best_at_3": 0.0,
+      "best_at_5": 0.0,
+      "best_at_10": 0.0,
+      "best_at_30": 0.0
+    },
+    {
+      "seed": 4253,
+      "diversity": 1.0047619047619047,
+      "best_at_3": 0.75,
+      "best_at_5": 0.75,
+      "best_at_10": 0.75,
+      "best_at_30": 0.75
+    },
+    {
+      "seed": 4254,
+      "diversity": 0.4,
+      "best_at_3": 0.75,
+      "best_at_5": 0.75,
+      "best_at_10": 0.75,
+      "best_at_30": 0.75
+    },
+    {
+      "seed": 4255,
+      "diversity": 0.0,
+      "best_at_3": 0.0,
+      "best_at_5": 0.0,
+      "best_at_10": 0.0,
+      "best_at_30": 0.0
+    },
+    {
+      "seed": 4256,
+      "diversity": 0.5257142850330898,
+      "best_at_3": 0.0,
+      "best_at_5": 0.0,
+      "best_at_10": 0.699999988079071,
+      "best_at_30": 0.699999988079071
+    },
+    {
+      "seed": 4257,
+      "diversity": 0.37333332697550453,
+      "best_at_3": 0.699999988079071,
+      "best_at_5": 0.699999988079071,
+      "best_at_10": 0.699999988079071,
+      "best_at_30": 0.699999988079071
+    }
+  ]
+}
+Evaluating AdamW VPO 30-step
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/rl-diversity/src/diversity_muon/eval_diversity.py", line 114, in <module>
+    main()
+  File "/rl-diversity/src/diversity_muon/eval_diversity.py", line 29, in main
+    tokenizer = AutoTokenizer.from_pretrained(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/rl-diversity/.venv/lib/python3.11/site-packages/transformers/models/auto/tokenization_auto.py", line 1175, in from_pretrained
+    return tokenizer_class_fast.from_pretrained(pretrained_model_name_or_path, *inputs, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/rl-diversity/.venv/lib/python3.11/site-packages/transformers/tokenization_utils_base.py", line 2113, in from_pretrained
+    return cls._from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/rl-diversity/.venv/lib/python3.11/site-packages/transformers/tokenization_utils_base.py", line 2151, in _from_pretrained
+    slow_tokenizer = (cls.slow_tokenizer_class)._from_pretrained(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/rl-diversity/.venv/lib/python3.11/site-packages/transformers/tokenization_utils_base.py", line 2359, in _from_pretrained
+    tokenizer = cls(*init_inputs, **init_kwargs)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/rl-diversity/.venv/lib/python3.11/site-packages/transformers/models/qwen2/tokenization_qwen2.py", line 172, in __init__
+    with open(vocab_file, encoding="utf-8") as vocab_handle:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: expected str, bytes or os.PathLike object, not NoneType
+Summary
+adam_multirlvr: diversity=0.7210, best@30=0.4086, best@10=0.3656
+muon_multirlvr: diversity=0.3622, best@30=0.3479, best@10=0.3440
