@@ -27,6 +27,9 @@ class ExperimentConfig:
     max_completion_length: int = 256
     learning_rate: float = 1e-6
     weight_decay: float = 0.01
+    muon_momentum: float = 0.95
+    soft_muon_power: float = 0.2
+    soft_muon_mix: float = 0.8
     beta: float = 1e-3
     epsilon: float = 0.2
     logging_steps: int = 1

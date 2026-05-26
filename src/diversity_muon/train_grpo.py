@@ -91,6 +91,9 @@ def main() -> None:
         optimizer_name=cfg.optimizer,  # type: ignore[arg-type]
         learning_rate=cfg.learning_rate,
         weight_decay=cfg.weight_decay,
+        muon_momentum=cfg.muon_momentum,
+        soft_muon_power=cfg.soft_muon_power,
+        soft_muon_mix=cfg.soft_muon_mix,
     )
     scheduler = build_scheduler(
         optimizer, scheduler_type="constant", num_training_steps=cfg.max_steps
