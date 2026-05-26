@@ -1,8 +1,9 @@
 run_name: min_muon_multirlvr
 model: Qwen/Qwen3-0.6B
+maze_size: 5
 objective: multirlvr
 optimizer: muon
-output_dir: outputs/min_muon_multirlvr
+output_dir: outputs/min5_muon_multirlvr
 train_size: 128
 eval_size: 32
 max_steps: 10

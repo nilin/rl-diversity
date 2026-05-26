@@ -7,7 +7,6 @@ import numpy as np
 
 from diversity_muon.maze_reward import pairwise_l1_diversity, score_completion_routes
 
-
 ObjectiveName = Literal["multirlvr", "vpo"]
 
 

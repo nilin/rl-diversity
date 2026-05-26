@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import sys
 
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -10,6 +11,7 @@ from diversity_muon.config import load_config
 from diversity_muon.maze import build_dataset
 from diversity_muon.objectives import MazeReward, RewardConfig
 from diversity_muon.optim import build_optimizer, build_scheduler
+from diversity_muon.prompting import format_chat_prompt
 
 
 def _resolve_bf16(requested: bool) -> bool:
@@ -27,7 +29,9 @@ def main() -> None:
     args = parser.parse_args()
     cfg = load_config(args.config)
 
-    tokenizer = AutoTokenizer.from_pretrained(cfg.model, padding_side="left", trust_remote_code=True)
+    tokenizer = AutoTokenizer.from_pretrained(
+        cfg.model, padding_side="left", trust_remote_code=True, fix_mistral_regex=True
+    )
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
 
@@ -37,8 +41,18 @@ def main() -> None:
         trust_remote_code=True,
     )
 
-    train_dataset = build_dataset(start_seed=cfg.train_seed_start, count=cfg.train_size)
-    eval_dataset = build_dataset(start_seed=cfg.eval_seed_start, count=cfg.eval_size)
+    train_dataset = build_dataset(
+        start_seed=cfg.train_seed_start, count=cfg.train_size, size=cfg.maze_size
+    )
+    eval_dataset = build_dataset(
+        start_seed=cfg.eval_seed_start, count=cfg.eval_size, size=cfg.maze_size
+    )
+    train_dataset = train_dataset.map(
+        lambda row: {"prompt": format_chat_prompt(tokenizer, row["prompt"])}
+    )
+    eval_dataset = eval_dataset.map(
+        lambda row: {"prompt": format_chat_prompt(tokenizer, row["prompt"])}
+    )
 
     reward = MazeReward(
         RewardConfig(
@@ -67,6 +81,8 @@ def main() -> None:
         bf16=_resolve_bf16(cfg.bf16),
         report_to=cfg.report_to,
         seed=cfg.seed,
+        disable_tqdm=not sys.stderr.isatty(),
+        save_only_model=True,
         remove_unused_columns=False,
     )
 

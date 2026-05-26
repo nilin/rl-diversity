@@ -10,6 +10,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 
 from diversity_muon.maze import build_dataset
 from diversity_muon.maze_reward import pairwise_l1_diversity, score_completion_routes
+from diversity_muon.prompting import format_chat_prompt
 
 
 def main() -> None:
@@ -18,13 +19,16 @@ def main() -> None:
     parser.add_argument("--num-prompts", type=int, default=32)
     parser.add_argument("--samples-per-prompt", type=int, default=10)
     parser.add_argument("--seed-start", type=int, default=4242)
+    parser.add_argument("--maze-size", type=int, default=9)
     parser.add_argument("--max-new-tokens", type=int, default=256)
     parser.add_argument("--temperature", type=float, default=0.7)
     parser.add_argument("--top-p", type=float, default=1.0)
     parser.add_argument("--output", default=None)
     args = parser.parse_args()
 
-    tokenizer = AutoTokenizer.from_pretrained(args.model, padding_side="left", trust_remote_code=True)
+    tokenizer = AutoTokenizer.from_pretrained(
+        args.model, padding_side="left", trust_remote_code=True, fix_mistral_regex=True
+    )
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
     model = AutoModelForCausalLM.from_pretrained(
@@ -32,12 +36,12 @@ def main() -> None:
     )
     model.eval()
 
-    dataset = build_dataset(start_seed=args.seed_start, count=args.num_prompts)
+    dataset = build_dataset(start_seed=args.seed_start, count=args.num_prompts, size=args.maze_size)
     weights = np.full((4,), 0.25, dtype=np.float32)
     prompt_metrics = []
 
     for row in dataset:
-        prompt = row["prompt"]
+        prompt = format_chat_prompt(tokenizer, row["prompt"])
         encoded = tokenizer([prompt], return_tensors="pt").to(model.device)
         all_vectors = []
         for _ in range(args.samples_per_prompt):

@@ -1,8 +1,9 @@
 run_name: min_adam_vpo
 model: Qwen/Qwen3-0.6B
+maze_size: 5
 objective: vpo
 optimizer: adamw
-output_dir: outputs/min_adam_vpo
+output_dir: outputs/min5_adam_vpo
 train_size: 128
 eval_size: 32
 max_steps: 10

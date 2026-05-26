@@ -1,11 +1,10 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
 import itertools
 import re
+from dataclasses import dataclass
 
 import numpy as np
-
 
 MOVE_DELTAS = {
     "UP": (-1, 0),
@@ -26,7 +25,9 @@ class RouteScore:
 
     @property
     def vector(self) -> np.ndarray:
-        return np.array([self.completion, self.gold, self.diamond, self.avoid_lava], dtype=np.float32)
+        return np.array(
+            [self.completion, self.gold, self.diamond, self.avoid_lava], dtype=np.float32
+        )
 
 
 def parse_routes(completion: str, *, expected_routes: int = 3) -> list[list[str]]:
@@ -63,6 +64,8 @@ def score_route(
         nr, nc = r + dr, c + dc
         if nr < 0 or nr >= size or nc < 0 or nc >= len(cells[nr]):
             return RouteScore(0.0, 0.0, 0.0, 0.0)
+        if cells[nr][nc] == "#":
+            return RouteScore(0.0, 0.0, 0.0, 0.0)
         r, c = nr, nc
         tile = cells[r][c]
         if tile == "G":
@@ -71,6 +74,8 @@ def score_route(
             diamond_seen.add((r, c))
         elif tile == "L":
             lava_seen.add((r, c))
+        if (r, c) == end_coord:
+            break
 
     if (r, c) != end_coord:
         return RouteScore(0.0, 0.0, 0.0, 0.0)

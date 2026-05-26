@@ -32,6 +32,53 @@ def test_score_completion_routes_returns_three_vectors():
     assert all(vector.shape == (4,) for vector in vectors)
 
 
+def test_score_route_stops_at_exit_before_extra_moves():
+    grid = [
+        "S E .",
+        ". . .",
+        ". . .",
+    ]
+    vectors = score_completion_routes(
+        "<route_1>RIGHT LEFT</route_1><route_2>RIGHT</route_2><route_3>RIGHT</route_3>",
+        grid=grid,
+        start=(0, 0),
+        end=(0, 1),
+        step_budget=2,
+        gold_total=1,
+        diamond_total=1,
+        lava_total=1,
+    )
+    assert vectors[0].tolist() == [1.0, 0.0, 0.0, 1.0]
+
+
+def test_score_route_rejects_walls():
+    grid = [
+        "S # E",
+        ". . .",
+        ". . .",
+    ]
+    vectors = score_completion_routes(
+        "<route_1>RIGHT RIGHT</route_1><route_2>DOWN</route_2><route_3>DOWN</route_3>",
+        grid=grid,
+        start=(0, 0),
+        end=(0, 2),
+        step_budget=2,
+        gold_total=1,
+        diamond_total=1,
+        lava_total=1,
+    )
+    assert vectors[0].tolist() == [0.0, 0.0, 0.0, 0.0]
+
+
+def test_paper_style_maze_prompt_and_counts():
+    maze = make_maze(42)
+    assert "Format example (m=3):" in maze.prompt
+    assert "# is a wall -- you cannot enter it" in maze.prompt
+    assert sum(row.split().count("G") for row in maze.grid) == maze.gold_total
+    assert sum(row.split().count("D") for row in maze.grid) == maze.diamond_total
+    assert sum(row.split().count("L") for row in maze.grid) == maze.lava_total
+
+
 def test_vpo_reward_is_scalar():
     reward = MazeReward(RewardConfig(objective="vpo", seed=123))
     values = reward(

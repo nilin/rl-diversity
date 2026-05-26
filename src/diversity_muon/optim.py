@@ -7,7 +7,6 @@ import torch
 from torch import nn
 from transformers import get_scheduler
 
-
 OptimizerName = Literal["adamw", "muon"]
 
 
@@ -101,7 +100,9 @@ def build_optimizer(
     raise ValueError(f"Unsupported optimizer: {optimizer_name}")
 
 
-def build_scheduler(optimizer: torch.optim.Optimizer, *, scheduler_type: str, num_training_steps: int):
+def build_scheduler(
+    optimizer: torch.optim.Optimizer, *, scheduler_type: str, num_training_steps: int
+):
     return get_scheduler(
         scheduler_type,
         optimizer=optimizer,
