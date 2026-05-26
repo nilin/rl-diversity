@@ -8,7 +8,7 @@ SAMPLES_PER_PROMPT="${SAMPLES_PER_PROMPT:-5}"
 MAZE_SIZE="${MAZE_SIZE:-5}"
 ADAM_MULTI_OUTPUT="${ADAM_MULTI_OUTPUT:-outputs/min5_adam_multirlvr}"
 MUON_MULTI_OUTPUT="${MUON_MULTI_OUTPUT:-outputs/min5_muon_multirlvr}"
-SOFT_MUON_MULTI_OUTPUT="${SOFT_MUON_MULTI_OUTPUT:-outputs/min5_soft_muon_multirlvr}"
+SOFT_MUON_MULTI_OUTPUT="${SOFT_MUON_MULTI_OUTPUT:-outputs/min5_soft_muon_p05_multirlvr}"
 ADAM_VPO_OUTPUT="${ADAM_VPO_OUTPUT:-outputs/min5_adam_vpo}"
 EVAL_OUTPUT_DIR="${EVAL_OUTPUT_DIR:-outputs/min5_eval}"
 
@@ -25,7 +25,7 @@ accelerate launch -m diversity_muon.train_grpo \
 if [[ "$RUN_SOFT_MUON" == "1" ]]; then
   echo "Running Soft-Muon Multi-RLVR minimum run"
   accelerate launch -m diversity_muon.train_grpo \
-    --config configs/min_soft_muon_multirlvr.yaml
+    --config configs/min_soft_muon_p05_multirlvr.yaml
 fi
 
 if [[ "$RUN_VPO" == "1" ]]; then
@@ -57,7 +57,7 @@ if [[ "$RUN_SOFT_MUON" == "1" ]]; then
     --maze-size "$MAZE_SIZE" \
     --num-prompts "$EVAL_PROMPTS" \
     --samples-per-prompt "$SAMPLES_PER_PROMPT" \
-    --output "$EVAL_OUTPUT_DIR/soft_muon_multirlvr.json"
+    --output "$EVAL_OUTPUT_DIR/soft_muon_p05_multirlvr.json"
 fi
 
 if [[ "$RUN_VPO" == "1" ]]; then
