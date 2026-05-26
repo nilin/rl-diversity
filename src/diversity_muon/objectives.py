@@ -25,6 +25,7 @@ class MazeReward:
     def __init__(self, config: RewardConfig):
         self.config = config
         self.rng = np.random.default_rng(config.seed)
+        self.__name__ = f"maze_{config.objective}_reward"
 
     def __call__(
         self,

@@ -13,6 +13,15 @@ This repo is a fast prototype, not a byte-exact reproduction of the paper. The p
 
 ## Install
 
+For a fresh NVIDIA GPU machine, run the setup script:
+
+```bash
+./scripts/setup_minimum_env.sh
+```
+
+It creates `.venv`, installs the CUDA 12.8 PyTorch wheel, installs this
+package in editable mode, and verifies CUDA/bf16 availability.
+
 ```bash
 python -m venv .venv
 source .venv/bin/activate

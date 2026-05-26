@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 
+import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from trl import GRPOConfig, GRPOTrainer
 
@@ -9,6 +10,15 @@ from diversity_muon.config import load_config
 from diversity_muon.maze import build_dataset
 from diversity_muon.objectives import MazeReward, RewardConfig
 from diversity_muon.optim import build_optimizer, build_scheduler
+
+
+def _resolve_bf16(requested: bool) -> bool:
+    if not requested:
+        return False
+    if torch.cuda.is_available() and torch.cuda.is_bf16_supported():
+        return True
+    print("bf16 requested in config, but this environment does not support it; using fp32.")
+    return False
 
 
 def main() -> None:
@@ -54,7 +64,7 @@ def main() -> None:
         logging_steps=cfg.logging_steps,
         save_steps=cfg.save_steps,
         use_vllm=cfg.use_vllm,
-        bf16=cfg.bf16,
+        bf16=_resolve_bf16(cfg.bf16),
         report_to=cfg.report_to,
         seed=cfg.seed,
         remove_unused_columns=False,
