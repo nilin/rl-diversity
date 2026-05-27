@@ -32,7 +32,9 @@ The same wrapper can select patched variants:
 ```bash
 OBJECTIVE=vpo ./run_grpo_smoke.sh
 OPTIMIZER=muon ./run_grpo_smoke.sh
+OPTIMIZER=soft_muon SOFT_MUON_P=0.5 ./run_grpo_smoke.sh
 OBJECTIVE=vpo OPTIMIZER=muon ./run_grpo_smoke.sh
+OBJECTIVE=vpo OPTIMIZER=soft_muon SOFT_MUON_P=0.5 ./run_grpo_smoke.sh
 ```
 
 ## VPO Patch Points
@@ -92,3 +94,13 @@ This branch enables a first-pass FSDP Muon split with:
 ```text
 actor_rollout_ref.actor.optim.optimizer=muon
 ```
+
+It also enables Soft-Muon p=0.5 with:
+
+```text
+actor_rollout_ref.actor.optim.optimizer=soft_muon
+actor_rollout_ref.actor.optim.soft_muon_p=0.5
+```
+
+The Soft-Muon path uses a fixed convex combination of the 0th through 5th Newton-Schulz
+iterates fitted to approximate the singular-value power map `s^0.5`.

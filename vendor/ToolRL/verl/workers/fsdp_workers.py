@@ -16,6 +16,7 @@ The main entry point to run the PPO algorithm
 """
 
 import logging
+import math
 import os
 import warnings
 
@@ -42,6 +43,123 @@ from codetiming import Timer
 
 logger = logging.getLogger(__file__)
 logger.setLevel(os.getenv('VERL_PPO_LOGGING_LEVEL', 'WARN'))
+
+
+# Convex weights over NS iterates x0..x5 fitted to approximate the map s -> s^0.5.
+SOFT_MUON_P05_WEIGHTS = (
+    0.5939769106713131,
+    0.20341487335231062,
+    0.07481572691211376,
+    0.0273956601340413,
+    0.05513279135895345,
+    0.045264037571267964,
+)
+
+
+def _adjust_muon_lr(lr, adjust_lr_fn, param_shape):
+    if adjust_lr_fn is None or adjust_lr_fn == "original":
+        adjusted_ratio = math.sqrt(max(1.0, param_shape[0] / param_shape[1]))
+    elif adjust_lr_fn == "match_rms_adamw":
+        adjusted_ratio = 0.2 * math.sqrt(max(param_shape[0], param_shape[1]))
+    else:
+        adjusted_ratio = 1.0
+    return lr * adjusted_ratio
+
+
+def _soft_muon_update(update, ns_coefficients, ns_steps, eps, soft_muon_p):
+    if update.ndim != 2:
+        raise ValueError("Soft-Muon only supports 2D gradient updates.")
+    if abs(float(soft_muon_p) - 0.5) > 1e-12:
+        raise ValueError("This Soft-Muon path currently supports soft_muon_p=0.5 only.")
+    if ns_steps != 5:
+        raise ValueError("The p=0.5 Soft-Muon weights are fitted for ns_steps=5.")
+
+    a, b, c = ns_coefficients
+    transposed = update.size(0) > update.size(1)
+    soft_update = update.bfloat16()
+    if transposed:
+        soft_update = soft_update.T
+    soft_update = soft_update / soft_update.norm().clamp(min=eps)
+
+    iterates = [soft_update]
+    for _ in range(ns_steps):
+        gram_matrix = soft_update @ soft_update.T
+        gram_update = torch.addmm(gram_matrix, gram_matrix, gram_matrix, beta=b, alpha=c)
+        soft_update = torch.addmm(soft_update, gram_update, soft_update, beta=a)
+        iterates.append(soft_update)
+
+    soft_update = torch.zeros_like(iterates[-1])
+    for weight, iterate in zip(SOFT_MUON_P05_WEIGHTS, iterates):
+        soft_update.add_(iterate, alpha=weight)
+    if transposed:
+        soft_update = soft_update.T
+    return soft_update
+
+
+class SoftMuon(torch.optim.Optimizer):
+    def __init__(
+        self,
+        params,
+        lr=1e-3,
+        weight_decay=0.1,
+        momentum=0.95,
+        nesterov=True,
+        ns_coefficients=(3.4445, -4.775, 2.0315),
+        eps=1e-7,
+        ns_steps=5,
+        adjust_lr_fn="match_rms_adamw",
+        soft_muon_p=0.5,
+    ):
+        defaults = {
+            "lr": lr,
+            "weight_decay": weight_decay,
+            "momentum": momentum,
+            "nesterov": nesterov,
+            "ns_coefficients": ns_coefficients,
+            "eps": eps,
+            "ns_steps": ns_steps,
+            "adjust_lr_fn": adjust_lr_fn,
+            "soft_muon_p": soft_muon_p,
+        }
+        super().__init__(params, defaults)
+        for group in self.param_groups:
+            for param in group["params"]:
+                if param.ndim != 2:
+                    raise ValueError(f"Soft-Muon only supports 2D parameters, got size {param.size()}.")
+
+    @torch.no_grad()
+    def step(self, closure=None):
+        loss = None
+        if closure is not None:
+            with torch.enable_grad():
+                loss = closure()
+
+        for group in self.param_groups:
+            lr = group["lr"]
+            momentum = group["momentum"]
+            for param in group["params"]:
+                if param.grad is None:
+                    continue
+                if torch.is_complex(param) or param.grad.is_sparse:
+                    raise RuntimeError("Soft-Muon does not support complex parameters or sparse gradients.")
+                state = self.state[param]
+                if "momentum_buffer" not in state:
+                    state["momentum_buffer"] = torch.zeros_like(param.grad, memory_format=torch.preserve_format)
+                buf = state["momentum_buffer"]
+                buf.lerp_(param.grad, 1 - momentum)
+                update = param.grad.lerp(buf, momentum) if group["nesterov"] else buf
+                update = _soft_muon_update(
+                    update,
+                    group["ns_coefficients"],
+                    group["ns_steps"],
+                    group["eps"],
+                    group["soft_muon_p"],
+                )
+                adjusted_lr = _adjust_muon_lr(lr, group["adjust_lr_fn"], param.shape)
+                param.mul_(1 - lr * group["weight_decay"])
+                param.add_(update, alpha=-adjusted_lr)
+
+        return loss
 
 
 class CombinedOptimizer(torch.optim.Optimizer):
@@ -77,7 +195,7 @@ class CombinedOptimizer(torch.optim.Optimizer):
 
 
 def build_actor_optimizer(params, optim_config, optim_module):
-    optimizer_name = str(optim_config.get("optimizer", "adamw")).lower()
+    optimizer_name = str(optim_config.get("optimizer", "adamw")).lower().replace("-", "_")
     lr = optim_config.lr
     betas = optim_config.get("betas", (0.9, 0.999))
     weight_decay = optim_config.get("weight_decay", 1e-2)
@@ -85,24 +203,37 @@ def build_actor_optimizer(params, optim_config, optim_module):
     if optimizer_name == "adamw":
         return optim_module.AdamW(params, lr=lr, betas=betas, weight_decay=weight_decay)
 
-    if optimizer_name == "muon":
-        if not hasattr(torch.optim, "Muon"):
+    if optimizer_name in ("muon", "soft_muon"):
+        if optimizer_name == "muon" and not hasattr(torch.optim, "Muon"):
             raise RuntimeError("torch.optim.Muon is unavailable in this PyTorch build.")
         params = [param for param in params if param.requires_grad]
         muon_params = [param for param in params if param.ndim == 2]
         adam_params = [param for param in params if param.ndim != 2]
         optimizers = []
         if muon_params:
-            optimizers.append(
-                torch.optim.Muon(
-                    muon_params,
-                    lr=lr,
-                    weight_decay=weight_decay,
-                    momentum=optim_config.get("muon_momentum", 0.95),
-                    nesterov=True,
-                    adjust_lr_fn="match_rms_adamw",
+            if optimizer_name == "muon":
+                optimizers.append(
+                    torch.optim.Muon(
+                        muon_params,
+                        lr=lr,
+                        weight_decay=weight_decay,
+                        momentum=optim_config.get("muon_momentum", 0.95),
+                        nesterov=True,
+                        adjust_lr_fn="match_rms_adamw",
+                    )
                 )
-            )
+            else:
+                optimizers.append(
+                    SoftMuon(
+                        muon_params,
+                        lr=lr,
+                        weight_decay=weight_decay,
+                        momentum=optim_config.get("muon_momentum", 0.95),
+                        nesterov=True,
+                        adjust_lr_fn="match_rms_adamw",
+                        soft_muon_p=optim_config.get("soft_muon_p", 0.5),
+                    )
+                )
         if adam_params:
             optimizers.append(optim_module.AdamW(adam_params, lr=lr, betas=betas, weight_decay=0.0))
         if not optimizers:
@@ -269,8 +400,12 @@ class ActorRolloutRefWorker(Worker):
             auto_wrap_policy = None
 
         print(f'wrap_policy: {auto_wrap_policy}')
-        optimizer_name = str(optim_config.get("optimizer", "adamw")).lower() if optim_config is not None else "adamw"
-        use_orig_params = self._is_actor and optimizer_name == "muon"
+        optimizer_name = (
+            str(optim_config.get("optimizer", "adamw")).lower().replace("-", "_")
+            if optim_config is not None
+            else "adamw"
+        )
+        use_orig_params = self._is_actor and optimizer_name in ("muon", "soft_muon")
 
         # TODO(sgm): support hybrid
         if auto_wrap_policy is None:

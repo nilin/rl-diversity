@@ -27,7 +27,9 @@ Run patched variants from the same entry point:
 ```bash
 OBJECTIVE=vpo BASE_MODEL=Qwen/Qwen2.5-1.5B-Instruct ./run_grpo_smoke.sh
 OPTIMIZER=muon BASE_MODEL=Qwen/Qwen2.5-1.5B-Instruct ./run_grpo_smoke.sh
+OPTIMIZER=soft_muon SOFT_MUON_P=0.5 BASE_MODEL=Qwen/Qwen2.5-1.5B-Instruct ./run_grpo_smoke.sh
 OBJECTIVE=vpo OPTIMIZER=muon BASE_MODEL=Qwen/Qwen2.5-1.5B-Instruct ./run_grpo_smoke.sh
+OBJECTIVE=vpo OPTIMIZER=soft_muon SOFT_MUON_P=0.5 BASE_MODEL=Qwen/Qwen2.5-1.5B-Instruct ./run_grpo_smoke.sh
 ```
 
 Useful overrides:
@@ -59,4 +61,11 @@ Muon uses:
 
 ```text
 actor_rollout_ref.actor.optim.optimizer=muon
+```
+
+Soft-Muon p=0.5 uses:
+
+```text
+actor_rollout_ref.actor.optim.optimizer=soft_muon
+actor_rollout_ref.actor.optim.soft_muon_p=0.5
 ```

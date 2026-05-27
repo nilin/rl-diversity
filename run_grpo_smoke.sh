@@ -29,6 +29,7 @@ TEST_FREQ="${TEST_FREQ:-5}"
 GPU_MEMORY_UTILIZATION="${GPU_MEMORY_UTILIZATION:-0.6}"
 OBJECTIVE="${OBJECTIVE:-grpo}"
 OPTIMIZER="${OPTIMIZER:-adamw}"
+SOFT_MUON_P="${SOFT_MUON_P:-0.5}"
 VPO_WEIGHT_SAMPLES="${VPO_WEIGHT_SAMPLES:-16}"
 VPO_DIRICHLET_ALPHA="${VPO_DIRICHLET_ALPHA:-1.0}"
 VPO_SEED="${VPO_SEED:-0}"
@@ -53,6 +54,7 @@ python3 -m verl.trainer.main_ppo \
   data.max_response_length=1024 \
   actor_rollout_ref.model.path="$BASE_MODEL" \
   actor_rollout_ref.actor.optim.optimizer="$OPTIMIZER" \
+  actor_rollout_ref.actor.optim.soft_muon_p="$SOFT_MUON_P" \
   actor_rollout_ref.actor.optim.lr=1e-6 \
   actor_rollout_ref.model.use_remove_padding=True \
   actor_rollout_ref.actor.ppo_mini_batch_size="$PPO_MINI_BATCH_SIZE" \
