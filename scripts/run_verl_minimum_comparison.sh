@@ -1,10 +1,20 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-MODEL_PATH="${MODEL_PATH:-Qwen/Qwen3-0.6B}"
-DATA_DIR="${DATA_DIR:-data/maze_verl}"
+if [[ "${RUN_LOGGING_ACTIVE:-0}" != "1" ]]; then
+  LOG_DIR="${LOG_DIR:-logs}"
+  mkdir -p "$LOG_DIR"
+  RUN_LOG_FILE="${RUN_LOG_FILE:-$LOG_DIR/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log}"
+  export RUN_LOGGING_ACTIVE=1
+  exec > >(tee -a "$RUN_LOG_FILE") 2>&1
+  echo "Writing log to $RUN_LOG_FILE"
+fi
+
+MODEL_PATH="${MODEL_PATH:-Qwen/Qwen3-1.7B}"
+DATA_DIR="${DATA_DIR:-data/maze_verl_7x7}"
 TRAIN_SIZE="${TRAIN_SIZE:-128}"
 VAL_SIZE="${VAL_SIZE:-32}"
+MAZE_SIZE="${MAZE_SIZE:-7}"
 RUN_MUON="${RUN_MUON:-1}"
 RUN_VPO="${RUN_VPO:-0}"
 
@@ -16,7 +26,8 @@ export PYTHONPATH="$REPO_ROOT/src:${PYTHONPATH:-}"
 python -m diversity_muon.export_verl_maze \
   --output-dir "$DATA_DIR" \
   --train-size "$TRAIN_SIZE" \
-  --val-size "$VAL_SIZE"
+  --val-size "$VAL_SIZE" \
+  --maze-size "$MAZE_SIZE"
 
 run_verl() {
   local name="$1"
@@ -81,12 +92,12 @@ run_verl() {
     "${optim_overrides[@]}"
 }
 
-run_verl min_verl_adam_multirlvr multirlvr adamw
+run_verl qwen17b_7x7_verl_adam_multirlvr multirlvr adamw
 
 if [[ "$RUN_MUON" == "1" ]]; then
-  run_verl min_verl_muon_multirlvr multirlvr muon
+  run_verl qwen17b_7x7_verl_muon_multirlvr multirlvr muon
 fi
 
 if [[ "$RUN_VPO" == "1" ]]; then
-  run_verl min_verl_adam_vpo vpo adamw
+  run_verl qwen17b_7x7_verl_adam_vpo vpo adamw
 fi

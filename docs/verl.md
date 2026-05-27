@@ -8,9 +8,10 @@ Export Maze data in veRL's parquet format:
 
 ```bash
 python -m diversity_muon.export_verl_maze \
-  --output-dir data/maze_verl \
+  --output-dir data/maze_verl_7x7 \
   --train-size 128 \
-  --val-size 32
+  --val-size 32 \
+  --maze-size 7
 ```
 
 The custom reward function is [verl_reward.py](../src/diversity_muon/verl_reward.py). It reads `DIVERSITY_OBJECTIVE`:
@@ -28,8 +29,8 @@ Requires veRL to be installed in the active environment.
 
 This launches:
 
-- AdamW Multi-RLVR
-- experimental Muon Multi-RLVR
+- AdamW Multi-RLVR with Qwen3-1.7B on 7x7 mazes
+- experimental Muon Multi-RLVR with Qwen3-1.7B on 7x7 mazes
 
 Optional VPO:
 

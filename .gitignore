@@ -6,7 +6,11 @@ __pycache__/
 wandb/
 .DS_Store
 
-# Large/generated model checkpoint artifacts. Keep eval JSONs and run logs addable.
+# Runtime logs. Historical logs may be tracked under logs/, but new logs should stay local.
+/*.log
+/logs/*.log
+
+# Large/generated model checkpoint artifacts. Keep eval JSONs addable.
 outputs/*/checkpoint-*/
 *.safetensors
 optimizer.pt
