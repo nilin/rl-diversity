@@ -96,6 +96,30 @@ Plot those Figure-6-style curves with:
 python scripts/plot_training_diversity.py
 ```
 
+## Learning-Rate Matching
+
+The AdamW, Muon, and Soft-Muon comparison configs use the same nominal
+`learning_rate: 1.0e-6`. That makes the configs easy to compare, but the
+optimizer update rules are not identical.
+
+For Muon-style 2D matrix parameters, the code applies Muon's
+`match_rms_adamw` learning-rate adjustment. In practice this multiplies the
+configured LR by:
+
+```text
+0.2 * sqrt(max(fan_out, fan_in))
+```
+
+Soft-Muon uses the same shape-dependent adjustment after normalizing its soft
+update to the same Frobenius-scale target as the Muon zeropower update. Normal
+Muon uses PyTorch's `adjust_lr_fn="match_rms_adamw"` path.
+
+Auxiliary parameters still use AdamW at the configured LR. This includes
+embeddings, `lm_head`, norms, biases, and non-2D tensors. So the LR comparison
+is best read as: same nominal LR, Muon/Soft-Muon matrix updates scaled by the
+standard RMS-AdamW matching heuristic, not strict step-for-step equivalence with
+AdamW.
+
 ## Interpretation
 
 The first decision point is early training, not final Table 2 reproduction:

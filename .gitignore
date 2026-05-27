@@ -1,10 +1,14 @@
 .venv/
+.venv-minimum/
 __pycache__/
 *.py[cod]
 .pytest_cache/
 .ruff_cache/
 wandb/
 .DS_Store
+
+# Local third-party checkout used by setup scripts.
+vendor/
 
 # Runtime logs. Historical logs may be tracked under logs/, but new logs should stay local.
 /*.log
