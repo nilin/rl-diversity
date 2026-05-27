@@ -1,4 +1,4 @@
-# diversity
+# Diversity in RL Finetuning
 
 Small experiments for testing whether Muon or Soft-Muon reduces scalar-RL diversity collapse on the VPO paper's Maze-style setting.
 
