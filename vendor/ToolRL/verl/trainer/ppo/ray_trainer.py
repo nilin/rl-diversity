@@ -444,8 +444,9 @@ class RayPPOTrainer(object):
                                        filter_prompts=True,
                                        return_raw_chat=self.config.data.get('return_raw_chat', False),
                                        truncation='left')
+        val_batch_size = min(self.config.data.val_batch_size, len(self.val_dataset))
         self.val_dataloader = DataLoader(dataset=self.val_dataset,
-                                         batch_size=len(self.val_dataset),
+                                         batch_size=val_batch_size,
                                          shuffle=True,
                                          drop_last=True,
                                          collate_fn=collate_fn)
@@ -599,7 +600,7 @@ class RayPPOTrainer(object):
             critic_cls = RayClassWithInitArgs(cls=self.role_worker_mapping[Role.Critic], config=self.config.critic)
             self.resource_pool_to_cls[resource_pool]['critic'] = critic_cls
             self.use_critic = True
-        elif self.config.algorithm.adv_estimator == 'grpo':
+        elif self.config.algorithm.adv_estimator in ('grpo', 'vpo'):
             self.use_critic = False
         else:
             raise NotImplementedError
@@ -835,7 +836,7 @@ class RayPPOTrainer(object):
                 if self.global_steps >= self.total_training_steps:
 
                     # perform validation after training
-                    if self.val_reward_fn is not None:
+                    if self.val_reward_fn is not None and self.config.trainer.get('val_after_train', True):
                         val_metrics = self._validate()
                         pprint(f'Final validation metrics: {val_metrics}')
                         logger.log(data=val_metrics, step=self.global_steps)

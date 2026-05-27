@@ -162,6 +162,8 @@ trainer:
   n_gpus_per_node: 8
   save_freq: -1
   test_freq: -1
+  val_before_train: True
+  val_after_train: True
   critic_warmup: 0
   default_hdfs_dir: null
   default_local_dir: checkpoints/${trainer.project_name}/${trainer.experiment_name}
