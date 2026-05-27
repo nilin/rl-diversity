@@ -3,10 +3,11 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-TOOLRL_DIR="${TOOLRL_DIR:-$REPO_ROOT/external/ToolRL}"
+TOOLRL_DIR="${TOOLRL_DIR:-$REPO_ROOT/toolrl/vendor/ToolRL}"
 
-if [[ ! -d "$TOOLRL_DIR/.git" ]]; then
-  "$SCRIPT_DIR/setup.sh"
+if [[ ! -f "$TOOLRL_DIR/pyproject.toml" ]]; then
+  echo "Vendored ToolRL checkout not found at $TOOLRL_DIR" >&2
+  exit 1
 fi
 
 cd "$TOOLRL_DIR"

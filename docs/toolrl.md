@@ -10,13 +10,13 @@ repo: https://github.com/qiancheng0/ToolRL.git
 commit: 8cee13ec0ca72f0461da372a93a6fd8140dbb840
 ```
 
-Create the local workspace:
+Verify the vendored source:
 
 ```bash
 ./scripts/setup_toolrl_workspace.sh
 ```
 
-By default this clones ToolRL into `external/ToolRL`. Override with:
+By default this checks `toolrl/vendor/ToolRL`. Override with:
 
 ```bash
 TOOLRL_DIR=/path/to/ToolRL ./scripts/setup_toolrl_workspace.sh
@@ -27,7 +27,7 @@ TOOLRL_DIR=/path/to/ToolRL ./scripts/setup_toolrl_workspace.sh
 ToolRL's baseline GRPO entry point is:
 
 ```bash
-external/ToolRL/train_grpo.sh
+toolrl/vendor/ToolRL/train_grpo.sh
 ```
 
 That script wraps:
@@ -43,8 +43,8 @@ python3 -m verl.trainer.main_ppo \
 The shipped dataset is:
 
 ```text
-external/ToolRL/dataset/rlla_4k/train.parquet
-external/ToolRL/dataset/rlla_4k/test.parquet
+toolrl/vendor/ToolRL/dataset/rlla_4k/train.parquet
+toolrl/vendor/ToolRL/dataset/rlla_4k/test.parquet
 ```
 
 ## VPO Hook Points
@@ -52,7 +52,7 @@ external/ToolRL/dataset/rlla_4k/test.parquet
 ToolRL currently computes scalar reward in:
 
 ```text
-external/ToolRL/verl/utils/reward_score/rlla.py
+toolrl/vendor/ToolRL/verl/utils/reward_score/rlla.py
 ```
 
 The scalar comes from:
@@ -70,9 +70,9 @@ For VPO-paper faithfulness, we should expose a vector reward closer to:
 Then the advantage path to patch is:
 
 ```text
-external/ToolRL/verl/trainer/main_ppo.py
-external/ToolRL/verl/trainer/ppo/ray_trainer.py
-external/ToolRL/verl/trainer/ppo/core_algos.py
+toolrl/vendor/ToolRL/verl/trainer/main_ppo.py
+toolrl/vendor/ToolRL/verl/trainer/ppo/ray_trainer.py
+toolrl/vendor/ToolRL/verl/trainer/ppo/core_algos.py
 ```
 
 The existing GRPO advantage function is:
@@ -89,7 +89,7 @@ taking max over candidates under each sampled scalarization.
 ToolRL's FSDP actor optimizer is currently hard-coded to AdamW in:
 
 ```text
-external/ToolRL/verl/workers/fsdp_workers.py
+toolrl/vendor/ToolRL/verl/workers/fsdp_workers.py
 ```
 
 The immediate Muon hook is the actor branch in `_build_model_optimizer`, where it constructs:
@@ -104,10 +104,16 @@ optimizer before names are lost or carrying names through the FSDP wrapping path
 
 ## First Runnable Target
 
-Start with a small baseline GRPO run before patching VPO/Muon:
+Start with the top-level smoke wrapper before patching VPO/Muon:
 
 ```bash
-cd external/ToolRL
+BASE_MODEL=Qwen/Qwen2.5-1.5B-Instruct ./toolrl/run_grpo_smoke.sh
+```
+
+The equivalent raw ToolRL command is:
+
+```bash
+cd toolrl/vendor/ToolRL
 export CUDA_VISIBLE_DEVICES=0
 export VLLM_ATTENTION_BACKEND=XFORMERS
 export DATA_DIR=./dataset/rlla_4k

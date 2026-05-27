@@ -13,7 +13,7 @@ The ToolRL branch/worktree is:
 /Users/nilinabra/external/diversity-toolrl
 ```
 
-The upstream ToolRL repo is cloned into `external/ToolRL` by:
+The vendored ToolRL source lives in `toolrl/vendor/ToolRL`. Verify it with:
 
 ```bash
 ./toolrl/setup.sh
@@ -40,19 +40,19 @@ ROLLOUT_N=8 ./toolrl/run_grpo_smoke.sh
 
 ## Next Patch Points
 
-For VPO, patch the reward and advantage path in `external/ToolRL`:
+For VPO, patch the reward and advantage path in `toolrl/vendor/ToolRL`:
 
 ```text
-external/ToolRL/verl/utils/reward_score/rlla.py
-external/ToolRL/verl/trainer/main_ppo.py
-external/ToolRL/verl/trainer/ppo/ray_trainer.py
-external/ToolRL/verl/trainer/ppo/core_algos.py
+toolrl/vendor/ToolRL/verl/utils/reward_score/rlla.py
+toolrl/vendor/ToolRL/verl/trainer/main_ppo.py
+toolrl/vendor/ToolRL/verl/trainer/ppo/ray_trainer.py
+toolrl/vendor/ToolRL/verl/trainer/ppo/core_algos.py
 ```
 
 For Muon, patch the actor optimizer construction:
 
 ```text
-external/ToolRL/verl/workers/fsdp_workers.py
+toolrl/vendor/ToolRL/verl/workers/fsdp_workers.py
 ```
 
 The intended VPO reward vector for ToolRL is:
