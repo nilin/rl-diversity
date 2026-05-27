@@ -8,10 +8,8 @@ This repo is a fast prototype, not an exact reproduction of the paper. The paper
 - reward vector `[completion, gold, diamond, avoid_lava]`
 - scalar Multi-RLVR with a fixed uniform scalar
 - VPO-style set reward from Dirichlet-sampled scalarizations
+- AdamW vs Soft-Muon/Muon optimizer swap
 - reward-space diversity evaluation
-
-In addition, this repo includes
-- AdamW vs Muon/Soft-Muon optimizer swap
 
 ## Install
 
@@ -45,7 +43,14 @@ accelerate launch -m diversity_muon.train_grpo \
   --config configs/qwen17b_7x7_adam_multirlvr.yaml
 ```
 
-Muon Multi-RLVR, Qwen3-1.7B on 7x7 mazes:
+Soft-Muon p=0.5 Multi-RLVR, Qwen3-1.7B on 7x7 mazes:
+
+```bash
+accelerate launch -m diversity_muon.train_grpo \
+  --config configs/qwen17b_7x7_soft_muon_p05_multirlvr.yaml
+```
+
+Optional normal Muon Multi-RLVR, Qwen3-1.7B on 7x7 mazes:
 
 ```bash
 accelerate launch -m diversity_muon.train_grpo \
@@ -63,10 +68,23 @@ Offline diversity eval for a checkpoint:
 
 ```bash
 python -m diversity_muon.eval_diversity \
-  --model outputs/qwen17b_7x7_muon_multirlvr/checkpoint-40 \
+  --model outputs/qwen17b_7x7_soft_muon_p05_multirlvr/checkpoint-40 \
   --maze-size 7 \
   --num-prompts 32 \
   --samples-per-prompt 10
+```
+
+To run the default 7x7 comparison end-to-end:
+
+```bash
+./scripts/run_minimum_comparison.sh
+```
+
+By default this runs AdamW Multi-RLVR, Soft-Muon p=0.5 Multi-RLVR, and AdamW
+VPO. Add normal Muon after VPO with:
+
+```bash
+RUN_MUON=1 ./scripts/run_minimum_comparison.sh
 ```
 
 The 1.7B/7x7 configs also run a small in-training diversity evaluation every
@@ -78,3 +96,22 @@ Plot those Figure-6-style curves with:
 python scripts/plot_training_diversity.py
 ```
 
+## Interpretation
+
+The first decision point is early training, not final Table 2 reproduction:
+
+- if Soft-Muon Multi-RLVR tracks AdamW Multi-RLVR on reward-space diversity, stop
+- if Soft-Muon or Muon lifts diversity by steps 20-60, run the same test with Qwen3-4B
+- if VPO does not lift diversity in this scaffold, treat the scaffold as suspect before interpreting Muon
+
+The paper-comparable run would use Qwen3-4B Maze and the authors' full veRL-like setup. This repo is for the cheap triage experiment.
+
+## veRL
+
+The repo also includes a veRL path for a more tuned GRPO stack:
+
+```bash
+./scripts/run_verl_minimum_comparison.sh
+```
+
+See [docs/verl.md](docs/verl.md) for details and caveats.
