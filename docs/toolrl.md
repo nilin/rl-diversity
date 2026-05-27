@@ -18,14 +18,11 @@ vendor/ToolRL/dataset/rlla_4k/test.parquet
 
 ## Baseline
 
-The first runnable target is the GRPO smoke baseline:
+The main runnable target is the paper-style ToolRL recipe:
 
 ```bash
-BASE_MODEL=Qwen/Qwen2.5-1.5B-Instruct ./run_grpo_smoke.sh
+OBJECTIVE=grpo OPTIMIZER=adamw ./run_grpo_smoke.sh
 ```
-
-This verifies ToolRL's veRL trainer, vLLM rollout, parquet data, reward function, and GRPO update
-before longer VPO/Muon runs.
 
 The same wrapper can select patched variants:
 
@@ -36,6 +33,12 @@ OPTIMIZER=soft_muon SOFT_MUON_P=0.5 ./run_grpo_smoke.sh
 OBJECTIVE=vpo OPTIMIZER=muon ./run_grpo_smoke.sh
 OBJECTIVE=vpo OPTIMIZER=soft_muon SOFT_MUON_P=0.5 ./run_grpo_smoke.sh
 ```
+
+By default the wrapper uses Qwen3-1.7B, `m=3` attempts per completion, `n=8`
+rollouts per prompt, train batch 128, mini-batch 64, micro-batch 8, loss-side
+KL, no entropy bonus, training temperature 1.0, and the ToolRL vector reward
+described in the VPO paper. Set `TOTAL_TRAINING_STEPS=2 TRAIN_BATCH_SIZE=4
+VAL_BATCH_SIZE=4 ROLLOUT_N=2 MULTI_ANSWER_COUNT=1` for a quick mechanical test.
 
 ## VPO Patch Points
 
@@ -51,8 +54,8 @@ For VPO-paper faithfulness, expose a reward vector closer to:
 [format, tool_name_f1, arg_key_f1, arg_value_f1]
 ```
 
-This branch carries that vector through as token-level tensors and enables the set-level
-advantage estimator with:
+This branch carries per-attempt reward vectors through the trainer and enables
+the set-level advantage estimator with:
 
 ```text
 algorithm.adv_estimator=vpo
@@ -72,8 +75,9 @@ The existing GRPO advantage function is:
 compute_grpo_outcome_advantage(...)
 ```
 
-VPO should add a set-level objective over each prompt group by sampling Dirichlet weights and
-taking max over candidates under each sampled scalarization.
+VPO samples Dirichlet weights and scores each generated completion as the mean
+best attempt under those scalarizations before GRPO-normalizing across the
+rollout group.
 
 ## Muon Patch Point
 

@@ -14,25 +14,27 @@ cd "$TOOLRL_DIR"
 export CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES:-0}"
 export VLLM_ATTENTION_BACKEND="${VLLM_ATTENTION_BACKEND:-XFORMERS}"
 export DATA_DIR="${DATA_DIR:-./dataset/rlla_4k}"
-export BASE_MODEL="${BASE_MODEL:-Qwen/Qwen2.5-1.5B-Instruct}"
-export EXPERIMENT_NAME="${EXPERIMENT_NAME:-toolrl-qwen-grpo-smoke}"
+export BASE_MODEL="${BASE_MODEL:-Qwen/Qwen3-1.7B}"
+export EXPERIMENT_NAME="${EXPERIMENT_NAME:-toolrl-qwen3-paper}"
 
 N_GPUS="${N_GPUS:-1}"
 ROLLOUT_TP_SIZE="${ROLLOUT_TP_SIZE:-1}"
-ROLLOUT_N="${ROLLOUT_N:-2}"
-TRAIN_BATCH_SIZE="${TRAIN_BATCH_SIZE:-4}"
-VAL_BATCH_SIZE="${VAL_BATCH_SIZE:-4}"
-PPO_MINI_BATCH_SIZE="${PPO_MINI_BATCH_SIZE:-$TRAIN_BATCH_SIZE}"
-PPO_MICRO_BATCH_SIZE="${PPO_MICRO_BATCH_SIZE:-$PPO_MINI_BATCH_SIZE}"
+ROLLOUT_N="${ROLLOUT_N:-8}"
+TRAIN_BATCH_SIZE="${TRAIN_BATCH_SIZE:-128}"
+VAL_BATCH_SIZE="${VAL_BATCH_SIZE:-80}"
+PPO_MINI_BATCH_SIZE="${PPO_MINI_BATCH_SIZE:-64}"
+PPO_MICRO_BATCH_SIZE="${PPO_MICRO_BATCH_SIZE:-8}"
 TOTAL_EPOCHS="${TOTAL_EPOCHS:-1}"
-TOTAL_TRAINING_STEPS="${TOTAL_TRAINING_STEPS:-2}"
+TOTAL_TRAINING_STEPS="${TOTAL_TRAINING_STEPS:-}"
 SAVE_FREQ="${SAVE_FREQ:--1}"
 TEST_FREQ="${TEST_FREQ:--1}"
 GPU_MEMORY_UTILIZATION="${GPU_MEMORY_UTILIZATION:-0.6}"
 MAX_PROMPT_LENGTH="${MAX_PROMPT_LENGTH:-2048}"
-MAX_RESPONSE_LENGTH="${MAX_RESPONSE_LENGTH:-256}"
+MAX_RESPONSE_LENGTH="${MAX_RESPONSE_LENGTH:-2048}"
 VAL_BEFORE_TRAIN="${VAL_BEFORE_TRAIN:-false}"
 VAL_AFTER_TRAIN="${VAL_AFTER_TRAIN:-false}"
+MULTI_ANSWER_COUNT="${MULTI_ANSWER_COUNT:-3}"
+PAPER_TOOLRL_REWARD="${PAPER_TOOLRL_REWARD:-1}"
 OBJECTIVE="${OBJECTIVE:-grpo}"
 OPTIMIZER="${OPTIMIZER:-adamw}"
 SOFT_MUON_P="${SOFT_MUON_P:-0.5}"
@@ -41,12 +43,13 @@ MUON_NS_STEPS="${MUON_NS_STEPS:-12}"
 VPO_WEIGHT_SAMPLES="${VPO_WEIGHT_SAMPLES:-16}"
 VPO_DIRICHLET_ALPHA="${VPO_DIRICHLET_ALPHA:-1.0}"
 VPO_SEED="${VPO_SEED:-0}"
-if [[ -z "${USE_KL_LOSS:-}" ]]; then
-  if [[ "$OBJECTIVE" == "vpo" ]]; then
-    USE_KL_LOSS=true
-  else
-    USE_KL_LOSS=false
-  fi
+USE_KL_LOSS="${USE_KL_LOSS:-true}"
+export MULTI_ANSWER_COUNT
+export PAPER_TOOLRL_REWARD
+
+TRAINING_STEP_ARG=()
+if [[ -n "$TOTAL_TRAINING_STEPS" ]]; then
+  TRAINING_STEP_ARG=(trainer.total_training_steps="$TOTAL_TRAINING_STEPS")
 fi
 
 python3 -m verl.trainer.main_ppo \
@@ -60,6 +63,7 @@ python3 -m verl.trainer.main_ppo \
   data.val_batch_size="$VAL_BATCH_SIZE" \
   data.max_prompt_length="$MAX_PROMPT_LENGTH" \
   data.max_response_length="$MAX_RESPONSE_LENGTH" \
+  data.multi_answer_count="$MULTI_ANSWER_COUNT" \
   actor_rollout_ref.model.path="$BASE_MODEL" \
   actor_rollout_ref.actor.optim.optimizer="$OPTIMIZER" \
   actor_rollout_ref.actor.optim.soft_muon_p="$SOFT_MUON_P" \
@@ -69,7 +73,8 @@ python3 -m verl.trainer.main_ppo \
   actor_rollout_ref.model.use_remove_padding=True \
   actor_rollout_ref.actor.ppo_mini_batch_size="$PPO_MINI_BATCH_SIZE" \
   actor_rollout_ref.actor.ppo_micro_batch_size="$PPO_MICRO_BATCH_SIZE" \
-  actor_rollout_ref.actor.use_dynamic_bsz=True \
+  actor_rollout_ref.actor.use_dynamic_bsz=False \
+  actor_rollout_ref.actor.entropy_coeff=0.0 \
   actor_rollout_ref.actor.use_kl_loss="$USE_KL_LOSS" \
   actor_rollout_ref.actor.kl_loss_coef=0.001 \
   actor_rollout_ref.actor.kl_loss_type=low_var_kl \
@@ -80,6 +85,9 @@ python3 -m verl.trainer.main_ppo \
   actor_rollout_ref.rollout.tensor_model_parallel_size="$ROLLOUT_TP_SIZE" \
   actor_rollout_ref.rollout.name=vllm \
   actor_rollout_ref.rollout.gpu_memory_utilization="$GPU_MEMORY_UTILIZATION" \
+  actor_rollout_ref.rollout.temperature=1.0 \
+  actor_rollout_ref.rollout.top_p=1.0 \
+  actor_rollout_ref.rollout.top_k=-1 \
   actor_rollout_ref.rollout.n="$ROLLOUT_N" \
   actor_rollout_ref.ref.fsdp_config.param_offload=True \
   algorithm.kl_ctrl.kl_coef=0.001 \
@@ -90,8 +98,8 @@ python3 -m verl.trainer.main_ppo \
   trainer.n_gpus_per_node="$N_GPUS" \
   trainer.nnodes=1 \
   trainer.total_epochs="$TOTAL_EPOCHS" \
-  trainer.total_training_steps="$TOTAL_TRAINING_STEPS" \
   trainer.save_freq="$SAVE_FREQ" \
   trainer.test_freq="$TEST_FREQ" \
   trainer.val_before_train="$VAL_BEFORE_TRAIN" \
-  trainer.val_after_train="$VAL_AFTER_TRAIN"
+  trainer.val_after_train="$VAL_AFTER_TRAIN" \
+  "${TRAINING_STEP_ARG[@]}"

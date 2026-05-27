@@ -37,6 +37,6 @@ Setup complete.
 Activate the environment:
   source "$VENV_DIR/bin/activate"
 
-Run the VPO smoke test:
-  OBJECTIVE=vpo BASE_MODEL=Qwen/Qwen2.5-1.5B-Instruct ./run_grpo_smoke.sh
+Run the paper-style VPO test:
+  EXPERIMENT_NAME=toolrl-vpo-adamw OBJECTIVE=vpo OPTIMIZER=adamw ./run_grpo_smoke.sh
 EOF

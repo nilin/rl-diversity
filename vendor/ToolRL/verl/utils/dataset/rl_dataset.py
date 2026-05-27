@@ -13,6 +13,7 @@
 # limitations under the License.
 
 from omegaconf import ListConfig
+import copy
 import os
 from typing import List, Union
 
@@ -70,6 +71,7 @@ class RLHFDataset(Dataset):
                  cache_dir='~/.cache/verl/rlhf',
                  chat_template_func=None,
                  return_raw_chat=False,
+                 multi_answer_count=1,
                  truncation='error'):
         if not isinstance(parquet_files, (List, ListConfig)):
             parquet_files = [parquet_files]
@@ -85,6 +87,7 @@ class RLHFDataset(Dataset):
         self.return_raw_chat = return_raw_chat
         self.chat_template_func = chat_template_func
         self.truncation = truncation
+        self.multi_answer_count = int(multi_answer_count)
         
         self.use_chat_template = use_chat_template
 
@@ -127,6 +130,22 @@ class RLHFDataset(Dataset):
         row_dict = self.dataframe.iloc[item].to_dict()
 
         chat = row_dict.pop(self.prompt_key)
+        if self.multi_answer_count > 1:
+            chat = copy.deepcopy(list(chat))
+            suffix = (
+                "\n\nADDITIONAL INSTRUCTION (overrides the single-attempt output format above): "
+                f"Provide {self.multi_answer_count} different attempts at the task. Wrap each attempt in "
+                f"numbered outer tags <response_1>...</response_1> through <response_{self.multi_answer_count}>"
+                f"...</response_{self.multi_answer_count}>. Inside each <response_i>, follow the original "
+                "output format from the system prompt (your <think>, optional <tool_call>, and inner "
+                "<response> sections). The attempts should be genuinely different -- different tool choices, "
+                "different argument values, or different reasoning -- not paraphrases. Closing tags are "
+                "required on every outer attempt."
+            )
+            for message in reversed(chat):
+                if message.get("role") == "user":
+                    message["content"] = message["content"].rstrip() + suffix
+                    break
         if self.use_chat_template:
             prompt = self.tokenizer.apply_chat_template(chat, tokenize=False, add_generation_prompt=True)
         else:

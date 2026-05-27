@@ -16,28 +16,29 @@ Verify the vendored source:
 ./setup.sh
 ```
 
-Run a small GRPO baseline smoke test:
+Run the paper-style ToolRL GRPO baseline:
 
 ```bash
-BASE_MODEL=Qwen/Qwen2.5-1.5B-Instruct ./run_grpo_smoke.sh
+OBJECTIVE=grpo OPTIMIZER=adamw ./run_grpo_smoke.sh
 ```
 
-Run patched variants from the same entry point:
+Compare VPO and VPO + Soft-Muon:
 
 ```bash
-OBJECTIVE=vpo BASE_MODEL=Qwen/Qwen2.5-1.5B-Instruct ./run_grpo_smoke.sh
-OPTIMIZER=muon BASE_MODEL=Qwen/Qwen2.5-1.5B-Instruct ./run_grpo_smoke.sh
-OPTIMIZER=soft_muon SOFT_MUON_P=0.5 BASE_MODEL=Qwen/Qwen2.5-1.5B-Instruct ./run_grpo_smoke.sh
-OBJECTIVE=vpo OPTIMIZER=muon BASE_MODEL=Qwen/Qwen2.5-1.5B-Instruct ./run_grpo_smoke.sh
-OBJECTIVE=vpo OPTIMIZER=soft_muon SOFT_MUON_P=0.5 BASE_MODEL=Qwen/Qwen2.5-1.5B-Instruct ./run_grpo_smoke.sh
+EXPERIMENT_NAME=toolrl-vpo-adamw OBJECTIVE=vpo OPTIMIZER=adamw ./run_grpo_smoke.sh
+EXPERIMENT_NAME=toolrl-vpo-soft-muon-p05 OBJECTIVE=vpo OPTIMIZER=soft_muon SOFT_MUON_P=0.5 ./run_grpo_smoke.sh
 ```
 
-Useful overrides:
+The wrapper defaults to the paper-style ToolRL recipe where possible: Qwen3-1.7B,
+3 attempts per completion, 8 rollouts per prompt, train batch 128, mini-batch 64,
+micro-batch 8, loss-side KL, no entropy bonus, and ToolRL vector reward
+`[format, tool_name_f1, arg_key_f1, arg_value_f1]`.
+
+Useful overrides for shorter tests:
 
 ```bash
-N_GPUS=2 BASE_MODEL=Qwen/Qwen2.5-3B-Instruct ./run_grpo_smoke.sh
-TRAIN_BATCH_SIZE=64 VAL_BATCH_SIZE=32 ./run_grpo_smoke.sh
-ROLLOUT_N=8 ./run_grpo_smoke.sh
+TOTAL_TRAINING_STEPS=2 TRAIN_BATCH_SIZE=4 VAL_BATCH_SIZE=4 ROLLOUT_N=2 MULTI_ANSWER_COUNT=1 ./run_grpo_smoke.sh
+N_GPUS=4 CUDA_VISIBLE_DEVICES=0,1,2,3 ./run_grpo_smoke.sh
 ```
 
 Patch points:

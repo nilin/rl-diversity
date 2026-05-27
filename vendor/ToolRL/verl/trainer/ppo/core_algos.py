@@ -145,7 +145,7 @@ def compute_grpo_outcome_advantage(token_level_rewards: torch.Tensor,
                 id2std[idx] = torch.tensor(1.0)
             elif len(id2score[idx]) > 1:
                 id2mean[idx] = torch.mean(torch.tensor(id2score[idx]))
-                id2std[idx] = torch.std(torch.tensor([id2score[idx]]))
+                id2std[idx] = torch.std(torch.tensor(id2score[idx]), unbiased=False)
             else:
                 raise ValueError(f"no score in prompt index: {idx}")
         for i in range(bsz):
@@ -155,7 +155,7 @@ def compute_grpo_outcome_advantage(token_level_rewards: torch.Tensor,
     return scores, scores
 
 
-def compute_vpo_outcome_advantage(token_level_reward_vectors: torch.Tensor,
+def compute_vpo_outcome_advantage(candidate_reward_vectors: torch.Tensor,
                                   eos_mask: torch.Tensor,
                                   index: torch.Tensor,
                                   num_weight_samples: int = 16,
@@ -164,15 +164,13 @@ def compute_vpo_outcome_advantage(token_level_reward_vectors: torch.Tensor,
                                   epsilon: float = 1e-6):
     """Compute VPO-style advantages over per-prompt candidate sets.
 
-    token_level_reward_vectors has shape (bs, response_length, reward_dim). Outcome vectors
-    are expected on the terminal token, matching ToolRL's scalar reward convention.
+    candidate_reward_vectors has shape (bs, num_candidates, reward_dim).
     """
-    response_length = token_level_reward_vectors.shape[1]
-    vectors = token_level_reward_vectors.sum(dim=1)
+    response_length = eos_mask.shape[1]
+    vectors = candidate_reward_vectors
     scores = torch.zeros(vectors.shape[0], device=vectors.device, dtype=torch.float32)
 
     with torch.no_grad():
-        torch.manual_seed(seed)
         concentration = torch.full(
             (vectors.shape[-1],),
             float(dirichlet_alpha),
@@ -187,13 +185,12 @@ def compute_vpo_outcome_advantage(token_level_reward_vectors: torch.Tensor,
 
         for indices in id2indices.values():
             group_vectors = vectors[indices]
-            scalarized = group_vectors @ weights.transpose(0, 1)
-            winner_indices = scalarized.argmax(dim=0)
+            scalarized = torch.einsum("gmd,kd->gmk", group_vectors, weights)
+            rollout_scores = scalarized.max(dim=1).values.mean(dim=1)
             group_scores = torch.zeros(len(indices), device=vectors.device, dtype=torch.float32)
-            for sample_idx, winner_idx in enumerate(winner_indices):
-                group_scores[winner_idx] += scalarized[winner_idx, sample_idx] / weights.shape[0]
+            group_scores[:] = rollout_scores
             mean = group_scores.mean()
-            std = group_scores.std() if len(indices) > 1 else torch.tensor(1.0, device=vectors.device)
+            std = group_scores.std(unbiased=False) if len(indices) > 1 else torch.tensor(1.0, device=vectors.device)
             advantages = (group_scores - mean) / (std + epsilon)
             scores[indices] = advantages
 

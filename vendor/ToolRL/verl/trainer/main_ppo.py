@@ -15,6 +15,8 @@
 Note that we don't combine the main with ray_trainer as ray_trainer is used by other main.
 """
 
+import os
+
 import torch
 from verl import DataProto
 from verl.utils.reward_score import gsm8k, math, multiply, countdown, rlla
@@ -58,6 +60,8 @@ class RewardManager():
         tool_name_tensor = torch.zeros_like(data.batch['responses'], dtype=torch.float32)
         arg_key_tensor = torch.zeros_like(data.batch['responses'], dtype=torch.float32)
         arg_value_tensor = torch.zeros_like(data.batch['responses'], dtype=torch.float32)
+        max_candidates = int(os.getenv("MULTI_ANSWER_COUNT", "1"))
+        candidate_vector_tensor = torch.zeros((len(data), max_candidates, 4), dtype=torch.float32)
 
         already_print_data_sources = {}
 
@@ -87,7 +91,7 @@ class RewardManager():
 
             score_output = compute_score_fn(solution_str=sequences_str, ground_truth=ground_truth, step=step)
             if isinstance(score_output, tuple):
-                padded_scores = tuple(score_output) + (0.0,) * max(0, 7 - len(score_output))
+                padded_scores = tuple(score_output) + (0.0,) * max(0, 8 - len(score_output))
                 (
                     score,
                     fomrat_score,
@@ -96,11 +100,15 @@ class RewardManager():
                     tool_name_score,
                     arg_key_score,
                     arg_value_score,
-                ) = padded_scores[:7]
+                    candidate_vectors,
+                ) = padded_scores[:8]
             else:
                 score = score_output
                 fomrat_score = correctness_score = length_score = 0.0
                 tool_name_score = arg_key_score = arg_value_score = 0.0
+                candidate_vectors = []
+            if not isinstance(candidate_vectors, (list, tuple)):
+                candidate_vectors = []
             reward_tensor[i, valid_response_length - 1] = score
             format_tensor[i, valid_response_length - 1] = fomrat_score
             correctness_tensor[i, valid_response_length - 1] = correctness_score
@@ -108,6 +116,8 @@ class RewardManager():
             tool_name_tensor[i, valid_response_length - 1] = tool_name_score
             arg_key_tensor[i, valid_response_length - 1] = arg_key_score
             arg_value_tensor[i, valid_response_length - 1] = arg_value_score
+            for candidate_idx, vector in enumerate(candidate_vectors[:max_candidates]):
+                candidate_vector_tensor[i, candidate_idx] = torch.tensor(vector, dtype=torch.float32)
 
             if data_source not in already_print_data_sources:
                 already_print_data_sources[data_source] = 0
@@ -124,6 +134,7 @@ class RewardManager():
             tool_name_tensor,
             arg_key_tensor,
             arg_value_tensor,
+            candidate_vector_tensor,
         )
 
 

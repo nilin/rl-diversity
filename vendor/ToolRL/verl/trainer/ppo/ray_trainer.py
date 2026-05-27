@@ -155,17 +155,21 @@ def compute_advantage(data: DataProto,
         response_length = responses.size(-1)
         attention_mask = data.batch['attention_mask']
         response_mask = attention_mask[:, -response_length:]
-        token_level_reward_vectors = torch.stack(
-            [
-                data.batch['token_level_scores_format'],
-                data.batch['token_level_scores_tool_name'],
-                data.batch['token_level_scores_arg_key'],
-                data.batch['token_level_scores_arg_value'],
-            ],
-            dim=-1,
+        candidate_reward_vectors = (
+            data.batch['candidate_reward_vectors']
+            if 'candidate_reward_vectors' in data.batch.keys()
+            else torch.stack(
+                [
+                    data.batch['token_level_scores_format'].sum(dim=1),
+                    data.batch['token_level_scores_tool_name'].sum(dim=1),
+                    data.batch['token_level_scores_arg_key'].sum(dim=1),
+                    data.batch['token_level_scores_arg_value'].sum(dim=1),
+                ],
+                dim=-1,
+            ).unsqueeze(1)
         )
         advantages, returns = core_algos.compute_vpo_outcome_advantage(
-            token_level_reward_vectors=token_level_reward_vectors,
+            candidate_reward_vectors=candidate_reward_vectors,
             eos_mask=response_mask,
             index=index,
             num_weight_samples=vpo_weight_samples,
@@ -428,6 +432,7 @@ class RayPPOTrainer(object):
                                          max_prompt_length=self.config.data.max_prompt_length,
                                          # use_chat_template=self.config.data.use_chat_template,
                                          filter_prompts=True,
+                                         multi_answer_count=self.config.data.get('multi_answer_count', 1),
                                          return_raw_chat=self.config.data.get('return_raw_chat', False),
                                          truncation='left')
         self.train_dataloader = DataLoader(dataset=self.train_dataset,
@@ -442,6 +447,7 @@ class RayPPOTrainer(object):
                                        max_prompt_length=self.config.data.max_prompt_length,
                                        # use_chat_template=self.config.data.use_chat_template,
                                        filter_prompts=True,
+                                       multi_answer_count=self.config.data.get('multi_answer_count', 1),
                                        return_raw_chat=self.config.data.get('return_raw_chat', False),
                                        truncation='left')
         val_batch_size = min(self.config.data.val_batch_size, len(self.val_dataset))
@@ -517,6 +523,7 @@ class RayPPOTrainer(object):
                 tool_name_tensor,
                 arg_key_tensor,
                 arg_value_tensor,
+                candidate_vector_tensor,
             ) = self.val_reward_fn(test_batch, self.global_steps)
 
             reward_tensor_lst.append(reward_tensor)
@@ -769,6 +776,7 @@ class RayPPOTrainer(object):
                             tool_name_tensor,
                             arg_key_tensor,
                             arg_value_tensor,
+                            candidate_vector_tensor,
                         ) = self.reward_fn(batch, self.global_steps)
                         batch.batch['token_level_scores'] = reward_tensor
                         batch.batch['token_level_scores_format'] = format_tensor
@@ -777,6 +785,7 @@ class RayPPOTrainer(object):
                         batch.batch['token_level_scores_tool_name'] = tool_name_tensor
                         batch.batch['token_level_scores_arg_key'] = arg_key_tensor
                         batch.batch['token_level_scores_arg_value'] = arg_value_tensor
+                        batch.batch['candidate_reward_vectors'] = candidate_vector_tensor
 
                         # compute rewards. apply_kl_penalty if available
                         if not self.config.actor_rollout_ref.actor.use_kl_loss:

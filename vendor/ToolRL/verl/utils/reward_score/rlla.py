@@ -19,7 +19,7 @@ from collections import Counter
 
 
 def match_score(list1, list2):
-    """Compute a similarity score considering element frequency, ignoring order."""
+    """Compute multiset F1 considering element frequency, ignoring order."""
     if list1 == list2:
         return 1.0
     if os.getenv("REFINEDREWARD", 0) == "1":
@@ -34,10 +34,53 @@ def match_score(list1, list2):
     count2 = Counter(list2)  # Frequency count for list2
 
     intersection = sum(min(count1[k], count2[k]) for k in count1.keys() & count2.keys())
-    max_possible = len(list1) + len(list2) - intersection
 
-    return intersection / max_possible if max_possible > 0 else 0.0
-    
+    return 2 * intersection / (len(list1) + len(list2)) if len(list1) + len(list2) > 0 else 0.0
+
+
+def token_f1(value1, value2):
+    tokens1 = re.findall(r"\w+", str(value1).lower())
+    tokens2 = re.findall(r"\w+", str(value2).lower())
+    if tokens1 == tokens2:
+        return 1.0
+    if not tokens1 or not tokens2:
+        return 0.0
+    count1 = Counter(tokens1)
+    count2 = Counter(tokens2)
+    overlap = sum(min(count1[token], count2[token]) for token in count1.keys() & count2.keys())
+    return 2 * overlap / (len(tokens1) + len(tokens2)) if overlap else 0.0
+
+
+def extract_xml_block(text, tag):
+    pattern = rf"<{tag}>(.*?)</{tag}>"
+    match = re.search(pattern, text, re.DOTALL)
+    return match.group(1).strip() if match else ""
+
+
+def extract_multi_attempts(text, count):
+    attempts = []
+    for i in range(1, count + 1):
+        attempt = extract_xml_block(text, f"response_{i}")
+        attempts.append(attempt)
+    if any(attempts):
+        return attempts
+    return [text]
+
+
+def extract_assistant_text(solution_str):
+    if "<|start_header_id|>assistant<|end_header_id|>" in solution_str:
+        return solution_str.split("<|start_header_id|>assistant<|end_header_id|>")[-1].split("<|eot_id|>")[0].strip()
+    if "<|im_start|>assistant" in solution_str:
+        return solution_str.split("<|im_start|>assistant")[-1].split("<|im_end|>")[0].strip()
+    return solution_str.strip()
+
+
+def parse_tool_calls(text):
+    tool_call = extract_xml_block(text, "tool_call")
+    if not tool_call:
+        return []
+    return [json.loads(tool) for tool in tool_call.split("\n") if tool.strip()]
+
 
 # custoimzed reward functions: format
 def customize_format_reward_func(completions, answer, step, max_possible_reward, min_possible_reward, **kwargs):
@@ -63,11 +106,12 @@ def customize_format_reward_func(completions, answer, step, max_possible_reward,
     rewards = []
     responses = [completion[0]['content'] for completion in completions]
     
-    print("\n======= Answer ======= ")
-    print(answer[0])
-    print("\n======= Responses ======= ")
-    for idx, response in enumerate(responses):
-        print(f"*** Response {idx+1}***\n{response}")
+    if os.getenv("REWARD_DEBUG", "0") == "1":
+        print("\n======= Answer ======= ")
+        print(answer[0])
+        print("\n======= Responses ======= ")
+        for idx, response in enumerate(responses):
+            print(f"*** Response {idx+1}***\n{response}")
 
     for response, ans in zip(responses, answer):
         reward = min_possible_reward
@@ -90,9 +134,10 @@ def customize_format_reward_func(completions, answer, step, max_possible_reward,
         
         rewards.append(reward)
         
-    print("\n======= Reward for <format> =======")
-    print("Reward function for <format> is called ...")
-    print(rewards)
+    if os.getenv("REWARD_DEBUG", "0") == "1":
+        print("\n======= Reward for <format> =======")
+        print("Reward function for <format> is called ...")
+        print(rewards)
     return rewards
 
 
@@ -200,7 +245,7 @@ def compute_tool_call_reward(gt_tools, pd_tools, max_possible_reward, min_possib
 def compute_tool_call_vector(gt_tools, pd_tools):
     """Return ToolRL VPO vector components in [0, 1].
 
-    Components are tool-name match, argument-key match, and argument-value exactness.
+    Components are tool-name multiset F1, argument-key set F1, and argument-value token F1.
     The scalar reward path above is left intact for baseline GRPO compatibility.
     """
     if gt_tools == pd_tools:
@@ -232,9 +277,8 @@ def compute_tool_call_vector(gt_tools, pd_tools):
                 continue
             pd_params = pd_tool["parameters"]
             key_score = match_score(list(gt_params.keys()), list(pd_params.keys()))
-            value_score = sum(
-                1.0 for key, value in gt_params.items() if key in pd_params and pd_params[key] == value
-            ) / max(1, len(gt_params))
+            value_score = sum(token_f1(value, pd_params[key]) for key, value in gt_params.items() if key in pd_params)
+            value_score = value_score / max(1, len(gt_params))
             total = key_score + value_score
             if total > best_total:
                 best_total = total
@@ -334,6 +378,22 @@ def customize_tool_vector_reward(completions, answer, **kwargs):
     return vectors
 
 
+def compute_attempt_vector(response, ground_truth, step=0):
+    answer = [ground_truth]
+    completions = [[{"role": "assistant", "content": response}]]
+    format_score = customize_format_reward_func(completions, answer, step, 1.0, 0.0)[0]
+    if "<tool_call>" not in ground_truth:
+        return (format_score, 0.0, 0.0, 0.0)
+
+    try:
+        gt_tools = parse_tool_calls(ground_truth)
+        pd_tools = parse_tool_calls(response)
+        tool_name_score, arg_key_score, arg_value_score = compute_tool_call_vector(gt_tools, pd_tools)
+    except Exception:
+        tool_name_score = arg_key_score = arg_value_score = 0.0
+    return (format_score, tool_name_score, arg_key_score, arg_value_score)
+
+
 def compute_score(solution_str, ground_truth, step=0):
     """The scoring function for GSM8k.
 
@@ -346,13 +406,32 @@ def compute_score(solution_str, ground_truth, step=0):
         format_score: the score for the format
         score: the score for the correct answer
     """
-    exp_name = str(os.getenv("EXPERIMENT_NAME", ""))
-    if "llama" in exp_name:
-        predict_str = solution_str.split("<|start_header_id|>assistant<|end_header_id|>")[-1].split("<|eot_id|>")[0].strip()
-    elif "qwen" in exp_name:
-        predict_str = solution_str.split("<|im_start|>assistant")[-1].split("<|im_end|>")[0].strip()
-    else:
-        raise NotImplementedError(f"Unknown model name: {exp_name}")
+    predict_str = extract_assistant_text(solution_str)
+    multi_answer_count = int(os.getenv("MULTI_ANSWER_COUNT", "1"))
+    if multi_answer_count > 1 or os.getenv("PAPER_TOOLRL_REWARD", "0") == "1":
+        attempts = extract_multi_attempts(predict_str, multi_answer_count)
+        candidate_vectors = [
+            compute_attempt_vector(attempt, ground_truth, step)
+            for attempt in attempts[:multi_answer_count]
+        ]
+        while len(candidate_vectors) < multi_answer_count:
+            candidate_vectors.append((0.0, 0.0, 0.0, 0.0))
+        scalar_scores = [sum(vector) / 4 for vector in candidate_vectors]
+        best_index = max(range(len(scalar_scores)), key=lambda idx: scalar_scores[idx]) if scalar_scores else 0
+        best_vector = candidate_vectors[best_index] if candidate_vectors else (0.0, 0.0, 0.0, 0.0)
+        score = scalar_scores[best_index] if scalar_scores else 0.0
+        correctness_score = sum(best_vector[1:]) / 3
+
+        return (
+            score,
+            best_vector[0],
+            correctness_score,
+            0.0,
+            best_vector[1],
+            best_vector[2],
+            best_vector[3],
+            candidate_vectors,
+        )
     
     if str(os.getenv("CORRECTMAX1", 0)) == "1":
         print("CORRECTMAX1 is set to 1, so max score is set to 1")
