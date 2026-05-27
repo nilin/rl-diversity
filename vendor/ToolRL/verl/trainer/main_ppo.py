@@ -55,6 +55,9 @@ class RewardManager():
         format_tensor = torch.zeros_like(data.batch['responses'], dtype=torch.float32)
         correctness_tensor = torch.zeros_like(data.batch['responses'], dtype=torch.float32)
         length_tensor = torch.zeros_like(data.batch['responses'], dtype=torch.float32)
+        tool_name_tensor = torch.zeros_like(data.batch['responses'], dtype=torch.float32)
+        arg_key_tensor = torch.zeros_like(data.batch['responses'], dtype=torch.float32)
+        arg_value_tensor = torch.zeros_like(data.batch['responses'], dtype=torch.float32)
 
         already_print_data_sources = {}
 
@@ -82,11 +85,29 @@ class RewardManager():
             data_source = data_item.non_tensor_batch['data_source']
             compute_score_fn = _select_rm_score_fn(data_source)
 
-            score, fomrat_score, correctness_score, length_score = compute_score_fn(solution_str=sequences_str, ground_truth=ground_truth, step=step)
+            score_output = compute_score_fn(solution_str=sequences_str, ground_truth=ground_truth, step=step)
+            if isinstance(score_output, tuple):
+                padded_scores = tuple(score_output) + (0.0,) * max(0, 7 - len(score_output))
+                (
+                    score,
+                    fomrat_score,
+                    correctness_score,
+                    length_score,
+                    tool_name_score,
+                    arg_key_score,
+                    arg_value_score,
+                ) = padded_scores[:7]
+            else:
+                score = score_output
+                fomrat_score = correctness_score = length_score = 0.0
+                tool_name_score = arg_key_score = arg_value_score = 0.0
             reward_tensor[i, valid_response_length - 1] = score
             format_tensor[i, valid_response_length - 1] = fomrat_score
             correctness_tensor[i, valid_response_length - 1] = correctness_score
             length_tensor[i, valid_response_length - 1] = length_score
+            tool_name_tensor[i, valid_response_length - 1] = tool_name_score
+            arg_key_tensor[i, valid_response_length - 1] = arg_key_score
+            arg_value_tensor[i, valid_response_length - 1] = arg_value_score
 
             if data_source not in already_print_data_sources:
                 already_print_data_sources[data_source] = 0
@@ -95,7 +116,15 @@ class RewardManager():
                 already_print_data_sources[data_source] += 1
                 print(sequences_str)
 
-        return reward_tensor, format_tensor, correctness_tensor, length_tensor
+        return (
+            reward_tensor,
+            format_tensor,
+            correctness_tensor,
+            length_tensor,
+            tool_name_tensor,
+            arg_key_tensor,
+            arg_value_tensor,
+        )
 
 
 import ray

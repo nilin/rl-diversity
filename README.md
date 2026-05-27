@@ -22,6 +22,14 @@ Run a small GRPO baseline smoke test:
 BASE_MODEL=Qwen/Qwen2.5-1.5B-Instruct ./run_grpo_smoke.sh
 ```
 
+Run patched variants from the same entry point:
+
+```bash
+OBJECTIVE=vpo BASE_MODEL=Qwen/Qwen2.5-1.5B-Instruct ./run_grpo_smoke.sh
+OPTIMIZER=muon BASE_MODEL=Qwen/Qwen2.5-1.5B-Instruct ./run_grpo_smoke.sh
+OBJECTIVE=vpo OPTIMIZER=muon BASE_MODEL=Qwen/Qwen2.5-1.5B-Instruct ./run_grpo_smoke.sh
+```
+
 Useful overrides:
 
 ```bash
@@ -40,3 +48,15 @@ vendor/ToolRL/verl/trainer/ppo/core_algos.py
 vendor/ToolRL/verl/workers/fsdp_workers.py
 ```
 
+VPO uses:
+
+```text
+algorithm.adv_estimator=vpo
+reward vector: [format, tool_name_f1, arg_key_f1, arg_value_f1]
+```
+
+Muon uses:
+
+```text
+actor_rollout_ref.actor.optim.optimizer=muon
+```

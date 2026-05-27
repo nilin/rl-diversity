@@ -34,7 +34,9 @@ actor_rollout_ref:
     shuffle: False
     ulysses_sequence_parallel_size: 1 # sp size
     optim:
+      optimizer: adamw
       lr: 1e-6
+      muon_momentum: 0.95
       lr_warmup_steps_ratio: 0.  # the total steps will be injected during runtime
       min_lr_ratio: null   # only useful for warmup with cosine
       warmup_style: constant  # select from constant/cosine
@@ -139,6 +141,9 @@ algorithm:
   gamma: 1.0
   lam: 1.0
   adv_estimator: gae
+  vpo_weight_samples: 16
+  vpo_dirichlet_alpha: 1.0
+  vpo_seed: 0
   kl_penalty: kl  # how to estimate kl divergence
   kl_ctrl:
     type: fixed

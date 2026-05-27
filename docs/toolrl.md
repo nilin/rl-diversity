@@ -25,7 +25,15 @@ BASE_MODEL=Qwen/Qwen2.5-1.5B-Instruct ./run_grpo_smoke.sh
 ```
 
 This verifies ToolRL's veRL trainer, vLLM rollout, parquet data, reward function, and GRPO update
-before VPO/Muon patches are added.
+before longer VPO/Muon runs.
+
+The same wrapper can select patched variants:
+
+```bash
+OBJECTIVE=vpo ./run_grpo_smoke.sh
+OPTIMIZER=muon ./run_grpo_smoke.sh
+OBJECTIVE=vpo OPTIMIZER=muon ./run_grpo_smoke.sh
+```
 
 ## VPO Patch Points
 
@@ -39,6 +47,13 @@ For VPO-paper faithfulness, expose a reward vector closer to:
 
 ```text
 [format, tool_name_f1, arg_key_f1, arg_value_f1]
+```
+
+This branch carries that vector through as token-level tensors and enables the set-level
+advantage estimator with:
+
+```text
+algorithm.adv_estimator=vpo
 ```
 
 Then patch:
@@ -72,3 +87,8 @@ The immediate Muon hook is the actor branch in `_build_model_optimizer`, where i
 actor_optimizer = optim.AdamW(actor_module_fsdp.parameters(), ...)
 ```
 
+This branch enables a first-pass FSDP Muon split with:
+
+```text
+actor_rollout_ref.actor.optim.optimizer=muon
+```

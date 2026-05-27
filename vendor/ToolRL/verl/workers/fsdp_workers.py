@@ -44,6 +44,74 @@ logger = logging.getLogger(__file__)
 logger.setLevel(os.getenv('VERL_PPO_LOGGING_LEVEL', 'WARN'))
 
 
+class CombinedOptimizer(torch.optim.Optimizer):
+    def __init__(self, optimizers):
+        self.optimizers = list(optimizers)
+        params = [
+            param
+            for optimizer in self.optimizers
+            for group in optimizer.param_groups
+            for param in group["params"]
+        ]
+        super().__init__(params, {})
+        self.param_groups = [group for optimizer in self.optimizers for group in optimizer.param_groups]
+
+    def zero_grad(self, set_to_none=True):
+        for optimizer in self.optimizers:
+            optimizer.zero_grad(set_to_none=set_to_none)
+
+    def step(self, closure=None):
+        loss = None
+        for optimizer in self.optimizers:
+            maybe_loss = optimizer.step(closure=closure)
+            if maybe_loss is not None:
+                loss = maybe_loss
+        return loss
+
+    def state_dict(self):
+        return {"optimizers": [optimizer.state_dict() for optimizer in self.optimizers]}
+
+    def load_state_dict(self, state_dict):
+        for optimizer, child_state in zip(self.optimizers, state_dict["optimizers"]):
+            optimizer.load_state_dict(child_state)
+
+
+def build_actor_optimizer(params, optim_config, optim_module):
+    optimizer_name = str(optim_config.get("optimizer", "adamw")).lower()
+    lr = optim_config.lr
+    betas = optim_config.get("betas", (0.9, 0.999))
+    weight_decay = optim_config.get("weight_decay", 1e-2)
+
+    if optimizer_name == "adamw":
+        return optim_module.AdamW(params, lr=lr, betas=betas, weight_decay=weight_decay)
+
+    if optimizer_name == "muon":
+        if not hasattr(torch.optim, "Muon"):
+            raise RuntimeError("torch.optim.Muon is unavailable in this PyTorch build.")
+        params = [param for param in params if param.requires_grad]
+        muon_params = [param for param in params if param.ndim == 2]
+        adam_params = [param for param in params if param.ndim != 2]
+        optimizers = []
+        if muon_params:
+            optimizers.append(
+                torch.optim.Muon(
+                    muon_params,
+                    lr=lr,
+                    weight_decay=weight_decay,
+                    momentum=optim_config.get("muon_momentum", 0.95),
+                    nesterov=True,
+                    adjust_lr_fn="match_rms_adamw",
+                )
+            )
+        if adam_params:
+            optimizers.append(optim_module.AdamW(adam_params, lr=lr, betas=betas, weight_decay=0.0))
+        if not optimizers:
+            raise ValueError("No trainable actor parameters were provided to Muon optimizer.")
+        return CombinedOptimizer(optimizers)
+
+    raise ValueError(f"Unsupported actor optimizer: {optimizer_name}")
+
+
 class ActorRolloutRefWorker(Worker):
     """
     This worker can be instantiated as a standalone actor or a standalone rollout or a standalone reference policy
@@ -201,6 +269,8 @@ class ActorRolloutRefWorker(Worker):
             auto_wrap_policy = None
 
         print(f'wrap_policy: {auto_wrap_policy}')
+        optimizer_name = str(optim_config.get("optimizer", "adamw")).lower() if optim_config is not None else "adamw"
+        use_orig_params = self._is_actor and optimizer_name == "muon"
 
         # TODO(sgm): support hybrid
         if auto_wrap_policy is None:
@@ -212,7 +282,7 @@ class ActorRolloutRefWorker(Worker):
         actor_module_fsdp = FSDP(
             actor_module,
             param_init_fn=init_fn,
-            use_orig_params=False,
+            use_orig_params=use_orig_params,
             auto_wrap_policy=auto_wrap_policy,
             device_id=torch.cuda.current_device(),
             sharding_strategy=sharding_strategy,  # zero3
@@ -226,10 +296,11 @@ class ActorRolloutRefWorker(Worker):
         # TODO: add more optimizer args into config
         if self._is_actor:
             from verl.utils.torch_functional import get_constant_schedule_with_warmup
-            actor_optimizer = optim.AdamW(actor_module_fsdp.parameters(),
-                                          lr=optim_config.lr,
-                                          betas=optim_config.get('betas', (0.9, 0.999)),
-                                          weight_decay=optim_config.get('weight_decay', 1e-2))
+            actor_optimizer = build_actor_optimizer(
+                list(actor_module_fsdp.parameters()),
+                optim_config=optim_config,
+                optim_module=optim,
+            )
 
             total_steps = optim_config.get('total_training_steps', 0)
             num_warmup_steps_ratio = optim_config.get('lr_warmup_steps_ratio', 0.)

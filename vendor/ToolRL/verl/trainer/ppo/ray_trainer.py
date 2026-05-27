@@ -113,7 +113,14 @@ def apply_kl_penalty(data: DataProto, kl_ctrl: core_algos.AdaptiveKLController, 
     return data, metrics
 
 
-def compute_advantage(data: DataProto, adv_estimator, gamma=1.0, lam=1.0, num_repeat=1):
+def compute_advantage(data: DataProto,
+                      adv_estimator,
+                      gamma=1.0,
+                      lam=1.0,
+                      num_repeat=1,
+                      vpo_weight_samples=16,
+                      vpo_dirichlet_alpha=1.0,
+                      vpo_seed=0):
     # prepare response group
     # TODO: add other ways to estimate advantages
     if adv_estimator == 'gae':
@@ -140,6 +147,31 @@ def compute_advantage(data: DataProto, adv_estimator, gamma=1.0, lam=1.0, num_re
         advantages, returns = core_algos.compute_grpo_outcome_advantage(token_level_rewards=token_level_rewards,
                                                                         eos_mask=response_mask,
                                                                         index=index)
+        data.batch['advantages'] = advantages
+        data.batch['returns'] = returns
+    elif adv_estimator == 'vpo':
+        index = data.non_tensor_batch['uid']
+        responses = data.batch['responses']
+        response_length = responses.size(-1)
+        attention_mask = data.batch['attention_mask']
+        response_mask = attention_mask[:, -response_length:]
+        token_level_reward_vectors = torch.stack(
+            [
+                data.batch['token_level_scores_format'],
+                data.batch['token_level_scores_tool_name'],
+                data.batch['token_level_scores_arg_key'],
+                data.batch['token_level_scores_arg_value'],
+            ],
+            dim=-1,
+        )
+        advantages, returns = core_algos.compute_vpo_outcome_advantage(
+            token_level_reward_vectors=token_level_reward_vectors,
+            eos_mask=response_mask,
+            index=index,
+            num_weight_samples=vpo_weight_samples,
+            dirichlet_alpha=vpo_dirichlet_alpha,
+            seed=vpo_seed,
+        )
         data.batch['advantages'] = advantages
         data.batch['returns'] = returns
     else:
@@ -173,10 +205,26 @@ def compute_data_metrics(batch, use_critic=True):
     # TODO: add response length
     sequence_score = batch.batch['token_level_scores'].sum(-1)
     sequence_reward = batch.batch['token_level_rewards'].sum(-1)
+    zero_score = torch.zeros_like(batch.batch['token_level_scores'])
     
     sequence_score_format = batch.batch['token_level_scores_format'].sum(-1)
     sequence_score_correctness = batch.batch['token_level_scores_correctness'].sum(-1)
     sequence_score_length = batch.batch['token_level_scores_length'].sum(-1)
+    sequence_score_tool_name = (
+        batch.batch['token_level_scores_tool_name']
+        if 'token_level_scores_tool_name' in batch.batch.keys()
+        else zero_score
+    ).sum(-1)
+    sequence_score_arg_key = (
+        batch.batch['token_level_scores_arg_key']
+        if 'token_level_scores_arg_key' in batch.batch.keys()
+        else zero_score
+    ).sum(-1)
+    sequence_score_arg_value = (
+        batch.batch['token_level_scores_arg_value']
+        if 'token_level_scores_arg_value' in batch.batch.keys()
+        else zero_score
+    ).sum(-1)
 
     advantages = batch.batch['advantages']
     returns = batch.batch['returns']
@@ -230,6 +278,12 @@ def compute_data_metrics(batch, use_critic=True):
             torch.max(sequence_score_length).detach().item(),
         'critic/length_score/min':
             torch.min(sequence_score_length).detach().item(),
+        'critic/tool_name_score/mean':
+            torch.mean(sequence_score_tool_name).detach().item(),
+        'critic/arg_key_score/mean':
+            torch.mean(sequence_score_arg_key).detach().item(),
+        'critic/arg_value_score/mean':
+            torch.mean(sequence_score_arg_value).detach().item(),
         # reward
         'critic/rewards/mean':
             torch.mean(sequence_reward).detach().item(),
@@ -421,6 +475,9 @@ class RayPPOTrainer(object):
         format_tensor_lst = []
         correctness_tensor_lst = []
         length_tensor_lst = []
+        tool_name_tensor_lst = []
+        arg_key_tensor_lst = []
+        arg_value_tensor_lst = []
         
         data_source_lst = []
         for test_data in self.val_dataloader:
@@ -451,18 +508,32 @@ class RayPPOTrainer(object):
 
             # evaluate using reward_function
             # for certain reward function (e.g. sandbox), the generation can overlap with reward
-            reward_tensor, format_tensor, correctness_tensor, length_tensor = self.val_reward_fn(test_batch, self.global_steps)
+            (
+                reward_tensor,
+                format_tensor,
+                correctness_tensor,
+                length_tensor,
+                tool_name_tensor,
+                arg_key_tensor,
+                arg_value_tensor,
+            ) = self.val_reward_fn(test_batch, self.global_steps)
 
             reward_tensor_lst.append(reward_tensor)
             format_tensor_lst.append(format_tensor)
             correctness_tensor_lst.append(correctness_tensor)
             length_tensor_lst.append(length_tensor)
+            tool_name_tensor_lst.append(tool_name_tensor)
+            arg_key_tensor_lst.append(arg_key_tensor)
+            arg_value_tensor_lst.append(arg_value_tensor)
             data_source_lst.append(test_batch.non_tensor_batch.get('data_source', ['unknown'] * reward_tensor.shape[0]))
 
         reward_tensor = torch.cat(reward_tensor_lst, dim=0).sum(-1).cpu()  # (batch_size,)
         format_tensor = torch.cat(format_tensor_lst, dim=0).sum(-1).cpu()  # (batch_size,)
         correctness_tensor = torch.cat(correctness_tensor_lst, dim=0).sum(-1).cpu()  # (batch_size,)
         length_tensor = torch.cat(length_tensor_lst, dim=0).sum(-1).cpu()  # (batch_size,)
+        tool_name_tensor = torch.cat(tool_name_tensor_lst, dim=0).sum(-1).cpu()  # (batch_size,)
+        arg_key_tensor = torch.cat(arg_key_tensor_lst, dim=0).sum(-1).cpu()  # (batch_size,)
+        arg_value_tensor = torch.cat(arg_value_tensor_lst, dim=0).sum(-1).cpu()  # (batch_size,)
         data_sources = np.concatenate(data_source_lst, axis=0)
         
         # evaluate test_score based on data source
@@ -470,6 +541,9 @@ class RayPPOTrainer(object):
         data_source_format = {}
         data_source_correctness = {}
         data_source_length = {}
+        data_source_tool_name = {}
+        data_source_arg_key = {}
+        data_source_arg_value = {}
         
         for i in range(reward_tensor.shape[0]):
             data_source = data_sources[i]
@@ -478,11 +552,17 @@ class RayPPOTrainer(object):
                 data_source_format[data_source] = []
                 data_source_correctness[data_source] = []
                 data_source_length[data_source] = []
+                data_source_tool_name[data_source] = []
+                data_source_arg_key[data_source] = []
+                data_source_arg_value[data_source] = []
             
             data_source_reward[data_source].append(reward_tensor[i].item())
             data_source_format[data_source].append(format_tensor[i].item())
             data_source_correctness[data_source].append(correctness_tensor[i].item())
             data_source_length[data_source].append(length_tensor[i].item())
+            data_source_tool_name[data_source].append(tool_name_tensor[i].item())
+            data_source_arg_key[data_source].append(arg_key_tensor[i].item())
+            data_source_arg_value[data_source].append(arg_value_tensor[i].item())
 
         metric_dict = {}
         for data_source, rewards in data_source_reward.items():
@@ -490,6 +570,9 @@ class RayPPOTrainer(object):
             metric_dict[f'val/test_format/{data_source}'] = np.mean(data_source_format[data_source])
             metric_dict[f'val/test_correctness/{data_source}'] = np.mean(data_source_correctness[data_source])
             metric_dict[f'val/test_length/{data_source}'] = np.mean(data_source_length[data_source])
+            metric_dict[f'val/test_tool_name/{data_source}'] = np.mean(data_source_tool_name[data_source])
+            metric_dict[f'val/test_arg_key/{data_source}'] = np.mean(data_source_arg_key[data_source])
+            metric_dict[f'val/test_arg_value/{data_source}'] = np.mean(data_source_arg_value[data_source])
 
         return metric_dict
 
@@ -677,11 +760,22 @@ class RayPPOTrainer(object):
                             batch = batch.union(reward_tensor)
 
                         # we combine with rule-based rm
-                        reward_tensor, format_tensor, correctness_tensor, length_tensor = self.reward_fn(batch, self.global_steps)
+                        (
+                            reward_tensor,
+                            format_tensor,
+                            correctness_tensor,
+                            length_tensor,
+                            tool_name_tensor,
+                            arg_key_tensor,
+                            arg_value_tensor,
+                        ) = self.reward_fn(batch, self.global_steps)
                         batch.batch['token_level_scores'] = reward_tensor
                         batch.batch['token_level_scores_format'] = format_tensor
                         batch.batch['token_level_scores_correctness'] = correctness_tensor
                         batch.batch['token_level_scores_length'] = length_tensor
+                        batch.batch['token_level_scores_tool_name'] = tool_name_tensor
+                        batch.batch['token_level_scores_arg_key'] = arg_key_tensor
+                        batch.batch['token_level_scores_arg_value'] = arg_value_tensor
 
                         # compute rewards. apply_kl_penalty if available
                         if not self.config.actor_rollout_ref.actor.use_kl_loss:
@@ -697,7 +791,10 @@ class RayPPOTrainer(object):
                                                   adv_estimator=self.config.algorithm.adv_estimator,
                                                   gamma=self.config.algorithm.gamma,
                                                   lam=self.config.algorithm.lam,
-                                                  num_repeat=self.config.actor_rollout_ref.rollout.n)
+                                                  num_repeat=self.config.actor_rollout_ref.rollout.n,
+                                                  vpo_weight_samples=self.config.algorithm.get('vpo_weight_samples', 16),
+                                                  vpo_dirichlet_alpha=self.config.algorithm.get('vpo_dirichlet_alpha', 1.0),
+                                                  vpo_seed=self.config.algorithm.get('vpo_seed', 0))
 
                     # update critic
                     if self.use_critic:

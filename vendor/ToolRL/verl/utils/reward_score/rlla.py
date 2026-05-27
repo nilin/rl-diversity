@@ -22,7 +22,6 @@ def match_score(list1, list2):
     """Compute a similarity score considering element frequency, ignoring order."""
     if list1 == list2:
         return 1.0
-    
     if os.getenv("REFINEDREWARD", 0) == "1":
         print("REFINEDREWARD is set to 1, so strict match is used")
         if list1 != list2:
@@ -198,6 +197,64 @@ def compute_tool_call_reward(gt_tools, pd_tools, max_possible_reward, min_possib
     return (max_possible_reward - min_possible_reward) * score / local_max_possible + min_possible_reward
 
 
+def compute_tool_call_vector(gt_tools, pd_tools):
+    """Return ToolRL VPO vector components in [0, 1].
+
+    Components are tool-name match, argument-key match, and argument-value exactness.
+    The scalar reward path above is left intact for baseline GRPO compatibility.
+    """
+    if gt_tools == pd_tools:
+        return 1.0, 1.0, 1.0
+
+    if os.getenv("COARSEREWARD", 0) == "1" and gt_tools != pd_tools:
+        return 0.0, 0.0, 0.0
+
+    if not gt_tools or not pd_tools:
+        return 0.0, 0.0, 0.0
+
+    gt_names = [tool["name"] for tool in gt_tools]
+    pd_names = [tool["name"] for tool in pd_tools]
+    name_score = match_score(gt_names, pd_names)
+
+    key_scores = []
+    value_scores = []
+    used_pd_indices = set()
+    for gt_tool in gt_tools:
+        gt_name = gt_tool["name"]
+        gt_params = gt_tool["parameters"]
+        best_match_index = -1
+        best_key_score = 0.0
+        best_value_score = 0.0
+        best_total = -1.0
+
+        for i, pd_tool in enumerate(pd_tools):
+            if i in used_pd_indices or pd_tool["name"] != gt_name:
+                continue
+            pd_params = pd_tool["parameters"]
+            key_score = match_score(list(gt_params.keys()), list(pd_params.keys()))
+            value_score = sum(
+                1.0 for key, value in gt_params.items() if key in pd_params and pd_params[key] == value
+            ) / max(1, len(gt_params))
+            total = key_score + value_score
+            if total > best_total:
+                best_total = total
+                best_match_index = i
+                best_key_score = key_score
+                best_value_score = value_score
+
+        if best_match_index >= 0:
+            used_pd_indices.add(best_match_index)
+            key_scores.append(best_key_score)
+            value_scores.append(best_value_score)
+        else:
+            key_scores.append(0.0)
+            value_scores.append(0.0)
+
+    arg_key_score = sum(key_scores) / len(key_scores) if key_scores else 0.0
+    arg_value_score = sum(value_scores) / len(value_scores) if value_scores else 0.0
+    return name_score, arg_key_score, arg_value_score
+
+
 # custoimzed reward functions: tool call correctness
 def customize_correctness_reward_tool(completions, answer, step, max_possible_reward, min_possible_reward, **kwargs):
     if str(os.getenv("MAX1STEP30MAX3", 0)) == "1":
@@ -254,6 +311,29 @@ def customize_correctness_reward_tool(completions, answer, step, max_possible_re
     return rewards
 
 
+def customize_tool_vector_reward(completions, answer, **kwargs):
+    responses = [completion[0]['content'] for completion in completions]
+    vectors = []
+
+    for response, ans in zip(responses, answer):
+        if "<tool_call>" not in ans:
+            vectors.append((0.0, 0.0, 0.0))
+            continue
+
+        try:
+            assert "<tool_call>" in response
+            assert "</tool_call>" in response
+            gt_tool_call = ans.split("<tool_call>")[1].split("</tool_call>")[0].strip()
+            gt_tools = [json.loads(tool) for tool in gt_tool_call.split("\n")]
+            pd_tool_call = response.split("<tool_call>")[1].split("</tool_call>")[0].strip()
+            pd_tools = [json.loads(tool) for tool in pd_tool_call.split("\n")]
+            vectors.append(compute_tool_call_vector(gt_tools, pd_tools))
+        except Exception:
+            vectors.append((0.0, 0.0, 0.0))
+
+    return vectors
+
+
 def compute_score(solution_str, ground_truth, step=0):
     """The scoring function for GSM8k.
 
@@ -299,8 +379,19 @@ def compute_score(solution_str, ground_truth, step=0):
         length_score = customize_length_reward_func(completions, answer, step, length_max_possible, length_min_possible)[0]
     else:
         length_score = 0
-    
+
+    tool_name_score, arg_key_score, arg_value_score = customize_tool_vector_reward(
+        completions, answer
+    )[0]
+
     score = fomrat_score + correctness_score + length_score
-    
-    return score, fomrat_score, correctness_score, length_score
-    
+
+    return (
+        score,
+        fomrat_score,
+        correctness_score,
+        length_score,
+        tool_name_score,
+        arg_key_score,
+        arg_value_score,
+    )

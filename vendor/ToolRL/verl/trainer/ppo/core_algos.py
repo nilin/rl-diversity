@@ -155,6 +155,53 @@ def compute_grpo_outcome_advantage(token_level_rewards: torch.Tensor,
     return scores, scores
 
 
+def compute_vpo_outcome_advantage(token_level_reward_vectors: torch.Tensor,
+                                  eos_mask: torch.Tensor,
+                                  index: torch.Tensor,
+                                  num_weight_samples: int = 16,
+                                  dirichlet_alpha: float = 1.0,
+                                  seed: int = 0,
+                                  epsilon: float = 1e-6):
+    """Compute VPO-style advantages over per-prompt candidate sets.
+
+    token_level_reward_vectors has shape (bs, response_length, reward_dim). Outcome vectors
+    are expected on the terminal token, matching ToolRL's scalar reward convention.
+    """
+    response_length = token_level_reward_vectors.shape[1]
+    vectors = token_level_reward_vectors.sum(dim=1)
+    scores = torch.zeros(vectors.shape[0], device=vectors.device, dtype=torch.float32)
+
+    with torch.no_grad():
+        torch.manual_seed(seed)
+        concentration = torch.full(
+            (vectors.shape[-1],),
+            float(dirichlet_alpha),
+            device=vectors.device,
+            dtype=vectors.dtype,
+        )
+        weights = torch.distributions.Dirichlet(concentration).sample((int(num_weight_samples),))
+
+        id2indices = defaultdict(list)
+        for i in range(vectors.shape[0]):
+            id2indices[index[i]].append(i)
+
+        for indices in id2indices.values():
+            group_vectors = vectors[indices]
+            scalarized = group_vectors @ weights.transpose(0, 1)
+            winner_indices = scalarized.argmax(dim=0)
+            group_scores = torch.zeros(len(indices), device=vectors.device, dtype=torch.float32)
+            for sample_idx, winner_idx in enumerate(winner_indices):
+                group_scores[winner_idx] += scalarized[winner_idx, sample_idx] / weights.shape[0]
+            mean = group_scores.mean()
+            std = group_scores.std() if len(indices) > 1 else torch.tensor(1.0, device=vectors.device)
+            advantages = (group_scores - mean) / (std + epsilon)
+            scores[indices] = advantages
+
+        scores = scores.unsqueeze(-1).tile([1, response_length]) * eos_mask
+
+    return scores, scores
+
+
 def compute_rewards(token_level_scores, old_log_prob, ref_log_prob, kl_ratio):
     kl = old_log_prob - ref_log_prob
     return token_level_scores - kl * kl_ratio

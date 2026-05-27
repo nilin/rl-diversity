@@ -27,9 +27,24 @@ TOTAL_EPOCHS="${TOTAL_EPOCHS:-1}"
 SAVE_FREQ="${SAVE_FREQ:-5}"
 TEST_FREQ="${TEST_FREQ:-5}"
 GPU_MEMORY_UTILIZATION="${GPU_MEMORY_UTILIZATION:-0.6}"
+OBJECTIVE="${OBJECTIVE:-grpo}"
+OPTIMIZER="${OPTIMIZER:-adamw}"
+VPO_WEIGHT_SAMPLES="${VPO_WEIGHT_SAMPLES:-16}"
+VPO_DIRICHLET_ALPHA="${VPO_DIRICHLET_ALPHA:-1.0}"
+VPO_SEED="${VPO_SEED:-0}"
+if [[ -z "${USE_KL_LOSS:-}" ]]; then
+  if [[ "$OBJECTIVE" == "vpo" ]]; then
+    USE_KL_LOSS=true
+  else
+    USE_KL_LOSS=false
+  fi
+fi
 
 python3 -m verl.trainer.main_ppo \
-  algorithm.adv_estimator=grpo \
+  algorithm.adv_estimator="$OBJECTIVE" \
+  algorithm.vpo_weight_samples="$VPO_WEIGHT_SAMPLES" \
+  algorithm.vpo_dirichlet_alpha="$VPO_DIRICHLET_ALPHA" \
+  algorithm.vpo_seed="$VPO_SEED" \
   data.train_files="$DATA_DIR/train.parquet" \
   data.val_files="$DATA_DIR/test.parquet" \
   data.train_batch_size="$TRAIN_BATCH_SIZE" \
@@ -37,11 +52,12 @@ python3 -m verl.trainer.main_ppo \
   data.max_prompt_length=2048 \
   data.max_response_length=1024 \
   actor_rollout_ref.model.path="$BASE_MODEL" \
+  actor_rollout_ref.actor.optim.optimizer="$OPTIMIZER" \
   actor_rollout_ref.actor.optim.lr=1e-6 \
   actor_rollout_ref.model.use_remove_padding=True \
   actor_rollout_ref.actor.ppo_mini_batch_size="$PPO_MINI_BATCH_SIZE" \
   actor_rollout_ref.actor.use_dynamic_bsz=True \
-  actor_rollout_ref.actor.use_kl_loss=False \
+  actor_rollout_ref.actor.use_kl_loss="$USE_KL_LOSS" \
   actor_rollout_ref.actor.kl_loss_coef=0.001 \
   actor_rollout_ref.actor.kl_loss_type=low_var_kl \
   actor_rollout_ref.model.enable_gradient_checkpointing=True \
@@ -63,4 +79,3 @@ python3 -m verl.trainer.main_ppo \
   trainer.total_epochs="$TOTAL_EPOCHS" \
   trainer.save_freq="$SAVE_FREQ" \
   trainer.test_freq="$TEST_FREQ"
-
