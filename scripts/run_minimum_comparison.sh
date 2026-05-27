@@ -38,12 +38,6 @@ echo "Running AdamW Multi-RLVR minimum run"
 accelerate_launch \
   --config configs/qwen17b_7x7_adam_multirlvr.yaml
 
-if [[ "$RUN_MUON" == "1" ]]; then
-  echo "Running Muon Multi-RLVR minimum run"
-  accelerate_launch \
-    --config configs/qwen17b_7x7_muon_multirlvr.yaml
-fi
-
 if [[ "$RUN_SOFT_MUON" == "1" ]]; then
   echo "Running Soft-Muon Multi-RLVR minimum run"
   accelerate_launch \
@@ -54,6 +48,12 @@ if [[ "$RUN_VPO" == "1" ]]; then
   echo "Running AdamW VPO minimum positive control"
   accelerate_launch \
     --config configs/qwen17b_7x7_adam_vpo.yaml
+fi
+
+if [[ "$RUN_MUON" == "1" ]]; then
+  echo "Running Muon Multi-RLVR minimum run"
+  accelerate_launch \
+    --config configs/qwen17b_7x7_muon_multirlvr.yaml
 fi
 
 echo "Evaluating AdamW Multi-RLVR"
