@@ -68,6 +68,7 @@ class HFRollout(BaseRollout):
         response_length = prompts.meta_info.get('response_length', self.config.response_length)
         top_p = prompts.meta_info.get('top_p', self.config.get('top_p', 1.0))
         top_k = prompts.meta_info.get('top_k', self.config.get('top_k', 0))
+        n = self.config.get('n', 1) if do_sample else 1
 
         if top_k is None:
             top_k = 0
@@ -91,6 +92,7 @@ class HFRollout(BaseRollout):
                     eos_token_id=eos_token_id,
                     pad_token_id=pad_token_id,
                     generation_config=generation_config,
+                    num_return_sequences=n,
                     # renormalize_logits=True,
                     output_scores=False,  # this is potentially very large
                     return_dict_in_generate=True,
@@ -104,11 +106,17 @@ class HFRollout(BaseRollout):
         delta_length = sequence_length - seq.shape[1]
 
         if delta_length > 0:
-            delta_tokens = torch.ones(size=(batch_size, delta_length), device=seq.device, dtype=seq.dtype)
+            delta_tokens = torch.ones(size=(seq.size(0), delta_length), device=seq.device, dtype=seq.dtype)
             delta_tokens = pad_token_id * delta_tokens
             seq = torch.cat((seq, delta_tokens), dim=1)
 
         assert seq.shape[1] == sequence_length
+
+        if n > 1:
+            idx = idx.repeat_interleave(n, dim=0)
+            attention_mask = attention_mask.repeat_interleave(n, dim=0)
+            position_ids = position_ids.repeat_interleave(n, dim=0)
+            batch_size = batch_size * n
 
         prompt = seq[:, :prompt_length]  # (bs, prompt_length)
         response = seq[:, prompt_length:]  # (bs, response_length)

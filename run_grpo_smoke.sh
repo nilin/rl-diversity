@@ -17,6 +17,13 @@ export DATA_DIR="${DATA_DIR:-./dataset/rlla_4k}"
 export BASE_MODEL="${BASE_MODEL:-Qwen/Qwen3-1.7B}"
 export EXPERIMENT_NAME="${EXPERIMENT_NAME:-toolrl-qwen3-paper}"
 
+ROLLOUT_N_SET="${ROLLOUT_N+x}"
+TRAIN_BATCH_SIZE_SET="${TRAIN_BATCH_SIZE+x}"
+VAL_BATCH_SIZE_SET="${VAL_BATCH_SIZE+x}"
+PPO_MINI_BATCH_SIZE_SET="${PPO_MINI_BATCH_SIZE+x}"
+PPO_MICRO_BATCH_SIZE_SET="${PPO_MICRO_BATCH_SIZE+x}"
+MAX_RESPONSE_LENGTH_SET="${MAX_RESPONSE_LENGTH+x}"
+
 N_GPUS="${N_GPUS:-1}"
 ROLLOUT_TP_SIZE="${ROLLOUT_TP_SIZE:-1}"
 ROLLOUT_N="${ROLLOUT_N:-8}"
@@ -25,7 +32,7 @@ VAL_BATCH_SIZE="${VAL_BATCH_SIZE:-80}"
 PPO_MINI_BATCH_SIZE="${PPO_MINI_BATCH_SIZE:-64}"
 PPO_MICRO_BATCH_SIZE="${PPO_MICRO_BATCH_SIZE:-8}"
 TOTAL_EPOCHS="${TOTAL_EPOCHS:-1}"
-TOTAL_TRAINING_STEPS="${TOTAL_TRAINING_STEPS:-}"
+TOTAL_TRAINING_STEPS="${TOTAL_TRAINING_STEPS:-2}"
 SAVE_FREQ="${SAVE_FREQ:--1}"
 TEST_FREQ="${TEST_FREQ:--1}"
 GPU_MEMORY_UTILIZATION="${GPU_MEMORY_UTILIZATION:-0.6}"
@@ -46,6 +53,24 @@ VPO_SEED="${VPO_SEED:-0}"
 USE_KL_LOSS="${USE_KL_LOSS:-true}"
 export MULTI_ANSWER_COUNT
 export PAPER_TOOLRL_REWARD
+
+ROLLOUT_BACKEND="${ROLLOUT_BACKEND:-vllm}"
+ROLLOUT_MICRO_BATCH_SIZE="${ROLLOUT_MICRO_BATCH_SIZE:-1}"
+if [[ "$BASE_MODEL" == Qwen/Qwen3-* && "$ROLLOUT_BACKEND" == "vllm" ]]; then
+  # ToolRL's vendored vLLM integration is pinned to vLLM 0.6.3, which does not
+  # support Qwen3. Use HF rollout for Qwen3 unless explicitly overridden.
+  ROLLOUT_BACKEND=hf
+fi
+if [[ "$BASE_MODEL" == Qwen/Qwen3-* && "$ROLLOUT_BACKEND" == "hf" ]]; then
+  # Keep the no-override path usable as a smoke test. The paper-sized defaults
+  # remain available by setting these environment variables explicitly.
+  [[ -z "$ROLLOUT_N_SET" ]] && ROLLOUT_N=2
+  [[ -z "$TRAIN_BATCH_SIZE_SET" ]] && TRAIN_BATCH_SIZE=4
+  [[ -z "$VAL_BATCH_SIZE_SET" ]] && VAL_BATCH_SIZE=4
+  [[ -z "$PPO_MINI_BATCH_SIZE_SET" ]] && PPO_MINI_BATCH_SIZE="$TRAIN_BATCH_SIZE"
+  [[ -z "$PPO_MICRO_BATCH_SIZE_SET" ]] && PPO_MICRO_BATCH_SIZE="$PPO_MINI_BATCH_SIZE"
+  [[ -z "$MAX_RESPONSE_LENGTH_SET" ]] && MAX_RESPONSE_LENGTH=256
+fi
 
 TRAINING_STEP_ARG=()
 if [[ -n "$TOTAL_TRAINING_STEPS" ]]; then
@@ -83,7 +108,8 @@ python3 -m verl.trainer.main_ppo \
   actor_rollout_ref.actor.fsdp_config.grad_offload=False \
   actor_rollout_ref.actor.fsdp_config.optimizer_offload=False \
   actor_rollout_ref.rollout.tensor_model_parallel_size="$ROLLOUT_TP_SIZE" \
-  actor_rollout_ref.rollout.name=vllm \
+  actor_rollout_ref.rollout.name="$ROLLOUT_BACKEND" \
+  actor_rollout_ref.rollout.micro_batch_size="$ROLLOUT_MICRO_BATCH_SIZE" \
   actor_rollout_ref.rollout.gpu_memory_utilization="$GPU_MEMORY_UTILIZATION" \
   actor_rollout_ref.rollout.temperature=1.0 \
   actor_rollout_ref.rollout.top_p=1.0 \
