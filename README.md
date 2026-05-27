@@ -1,15 +1,17 @@
 # diversity
 
-Small experiments for testing whether Muon reduces scalar-RL diversity collapse on the VPO paper's Maze-style setting.
+Small experiments for testing whether Muon or Soft-Muon reduces scalar-RL diversity collapse on the VPO paper's Maze-style setting.
 
-This repo is a fast prototype, not a byte-exact reproduction of the paper. The paper does not release its Maze generator or training code. The implementation here keeps the important mechanism fixed:
+This repo is a fast prototype, not an exact reproduction of the paper. The paper does not release its Maze generator or training code. The implementation here keeps the important mechanism fixed:
 
 - multi-answer prompts with `m=3` route candidates
 - reward vector `[completion, gold, diamond, avoid_lava]`
 - scalar Multi-RLVR with a fixed uniform scalar
 - VPO-style set reward from Dirichlet-sampled scalarizations
-- AdamW vs Muon optimizer swap
 - reward-space diversity evaluation
+
+In addition, this repo includes
+- AdamW vs Muon/Soft-Muon optimizer swap
 
 ## Install
 
