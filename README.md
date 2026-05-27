@@ -76,22 +76,3 @@ Plot those Figure-6-style curves with:
 python scripts/plot_training_diversity.py
 ```
 
-## Interpretation
-
-The first decision point is early training, not final Table 2 reproduction:
-
-- if Muon Multi-RLVR tracks AdamW Multi-RLVR on reward-space diversity, stop
-- if Muon lifts diversity by steps 20-60, run the same test with Qwen3-4B
-- if VPO does not lift diversity in this scaffold, treat the scaffold as suspect before interpreting Muon
-
-The paper-comparable run would use Qwen3-4B Maze and the authors' full veRL-like setup. This repo is for the cheap triage experiment.
-
-## veRL
-
-The repo also includes a veRL path for a more tuned GRPO stack:
-
-```bash
-./scripts/run_verl_minimum_comparison.sh
-```
-
-See [docs/verl.md](docs/verl.md) for details and caveats.
