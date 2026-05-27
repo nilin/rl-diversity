@@ -1,9 +1,9 @@
-run_name: qwen17b_7x7_soft_muon_p05_multirlvr
+run_name: qwen17b_7x7_soft_muon_p05_buggy_coeffs_multirlvr
 model: Qwen/Qwen3-1.7B
 maze_size: 7
 objective: multirlvr
 optimizer: soft_muon
-output_dir: outputs/qwen17b_7x7_soft_muon_p05_multirlvr
+output_dir: outputs/qwen17b_7x7_soft_muon_p05_buggy_coeffs_multirlvr
 train_size: 256
 eval_size: 64
 max_steps: 40
@@ -17,6 +17,8 @@ soft_muon_power: 0.5
 soft_muon_mix: 1.0
 soft_muon_ns_iterations: 12
 soft_muon_ns_coefficients: [2.0, -1.5, 0.5]
+# BUGGY: these old p=0.5 coefficients put too much mass on phi^12.
+# Use qwen17b_7x7_soft_muon_p05_fixed_coeffs_multirlvr.yaml instead.
 soft_muon_coefficients:
   - 0.6077251254
   - 0.04001601401
