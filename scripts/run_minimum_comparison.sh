@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+NUM_PROCESSES="${NUM_PROCESSES:-}"
 RUN_VPO="${RUN_VPO:-1}"
 RUN_SOFT_MUON="${RUN_SOFT_MUON:-0}"
 EVAL_PROMPTS="${EVAL_PROMPTS:-16}"
@@ -14,23 +15,31 @@ EVAL_OUTPUT_DIR="${EVAL_OUTPUT_DIR:-outputs/min5_eval}"
 
 mkdir -p "$EVAL_OUTPUT_DIR"
 
+accelerate_launch() {
+  local args=(accelerate launch)
+  if [[ -n "$NUM_PROCESSES" ]]; then
+    args+=(--num_processes "$NUM_PROCESSES")
+  fi
+  "${args[@]}" -m diversity_muon.train_grpo "$@"
+}
+
 echo "Running AdamW Multi-RLVR minimum run"
-accelerate launch -m diversity_muon.train_grpo \
+accelerate_launch \
   --config configs/min_adam_multirlvr.yaml
 
 echo "Running Muon Multi-RLVR minimum run"
-accelerate launch -m diversity_muon.train_grpo \
+accelerate_launch \
   --config configs/min_muon_multirlvr.yaml
 
 if [[ "$RUN_SOFT_MUON" == "1" ]]; then
   echo "Running Soft-Muon Multi-RLVR minimum run"
-  accelerate launch -m diversity_muon.train_grpo \
+  accelerate_launch \
     --config configs/min_soft_muon_p05_multirlvr.yaml
 fi
 
 if [[ "$RUN_VPO" == "1" ]]; then
   echo "Running AdamW VPO minimum positive control"
-  accelerate launch -m diversity_muon.train_grpo \
+  accelerate_launch \
     --config configs/min_adam_vpo.yaml
 fi
 
