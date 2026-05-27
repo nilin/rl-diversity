@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 import torch
@@ -31,7 +32,10 @@ def main() -> None:
     parser.add_argument(
         "--best-at-ks",
         default=",".join(str(value) for value in BEST_AT_KS),
-        help="Comma-separated k values to report from the same generated samples.",
+        help=(
+            "Comma-separated k values for answer-level best@k over sampled completions. "
+            "Legacy route-level route_best_at_k is also reported for the same k values."
+        ),
     )
     parser.add_argument("--output", default=None)
     args = parser.parse_args()
@@ -55,6 +59,7 @@ def main() -> None:
         prompt = format_chat_prompt(tokenizer, row["prompt"])
         encoded = tokenizer([prompt], return_tensors="pt").to(model.device)
         all_vectors = []
+        completion_route_scores = []
         with torch.no_grad():
             generated = model.generate(
                 **encoded,
@@ -69,27 +74,27 @@ def main() -> None:
         for generated_ids in generated:
             completion_ids = generated_ids[encoded["input_ids"].shape[1] :]
             completion = tokenizer.decode(completion_ids, skip_special_tokens=True)
-            all_vectors.extend(
-                score_completion_routes(
-                    completion,
-                    grid=row["grid"],
-                    start=row["start"],
-                    end=row["end"],
-                    step_budget=row["step_budget"],
-                    gold_total=row["gold_total"],
-                    diamond_total=row["diamond_total"],
-                    lava_total=row["lava_total"],
-                    expected_routes=3,
-                )
+            route_vectors = score_completion_routes(
+                completion,
+                grid=row["grid"],
+                start=row["start"],
+                end=row["end"],
+                step_budget=row["step_budget"],
+                gold_total=row["gold_total"],
+                diamond_total=row["diamond_total"],
+                lava_total=row["lava_total"],
+                expected_routes=3,
             )
+            all_vectors.extend(route_vectors)
+            completion_route_scores.append([float(np.dot(weights, vec)) for vec in route_vectors])
 
-        scalar_scores = [float(np.dot(weights, vec)) for vec in all_vectors]
         prompt_metrics.append(
-            {
-                "seed": row["seed"],
-                "diversity": pairwise_l1_diversity(all_vectors),
-                **{f"best_at_{k}": best_at_k(scalar_scores, k) for k in best_at_ks},
-            }
+            build_prompt_metrics(
+                seed=row["seed"],
+                all_vectors=all_vectors,
+                completion_route_scores=completion_route_scores,
+                best_at_ks=best_at_ks,
+            )
         )
 
     summary = {
@@ -101,6 +106,12 @@ def main() -> None:
             f"mean_best_at_{k}": mean_metric(prompt_metrics, f"best_at_{k}")
             for k in best_at_ks
         },
+        **{
+            f"mean_route_best_at_{k}": mean_metric(prompt_metrics, f"route_best_at_{k}")
+            for k in best_at_ks
+        },
+        "mean_completion_positive_rate": mean_metric(prompt_metrics, "completion_positive_rate"),
+        "mean_route_positive_rate": mean_metric(prompt_metrics, "route_positive_rate"),
         "prompts": prompt_metrics,
     }
     print(json.dumps(summary, indent=2))
@@ -115,7 +126,35 @@ def best_at_k(scores: list[float], k: int) -> float:
     return float(max(scores[: min(k, len(scores))]))
 
 
-BEST_AT_KS = (1, 3, 6, 12, 18, 24, 30)
+def build_prompt_metrics(
+    *,
+    seed: int,
+    all_vectors: list[Any],
+    completion_route_scores: list[list[float]],
+    best_at_ks: tuple[int, ...],
+) -> dict[str, Any]:
+    completion_scores = [
+        max(route_scores) if route_scores else 0.0 for route_scores in completion_route_scores
+    ]
+    route_scores = [score for route_scores in completion_route_scores for score in route_scores]
+    return {
+        "seed": seed,
+        "diversity": pairwise_l1_diversity(all_vectors),
+        "completion_scores": completion_scores,
+        "completion_route_scores": completion_route_scores,
+        "route_scores": route_scores,
+        "completion_positive_rate": positive_rate(completion_scores),
+        "route_positive_rate": positive_rate(route_scores),
+        **{f"best_at_{k}": best_at_k(completion_scores, k) for k in best_at_ks},
+        **{f"route_best_at_{k}": best_at_k(route_scores, k) for k in best_at_ks},
+    }
+
+
+def positive_rate(scores: list[float]) -> float:
+    return float(np.mean([score > 0.0 for score in scores])) if scores else 0.0
+
+
+BEST_AT_KS = (1, 3, 5, 10)
 
 
 def parse_best_at_ks(value: str) -> tuple[int, ...]:

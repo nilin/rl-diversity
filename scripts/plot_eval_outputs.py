@@ -12,7 +12,9 @@ RUN_LABELS = {
     "adam_multirlvr": "AdamW Multi-RLVR",
     "muon_multirlvr": "Muon Multi-RLVR",
     "soft_muon_multirlvr": "Soft-Muon Multi-RLVR",
-    "soft_muon_p05_multirlvr": "Soft-Muon p=0.5",
+    "soft_muon_p05_multirlvr": "Soft-Muon p=0.5 (buggy coeffs)",
+    "soft_muon_p04_fixed_coeffs_multirlvr": "Soft-Muon p=0.4 fixed",
+    "soft_muon_p05_fixed_coeffs_multirlvr": "Soft-Muon p=0.5 fixed",
     "adam_vpo": "AdamW VPO",
 }
 
@@ -50,10 +52,14 @@ def main() -> None:
     prompt_df.to_csv(output_dir / "prompt_metrics.csv", index=False)
 
     plot_best_at_k(summary_df, output_dir / "best_at_k_by_eval.png")
-    plot_best10_vs_baseline(summary_df, output_dir / "best10_vs_best_available.png")
+    if "mean_best_at_10" in summary_df.columns:
+        plot_best10_vs_baseline(summary_df, output_dir / "best10_vs_best_available.png")
+    else:
+        print("Skipping best@10 plots because mean_best_at_10 is not present.")
     plot_mean_diversity(summary_df, output_dir / "mean_diversity_by_eval.png")
     plot_prompt_diversity(prompt_df, output_dir / "prompt_diversity_boxplot.png")
-    plot_best10_vs_diversity(summary_df, output_dir / "best10_vs_diversity.png")
+    if "mean_best_at_10" in summary_df.columns:
+        plot_best10_vs_diversity(summary_df, output_dir / "best10_vs_diversity.png")
     plot_success_rate(summary_df, output_dir / "nonzero_rates_by_eval.png")
 
     print(f"Wrote plots and CSVs to {output_dir}")
@@ -117,7 +123,7 @@ def plot_best_at_k(summary_df: pd.DataFrame, output_path: Path) -> None:
     fig, axes = plt.subplots(
         1,
         len(eval_sets),
-        figsize=(5.0 * len(eval_sets), 4.2),
+        figsize=(5.8 * len(eval_sets), 4.8),
         sharey=True,
         squeeze=False,
     )
@@ -142,10 +148,10 @@ def plot_best_at_k(summary_df: pd.DataFrame, output_path: Path) -> None:
 
     axes[0][0].set_ylabel("mean best@k")
     handles, labels = axes[0][-1].get_legend_handles_labels()
-    fig.legend(handles, labels, loc="lower center", ncols=min(5, len(labels)))
+    fig.legend(handles, labels, loc="lower center", ncols=min(2, len(labels)))
     fig.suptitle("Validation Best@k")
-    fig.tight_layout(rect=(0, 0.16, 1, 0.92))
-    fig.savefig(output_path, dpi=180)
+    fig.tight_layout(rect=(0, 0.24, 1, 0.92))
+    fig.savefig(output_path, dpi=180, bbox_inches="tight")
     plt.close(fig)
 
 
