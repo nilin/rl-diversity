@@ -14,6 +14,7 @@ def main() -> None:
     parser.add_argument("--output-dir", default="data/maze_verl")
     parser.add_argument("--train-size", type=int, default=128)
     parser.add_argument("--val-size", type=int, default=32)
+    parser.add_argument("--maze-size", type=int, default=9)
     parser.add_argument("--train-seed-start", type=int, default=42)
     parser.add_argument("--val-seed-start", type=int, default=4242)
     args = parser.parse_args()
@@ -25,18 +26,23 @@ def main() -> None:
         split="train",
         seed_start=args.train_seed_start,
         count=args.train_size,
+        maze_size=args.maze_size,
     )
     write_split(
         output_dir / "test.parquet",
         split="test",
         seed_start=args.val_seed_start,
         count=args.val_size,
+        maze_size=args.maze_size,
     )
     print(f"Wrote veRL Maze data to {output_dir}")
 
 
-def write_split(path: Path, *, split: str, seed_start: int, count: int) -> None:
-    rows = [to_verl_row(make_maze(seed_start + idx), split=split, idx=idx) for idx in range(count)]
+def write_split(path: Path, *, split: str, seed_start: int, count: int, maze_size: int) -> None:
+    rows = [
+        to_verl_row(make_maze(seed_start + idx, size=maze_size), split=split, idx=idx)
+        for idx in range(count)
+    ]
     Dataset.from_list(rows).to_parquet(str(path))
 
 

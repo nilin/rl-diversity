@@ -13,7 +13,7 @@ from diversity_muon.prompting import format_chat_prompt
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--model", default="Qwen/Qwen3-0.6B")
+    parser.add_argument("--model", default="Qwen/Qwen3-1.7B")
     parser.add_argument("--seed-start", type=int, default=42)
     parser.add_argument("--num-seeds", type=int, default=4)
     parser.add_argument("--maze-size", type=int, default=7)

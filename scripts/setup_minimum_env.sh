@@ -43,4 +43,5 @@ PY
 echo
 echo "Environment ready. Run:"
 echo "  source $VENV_DIR/bin/activate"
-echo "  ./scripts/run_minimum_comparison.sh 2>&1 | tee run_minimum.log"
+echo "  ./scripts/run_minimum_comparison.sh"
+echo "Logs are written under logs/ by the run scripts."

@@ -76,10 +76,7 @@ def main() -> None:
             {
                 "seed": row["seed"],
                 "diversity": pairwise_l1_diversity(all_vectors),
-                "best_at_3": best_at_k(scalar_scores, 3),
-                "best_at_5": best_at_k(scalar_scores, 5),
-                "best_at_10": best_at_k(scalar_scores, 10),
-                "best_at_30": best_at_k(scalar_scores, 30),
+                **{f"best_at_{k}": best_at_k(scalar_scores, k) for k in BEST_AT_KS},
             }
         )
 
@@ -88,10 +85,7 @@ def main() -> None:
         "num_prompts": args.num_prompts,
         "samples_per_prompt": args.samples_per_prompt,
         "mean_diversity": mean_metric(prompt_metrics, "diversity"),
-        "mean_best_at_3": mean_metric(prompt_metrics, "best_at_3"),
-        "mean_best_at_5": mean_metric(prompt_metrics, "best_at_5"),
-        "mean_best_at_10": mean_metric(prompt_metrics, "best_at_10"),
-        "mean_best_at_30": mean_metric(prompt_metrics, "best_at_30"),
+        **{f"mean_best_at_{k}": mean_metric(prompt_metrics, f"best_at_{k}") for k in BEST_AT_KS},
         "prompts": prompt_metrics,
     }
     print(json.dumps(summary, indent=2))
@@ -104,6 +98,9 @@ def best_at_k(scores: list[float], k: int) -> float:
     if not scores:
         return 0.0
     return float(max(scores[: min(k, len(scores))]))
+
+
+BEST_AT_KS = (1, 3, 6, 12, 18, 24, 30)
 
 
 def mean_metric(rows: list[dict[str, float]], key: str) -> float:

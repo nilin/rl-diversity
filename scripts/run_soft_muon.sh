@@ -1,26 +1,44 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-STEPS="${STEPS:-10}"
+if [[ "${RUN_LOGGING_ACTIVE:-0}" != "1" ]]; then
+  LOG_DIR="${LOG_DIR:-logs}"
+  mkdir -p "$LOG_DIR"
+  RUN_LOG_FILE="${RUN_LOG_FILE:-$LOG_DIR/$(basename "$0" .sh)_$(date +%Y%m%d_%H%M%S).log}"
+  export RUN_LOGGING_ACTIVE=1
+  exec > >(tee -a "$RUN_LOG_FILE") 2>&1
+  echo "Writing log to $RUN_LOG_FILE"
+fi
+
+STEPS="${STEPS:-40}"
 EVAL_PROMPTS="${EVAL_PROMPTS:-16}"
 SAMPLES_PER_PROMPT="${SAMPLES_PER_PROMPT:-5}"
-MAZE_SIZE="${MAZE_SIZE:-5}"
+MAZE_SIZE="${MAZE_SIZE:-}"
 
 case "$STEPS" in
+  40)
+    CONFIG="${CONFIG:-configs/qwen17b_7x7_soft_muon_p05_multirlvr.yaml}"
+    OUTPUT_DIR="${OUTPUT_DIR:-outputs/qwen17b_7x7_soft_muon_p05_multirlvr}"
+    EVAL_OUTPUT_DIR="${EVAL_OUTPUT_DIR:-outputs/qwen17b_7x7_eval}"
+    CHECKPOINT="checkpoint-40"
+    MAZE_SIZE="${MAZE_SIZE:-7}"
+    ;;
   10)
     CONFIG="${CONFIG:-configs/min_soft_muon_p05_multirlvr.yaml}"
     OUTPUT_DIR="${OUTPUT_DIR:-outputs/min5_soft_muon_p05_multirlvr}"
     EVAL_OUTPUT_DIR="${EVAL_OUTPUT_DIR:-outputs/min5_eval}"
     CHECKPOINT="checkpoint-10"
+    MAZE_SIZE="${MAZE_SIZE:-5}"
     ;;
   30)
     CONFIG="${CONFIG:-configs/min30_soft_muon_p05_multirlvr.yaml}"
     OUTPUT_DIR="${OUTPUT_DIR:-outputs/min5_30_soft_muon_p05_multirlvr}"
     EVAL_OUTPUT_DIR="${EVAL_OUTPUT_DIR:-outputs/min5_30_eval}"
     CHECKPOINT="checkpoint-30"
+    MAZE_SIZE="${MAZE_SIZE:-5}"
     ;;
   *)
-    echo "Unsupported STEPS=$STEPS. Use STEPS=10 or STEPS=30." >&2
+    echo "Unsupported STEPS=$STEPS. Use STEPS=10, STEPS=30, or STEPS=40." >&2
     exit 2
     ;;
 esac

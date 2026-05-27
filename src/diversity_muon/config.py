@@ -39,6 +39,11 @@ class ExperimentConfig:
     report_to: str = "none"
     seed: int = 0
     vpo_weight_samples: int = 16
+    diversity_eval_steps: int = 0
+    diversity_eval_prompts: int = 16
+    diversity_eval_samples_per_prompt: int = 1
+    diversity_eval_temperature: float = 0.7
+    diversity_eval_top_p: float = 1.0
 
 
 def load_config(path: str | Path) -> ExperimentConfig:
