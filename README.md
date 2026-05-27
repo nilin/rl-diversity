@@ -68,4 +68,6 @@ Soft-Muon p=0.5 uses:
 ```text
 actor_rollout_ref.actor.optim.optimizer=soft_muon
 actor_rollout_ref.actor.optim.soft_muon_p=0.5
+actor_rollout_ref.actor.optim.muon_ns_coefficients=[2.0,-1.5,0.5]
+actor_rollout_ref.actor.optim.muon_ns_steps=12
 ```

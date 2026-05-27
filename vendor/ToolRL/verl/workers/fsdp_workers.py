@@ -45,14 +45,25 @@ logger = logging.getLogger(__file__)
 logger.setLevel(os.getenv('VERL_PPO_LOGGING_LEVEL', 'WARN'))
 
 
-# Convex weights over NS iterates x0..x5 fitted to approximate the map s -> s^0.5.
+# PR291 uses the stable Newton-Schulz polynomial a, b, c = 2, -1.5, 0.5.
+PR291_NS_COEFFICIENTS = (2.0, -1.5, 0.5)
+PR291_NS_STEPS = 12
+
+# Convex weights over PR291 NS iterates x0..x12 fitted to approximate s -> s^0.5.
 SOFT_MUON_P05_WEIGHTS = (
-    0.5939769106713131,
-    0.20341487335231062,
-    0.07481572691211376,
-    0.0273956601340413,
-    0.05513279135895345,
-    0.045264037571267964,
+    0.526435170838,
+    0.170757342268,
+    0.0799336087512,
+    0.0733659732167,
+    0.038259934537,
+    0.0367763370006,
+    0.0186431208846,
+    0.0188261050214,
+    0.00876844907604,
+    0.0101601149472,
+    0.00434411421352,
+    0.0,
+    0.0137297292463,
 )
 
 
@@ -66,20 +77,28 @@ def _adjust_muon_lr(lr, adjust_lr_fn, param_shape):
     return lr * adjusted_ratio
 
 
+def _gram_frobenius_norm_estimate(matrix, keepdim=False, eps=1e-10):
+    matrix = matrix.float()
+    gram = matrix.T @ matrix if matrix.size(-2) > matrix.size(-1) else matrix @ matrix.T
+    return gram.norm(dim=(-2, -1), keepdim=keepdim).sqrt().clamp_min(eps)
+
+
 def _soft_muon_update(update, ns_coefficients, ns_steps, eps, soft_muon_p):
     if update.ndim != 2:
         raise ValueError("Soft-Muon only supports 2D gradient updates.")
     if abs(float(soft_muon_p) - 0.5) > 1e-12:
         raise ValueError("This Soft-Muon path currently supports soft_muon_p=0.5 only.")
-    if ns_steps != 5:
-        raise ValueError("The p=0.5 Soft-Muon weights are fitted for ns_steps=5.")
+    if tuple(float(coeff) for coeff in ns_coefficients) != PR291_NS_COEFFICIENTS:
+        raise ValueError("The p=0.5 Soft-Muon weights are fitted for PR291 NS coefficients.")
+    if ns_steps != PR291_NS_STEPS:
+        raise ValueError("The p=0.5 Soft-Muon weights are fitted for PR291 ns_steps=12.")
 
     a, b, c = ns_coefficients
     transposed = update.size(0) > update.size(1)
     soft_update = update.bfloat16()
     if transposed:
         soft_update = soft_update.T
-    soft_update = soft_update / soft_update.norm().clamp(min=eps)
+    soft_update = soft_update / _gram_frobenius_norm_estimate(soft_update, keepdim=True, eps=eps).to(soft_update.dtype)
 
     iterates = [soft_update]
     for _ in range(ns_steps):
@@ -104,9 +123,9 @@ class SoftMuon(torch.optim.Optimizer):
         weight_decay=0.1,
         momentum=0.95,
         nesterov=True,
-        ns_coefficients=(3.4445, -4.775, 2.0315),
+        ns_coefficients=PR291_NS_COEFFICIENTS,
         eps=1e-7,
-        ns_steps=5,
+        ns_steps=PR291_NS_STEPS,
         adjust_lr_fn="match_rms_adamw",
         soft_muon_p=0.5,
     ):
@@ -199,6 +218,8 @@ def build_actor_optimizer(params, optim_config, optim_module):
     lr = optim_config.lr
     betas = optim_config.get("betas", (0.9, 0.999))
     weight_decay = optim_config.get("weight_decay", 1e-2)
+    muon_ns_coefficients = tuple(optim_config.get("muon_ns_coefficients", PR291_NS_COEFFICIENTS))
+    muon_ns_steps = optim_config.get("muon_ns_steps", PR291_NS_STEPS)
 
     if optimizer_name == "adamw":
         return optim_module.AdamW(params, lr=lr, betas=betas, weight_decay=weight_decay)
@@ -219,6 +240,8 @@ def build_actor_optimizer(params, optim_config, optim_module):
                         weight_decay=weight_decay,
                         momentum=optim_config.get("muon_momentum", 0.95),
                         nesterov=True,
+                        ns_coefficients=muon_ns_coefficients,
+                        ns_steps=muon_ns_steps,
                         adjust_lr_fn="match_rms_adamw",
                     )
                 )
@@ -230,6 +253,8 @@ def build_actor_optimizer(params, optim_config, optim_module):
                         weight_decay=weight_decay,
                         momentum=optim_config.get("muon_momentum", 0.95),
                         nesterov=True,
+                        ns_coefficients=muon_ns_coefficients,
+                        ns_steps=muon_ns_steps,
                         adjust_lr_fn="match_rms_adamw",
                         soft_muon_p=optim_config.get("soft_muon_p", 0.5),
                     )
