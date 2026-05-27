@@ -6,6 +6,23 @@ from typing import Any
 
 import yaml
 
+DEFAULT_SOFT_MUON_NS_COEFFICIENTS = (2.0, -1.5, 0.5)
+DEFAULT_SOFT_MUON_P05_COEFFICIENTS = (
+    0.6077251254,
+    0.04001601401,
+    0.02944381009,
+    0.02329789693,
+    0.01912933357,
+    0.01638279099,
+    0.01449631237,
+    0.01302904148,
+    0.01167778429,
+    0.01020522013,
+    0.008369069534,
+    0.006016417332,
+)
+DEFAULT_SOFT_MUON_P05_TAIL_COEFFICIENT = 0.2002111839
+
 
 @dataclass(frozen=True)
 class ExperimentConfig:
@@ -28,8 +45,12 @@ class ExperimentConfig:
     learning_rate: float = 1e-6
     weight_decay: float = 0.01
     muon_momentum: float = 0.95
-    soft_muon_power: float = 0.2
-    soft_muon_mix: float = 0.8
+    soft_muon_power: float = 0.5
+    soft_muon_mix: float = 1.0
+    soft_muon_ns_iterations: int = 12
+    soft_muon_ns_coefficients: tuple[float, ...] = DEFAULT_SOFT_MUON_NS_COEFFICIENTS
+    soft_muon_coefficients: tuple[float, ...] = DEFAULT_SOFT_MUON_P05_COEFFICIENTS
+    soft_muon_tail_coefficient: float = DEFAULT_SOFT_MUON_P05_TAIL_COEFFICIENT
     beta: float = 1e-3
     epsilon: float = 0.2
     logging_steps: int = 1

@@ -15,6 +15,22 @@ weight_decay: 0.01
 muon_momentum: 0.95
 soft_muon_power: 0.5
 soft_muon_mix: 1.0
+soft_muon_ns_iterations: 12
+soft_muon_ns_coefficients: [2.0, -1.5, 0.5]
+soft_muon_coefficients:
+  - 0.6077251254
+  - 0.04001601401
+  - 0.02944381009
+  - 0.02329789693
+  - 0.01912933357
+  - 0.01638279099
+  - 0.01449631237
+  - 0.01302904148
+  - 0.01167778429
+  - 0.01020522013
+  - 0.008369069534
+  - 0.006016417332
+soft_muon_tail_coefficient: 0.2002111839
 beta: 1.0e-3
 epsilon: 0.2
 save_steps: 10

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from collections.abc import Iterable
+from collections.abc import Iterable, Sequence
 from typing import Literal
 
 import torch
@@ -8,10 +8,26 @@ from torch import nn
 from transformers import get_scheduler
 
 OptimizerName = Literal["adamw", "muon", "soft_muon"]
+DEFAULT_SOFT_MUON_NS_COEFFICIENTS = (2.0, -1.5, 0.5)
+DEFAULT_SOFT_MUON_P05_COEFFICIENTS = (
+    0.6077251254,
+    0.04001601401,
+    0.02944381009,
+    0.02329789693,
+    0.01912933357,
+    0.01638279099,
+    0.01449631237,
+    0.01302904148,
+    0.01167778429,
+    0.01020522013,
+    0.008369069534,
+    0.006016417332,
+)
+DEFAULT_SOFT_MUON_P05_TAIL_COEFFICIENT = 0.2002111839
 
 
 class SoftMuon(torch.optim.Optimizer):
-    """Muon variant using a soft singular-value map instead of hard orthogonalization."""
+    """Muon variant using stacked Newton-Schulz iterates for a soft singular-value map."""
 
     def __init__(
         self,
@@ -21,8 +37,12 @@ class SoftMuon(torch.optim.Optimizer):
         weight_decay: float = 0.1,
         momentum: float = 0.95,
         nesterov: bool = True,
-        power: float = 0.2,
-        mix: float = 0.8,
+        power: float = 0.5,
+        mix: float = 1.0,
+        ns_iterations: int = 12,
+        ns_coefficients: Sequence[float] = DEFAULT_SOFT_MUON_NS_COEFFICIENTS,
+        soft_coefficients: Sequence[float] = DEFAULT_SOFT_MUON_P05_COEFFICIENTS,
+        soft_tail_coefficient: float = DEFAULT_SOFT_MUON_P05_TAIL_COEFFICIENT,
         eps: float = 1e-7,
     ) -> None:
         if lr < 0.0:
@@ -35,6 +55,19 @@ class SoftMuon(torch.optim.Optimizer):
             raise ValueError(f"soft_muon_power must be in [0, 1], got {power}")
         if not 0.0 <= mix <= 1.0:
             raise ValueError(f"soft_muon_mix must be in [0, 1], got {mix}")
+        if ns_iterations < 1:
+            raise ValueError(f"soft_muon_ns_iterations must be >= 1, got {ns_iterations}")
+        ns_coefficients = tuple(float(value) for value in ns_coefficients)
+        if len(ns_coefficients) != 3:
+            raise ValueError("soft_muon_ns_coefficients must contain exactly 3 values")
+        soft_coefficients = tuple(float(value) for value in soft_coefficients)
+        if len(soft_coefficients) != ns_iterations:
+            raise ValueError(
+                "soft_muon_coefficients length must match soft_muon_ns_iterations: "
+                f"{len(soft_coefficients)} != {ns_iterations}"
+            )
+        if any(value < 0.0 for value in soft_coefficients) or soft_tail_coefficient < 0.0:
+            raise ValueError("soft_muon coefficients must be nonnegative")
         defaults = dict(
             lr=lr,
             weight_decay=weight_decay,
@@ -42,9 +75,14 @@ class SoftMuon(torch.optim.Optimizer):
             nesterov=nesterov,
             power=power,
             mix=mix,
+            ns_iterations=ns_iterations,
+            ns_coefficients=ns_coefficients,
+            soft_coefficients=soft_coefficients,
+            soft_tail_coefficient=float(soft_tail_coefficient),
             eps=eps,
         )
         super().__init__(params, defaults)
+        self._logged_soft_muon_step = False
 
     @torch.no_grad()
     def step(self, closure=None):  # type: ignore[override]
@@ -60,12 +98,26 @@ class SoftMuon(torch.optim.Optimizer):
             nesterov = group["nesterov"]
             power = group["power"]
             mix = group["mix"]
+            ns_iterations = group["ns_iterations"]
+            ns_coefficients = group["ns_coefficients"]
+            soft_coefficients = group["soft_coefficients"]
+            soft_tail_coefficient = group["soft_tail_coefficient"]
             eps = group["eps"]
             for param in group["params"]:
                 if param.grad is None:
                     continue
                 if param.grad.ndim != 2:
                     raise RuntimeError("SoftMuon only supports 2D parameters")
+                if not self._logged_soft_muon_step:
+                    print(
+                        "SoftMuon.step: using custom Newton-Schulz SoftMuon update path "
+                        f"power={power} mix={mix} ns_iterations={ns_iterations} "
+                        f"ns_coefficients={ns_coefficients} "
+                        f"soft_coefficients={soft_coefficients} "
+                        f"soft_tail_coefficient={soft_tail_coefficient}",
+                        flush=True,
+                    )
+                    self._logged_soft_muon_step = True
 
                 grad = param.grad
                 state = self.state[param]
@@ -77,7 +129,16 @@ class SoftMuon(torch.optim.Optimizer):
 
                 if weight_decay != 0:
                     param.mul_(1 - lr * weight_decay)
-                update = _soft_muon_update(update, power=power, mix=mix, eps=eps)
+                update = _soft_muon_update(
+                    update,
+                    power=power,
+                    mix=mix,
+                    ns_iterations=ns_iterations,
+                    ns_coefficients=ns_coefficients,
+                    soft_coefficients=soft_coefficients,
+                    soft_tail_coefficient=soft_tail_coefficient,
+                    eps=eps,
+                )
                 lr_adjustment = _match_rms_adamw_lr_adjustment(update.shape)
                 param.add_(update.to(dtype=param.dtype), alpha=-lr * lr_adjustment)
 
@@ -129,8 +190,12 @@ def build_optimizer(
     adam_beta1: float = 0.9,
     adam_beta2: float = 0.999,
     muon_momentum: float = 0.95,
-    soft_muon_power: float = 0.2,
-    soft_muon_mix: float = 0.8,
+    soft_muon_power: float = 0.5,
+    soft_muon_mix: float = 1.0,
+    soft_muon_ns_iterations: int = 12,
+    soft_muon_ns_coefficients: Sequence[float] = DEFAULT_SOFT_MUON_NS_COEFFICIENTS,
+    soft_muon_coefficients: Sequence[float] = DEFAULT_SOFT_MUON_P05_COEFFICIENTS,
+    soft_muon_tail_coefficient: float = DEFAULT_SOFT_MUON_P05_TAIL_COEFFICIENT,
 ) -> torch.optim.Optimizer:
     if optimizer_name == "adamw":
         decay, no_decay = split_weight_decay_params(model)
@@ -164,6 +229,17 @@ def build_optimizer(
                     )
                 )
             else:
+                print(
+                    "build_optimizer: constructing custom SoftMuon optimizer "
+                    f"muon_param_count={len(muon_params)} lr={learning_rate} "
+                    f"weight_decay={weight_decay} momentum={muon_momentum} "
+                    f"power={soft_muon_power} mix={soft_muon_mix} "
+                    f"ns_iterations={soft_muon_ns_iterations} "
+                    f"ns_coefficients={tuple(soft_muon_ns_coefficients)} "
+                    f"soft_coefficients={tuple(soft_muon_coefficients)} "
+                    f"soft_tail_coefficient={soft_muon_tail_coefficient}",
+                    flush=True,
+                )
                 optimizers.append(
                     SoftMuon(
                         muon_params,
@@ -173,6 +249,10 @@ def build_optimizer(
                         nesterov=True,
                         power=soft_muon_power,
                         mix=soft_muon_mix,
+                        ns_iterations=soft_muon_ns_iterations,
+                        ns_coefficients=soft_muon_ns_coefficients,
+                        soft_coefficients=soft_muon_coefficients,
+                        soft_tail_coefficient=soft_muon_tail_coefficient,
                     )
                 )
         adam_groups = []
@@ -201,21 +281,109 @@ def build_scheduler(
 
 
 def _soft_muon_update(
-    update: torch.Tensor, *, power: float, mix: float, eps: float
+    update: torch.Tensor,
+    *,
+    power: float,
+    mix: float,
+    ns_iterations: int,
+    ns_coefficients: Sequence[float],
+    soft_coefficients: Sequence[float],
+    soft_tail_coefficient: float,
+    eps: float,
+) -> torch.Tensor:
+    del power  # The configured coefficients define the approximation to x**power.
+    sign_update = _zeropower_via_newtonschulz(
+        update, ns_iterations=ns_iterations, ns_coefficients=ns_coefficients, eps=eps
+    )
+    soft_update = _softpower_via_newtonschulz(
+        update,
+        ns_iterations=ns_iterations,
+        ns_coefficients=ns_coefficients,
+        soft_coefficients=soft_coefficients,
+        soft_tail_coefficient=soft_tail_coefficient,
+        eps=eps,
+    )
+
+    target_norm = _gram_frobenius_norm_estimate(sign_update, eps=eps)
+    soft_norm = _gram_frobenius_norm_estimate(soft_update, eps=eps)
+    soft_update = soft_update * (target_norm / soft_norm).to(soft_update.dtype)
+    mixed = torch.lerp(sign_update, soft_update, mix)
+    mixed_norm = _gram_frobenius_norm_estimate(mixed, eps=eps)
+    return mixed * (target_norm / mixed_norm).to(mixed.dtype)
+
+
+def _gram_frobenius_norm_estimate(
+    update: torch.Tensor, *, keepdim: bool = False, eps: float = 1e-10
 ) -> torch.Tensor:
     update_float = update.float()
-    left, singular_values, right_h = torch.linalg.svd(update_float, full_matrices=False)
-    sign_update = left @ right_h
-    if power == 0.0:
-        soft_update = sign_update
-    else:
-        soft_singular_values = singular_values.clamp_min(eps).pow(power)
-        soft_update = (left * soft_singular_values.unsqueeze(0)) @ right_h
-    mixed = torch.lerp(sign_update, soft_update, mix)
+    gram = (
+        update_float.mT @ update_float
+        if update_float.size(-2) > update_float.size(-1)
+        else update_float @ update_float.mT
+    )
+    return gram.norm(dim=(-2, -1), keepdim=keepdim).sqrt().clamp_min(eps)
 
-    target_rms = sign_update.square().mean().sqrt().clamp_min(eps)
-    mixed_rms = mixed.square().mean().sqrt().clamp_min(eps)
-    return mixed * (target_rms / mixed_rms)
+
+def _newton_schulz_input(
+    update: torch.Tensor, *, eps: float
+) -> tuple[torch.Tensor, bool]:
+    transposed = update.size(-2) > update.size(-1)
+    dtype = torch.bfloat16 if update.device.type == "cuda" else torch.float32
+    ns_update = update.to(dtype=dtype)
+    if transposed:
+        ns_update = ns_update.mT
+    ns_update = ns_update / _gram_frobenius_norm_estimate(
+        ns_update, keepdim=True, eps=eps
+    ).to(ns_update.dtype)
+    return ns_update, transposed
+
+
+def _newton_schulz_step(
+    update: torch.Tensor, ns_coefficients: Sequence[float]
+) -> torch.Tensor:
+    a, b, c = ns_coefficients
+    gram = update @ update.mT
+    basis = b * gram + c * gram @ gram
+    return a * update + basis @ update
+
+
+def _zeropower_via_newtonschulz(
+    update: torch.Tensor,
+    *,
+    ns_iterations: int,
+    ns_coefficients: Sequence[float],
+    eps: float,
+) -> torch.Tensor:
+    ns_update, transposed = _newton_schulz_input(update, eps=eps)
+    for _ in range(ns_iterations):
+        ns_update = _newton_schulz_step(ns_update, ns_coefficients)
+    if transposed:
+        ns_update = ns_update.mT
+    return ns_update
+
+
+def _softpower_via_newtonschulz(
+    update: torch.Tensor,
+    *,
+    ns_iterations: int,
+    ns_coefficients: Sequence[float],
+    soft_coefficients: Sequence[float],
+    soft_tail_coefficient: float,
+    eps: float,
+) -> torch.Tensor:
+    ns_update, transposed = _newton_schulz_input(update, eps=eps)
+    basis = [ns_update]
+    for _ in range(ns_iterations):
+        ns_update = _newton_schulz_step(ns_update, ns_coefficients)
+        basis.append(ns_update)
+
+    out = soft_tail_coefficient * basis[-1]
+    for coefficient, basis_term in zip(soft_coefficients, basis[:-1], strict=True):
+        out = out + coefficient * basis_term
+
+    if transposed:
+        out = out.mT
+    return out
 
 
 def _match_rms_adamw_lr_adjustment(shape: torch.Size) -> float:

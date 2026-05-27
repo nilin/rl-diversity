@@ -95,6 +95,10 @@ def main() -> None:
         muon_momentum=cfg.muon_momentum,
         soft_muon_power=cfg.soft_muon_power,
         soft_muon_mix=cfg.soft_muon_mix,
+        soft_muon_ns_iterations=cfg.soft_muon_ns_iterations,
+        soft_muon_ns_coefficients=cfg.soft_muon_ns_coefficients,
+        soft_muon_coefficients=cfg.soft_muon_coefficients,
+        soft_muon_tail_coefficient=cfg.soft_muon_tail_coefficient,
     )
     scheduler = build_scheduler(
         optimizer, scheduler_type="constant", num_training_steps=cfg.max_steps
