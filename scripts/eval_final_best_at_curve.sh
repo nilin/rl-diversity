@@ -3,18 +3,24 @@ set -euo pipefail
 
 CHECKPOINT="${CHECKPOINT:-checkpoint-50}"
 SEED="${SEED:-0}"
+SEED_LABEL="${SEED_LABEL:-seed${SEED}}"
 EVAL_PROMPTS="${EVAL_PROMPTS:-16}"
 MAZE_SIZE="${MAZE_SIZE:-7}"
 SAMPLES_PER_PROMPT="${SAMPLES_PER_PROMPT:-10}"
 BEST_AT_KS="${BEST_AT_KS:-1,2,3,4,5,6,7,8,9,10}"
-OUTPUT_DIR="${OUTPUT_DIR:-outputs/qwen17b_7x7_best_at_curve}"
+OUTPUT_DIR="${OUTPUT_DIR:-outputs/qwen17b_7x7_best_at_curve_${SEED_LABEL}}"
 RUN_MUON="${RUN_MUON:-0}"
+ADAM_MULTI_MODEL_DIR="${ADAM_MULTI_MODEL_DIR:-outputs/qwen17b_7x7_adam_multirlvr_${SEED_LABEL}}"
+SOFT_MUON_P04_MODEL_DIR="${SOFT_MUON_P04_MODEL_DIR:-outputs/qwen17b_7x7_soft_muon_p04_fixed_coeffs_multirlvr_${SEED_LABEL}}"
+ADAM_VPO_MODEL_DIR="${ADAM_VPO_MODEL_DIR:-outputs/qwen17b_7x7_adam_vpo_${SEED_LABEL}}"
+MUON_MULTI_MODEL_DIR="${MUON_MULTI_MODEL_DIR:-outputs/qwen17b_7x7_muon_multirlvr_${SEED_LABEL}}"
 
 mkdir -p "$OUTPUT_DIR"
 
 cat <<EOF
 Final eval run config:
   seed: $SEED
+  seed_label: $SEED_LABEL
   checkpoint: $CHECKPOINT
   eval_prompts: $EVAL_PROMPTS
   maze_size: $MAZE_SIZE
@@ -22,6 +28,10 @@ Final eval run config:
   best_at_ks: $BEST_AT_KS
   run_muon: $RUN_MUON
   output_dir: $OUTPUT_DIR
+  adam_multi_model_dir: $ADAM_MULTI_MODEL_DIR
+  soft_muon_p04_model_dir: $SOFT_MUON_P04_MODEL_DIR
+  adam_vpo_model_dir: $ADAM_VPO_MODEL_DIR
+  muon_multi_model_dir: $MUON_MULTI_MODEL_DIR
 EOF
 
 eval_run() {
@@ -39,11 +49,11 @@ eval_run() {
     --output "$OUTPUT_DIR/$name.json"
 }
 
-eval_run adam_multirlvr outputs/qwen17b_7x7_adam_multirlvr
-eval_run soft_muon_p04_fixed_coeffs_multirlvr outputs/qwen17b_7x7_soft_muon_p04_fixed_coeffs_multirlvr
-eval_run adam_vpo outputs/qwen17b_7x7_adam_vpo
+eval_run adam_multirlvr "$ADAM_MULTI_MODEL_DIR"
+eval_run soft_muon_p04_fixed_coeffs_multirlvr "$SOFT_MUON_P04_MODEL_DIR"
+eval_run adam_vpo "$ADAM_VPO_MODEL_DIR"
 if [[ "$RUN_MUON" == "1" ]]; then
-  eval_run muon_multirlvr outputs/qwen17b_7x7_muon_multirlvr
+  eval_run muon_multirlvr "$MUON_MULTI_MODEL_DIR"
 fi
 
 python - <<'PY'

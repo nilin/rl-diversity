@@ -29,10 +29,16 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", required=True, help="Path to a YAML experiment config.")
     parser.add_argument("--seed", type=int, default=None, help="Override the config seed.")
+    parser.add_argument("--output-dir", default=None, help="Override the config output_dir.")
+    parser.add_argument("--run-name", default=None, help="Override the config run_name.")
     args = parser.parse_args()
     cfg = load_config(args.config)
     if args.seed is not None:
         cfg = replace(cfg, seed=args.seed)
+    if args.output_dir is not None:
+        cfg = replace(cfg, output_dir=args.output_dir)
+    if args.run_name is not None:
+        cfg = replace(cfg, run_name=args.run_name)
 
     tokenizer = AutoTokenizer.from_pretrained(
         cfg.model, padding_side="left", trust_remote_code=True, fix_mistral_regex=True
