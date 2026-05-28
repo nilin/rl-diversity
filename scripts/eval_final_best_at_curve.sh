@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-CHECKPOINT="${CHECKPOINT:-checkpoint-40}"
+CHECKPOINT="${CHECKPOINT:-checkpoint-50}"
 SEED="${SEED:-0}"
 EVAL_PROMPTS="${EVAL_PROMPTS:-16}"
 MAZE_SIZE="${MAZE_SIZE:-7}"
