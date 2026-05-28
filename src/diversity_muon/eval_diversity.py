@@ -37,8 +37,8 @@ def main() -> None:
         "--best-at-ks",
         default=",".join(str(value) for value in BEST_AT_KS),
         help=(
-            "Comma-separated k values for answer-level best@k over sampled completions. "
-            "Legacy route-level route_best_at_k is also reported for the same k values."
+            "Comma-separated k values for paper-style best@k over candidate routes. "
+            "Rollout-level best@k over whole sampled completions is also reported separately."
         ),
     )
     parser.add_argument("--output", default=None)
@@ -127,6 +127,10 @@ def main() -> None:
             f"mean_route_best_at_{k}": mean_metric(prompt_metrics, f"route_best_at_{k}")
             for k in best_at_ks
         },
+        **{
+            f"mean_rollout_best_at_{k}": mean_metric(prompt_metrics, f"rollout_best_at_{k}")
+            for k in best_at_ks
+        },
         "mean_completion_positive_rate": mean_metric(prompt_metrics, "completion_positive_rate"),
         "mean_route_positive_rate": mean_metric(prompt_metrics, "route_positive_rate"),
         "prompts": prompt_metrics,
@@ -166,6 +170,7 @@ def build_prompt_metrics(
     return {
         "seed": seed,
         "diversity": pairwise_l1_diversity(all_vectors),
+        "rollout_scores": completion_scores,
         "completion_scores": completion_scores,
         "completion_route_scores": completion_route_scores,
         "completion_route_vectors": completion_route_vectors,
@@ -182,8 +187,9 @@ def build_prompt_metrics(
         "route_scores": route_scores,
         "completion_positive_rate": positive_rate(completion_scores),
         "route_positive_rate": positive_rate(route_scores),
-        **{f"best_at_{k}": best_at_k(completion_scores, k) for k in best_at_ks},
+        **{f"best_at_{k}": best_at_k(route_scores, k) for k in best_at_ks},
         **{f"route_best_at_{k}": best_at_k(route_scores, k) for k in best_at_ks},
+        **{f"rollout_best_at_{k}": best_at_k(completion_scores, k) for k in best_at_ks},
     }
 
 

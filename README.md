@@ -88,7 +88,7 @@ RUN_MUON=1 ./scripts/run_minimum_comparison.sh
 ```
 
 The 1.7B/7x7 configs also run a small in-training diversity evaluation every
-10 steps, with real best@3/6/12 from 4 multi-answer chains per prompt, and append
+10 steps, with paper-style route-level best@3/6/9 from 3 multi-answer chains per prompt, and append
 JSONL records to `outputs/<run>/diversity_eval.jsonl`.
 Plot those Figure-6-style curves with:
 

@@ -164,6 +164,12 @@ def evaluate_diversity(
             f"train_eval/mean_best_at_{k}": mean_metric(prompt_metrics, f"best_at_{k}")
             for k in TRAIN_BEST_AT_KS
         },
+        **{
+            f"train_eval/mean_rollout_best_at_{k}": mean_metric(
+                prompt_metrics, f"rollout_best_at_{k}"
+            )
+            for k in TRAIN_BEST_AT_KS
+        },
         "train_eval/prompts": float(len(rows)),
         "train_eval/samples_per_prompt": float(samples_per_prompt),
         "train_eval/expected_routes": float(expected_routes),
