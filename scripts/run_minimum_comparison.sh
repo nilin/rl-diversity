@@ -12,6 +12,7 @@ fi
 
 NUM_PROCESSES="${NUM_PROCESSES:-}"
 SEED="${SEED:-0}"
+EVAL_START="${EVAL_START:-0}"
 RUN_VPO="${RUN_VPO:-1}"
 RUN_MUON="${RUN_MUON:-0}"
 RUN_SOFT_MUON="${RUN_SOFT_MUON:-1}"
@@ -19,11 +20,13 @@ EVAL_PROMPTS="${EVAL_PROMPTS:-16}"
 SAMPLES_PER_PROMPT="${SAMPLES_PER_PROMPT:-10}"
 MAZE_SIZE="${MAZE_SIZE:-7}"
 CHECKPOINT="${CHECKPOINT:-checkpoint-50}"
+BASE_MODEL="${BASE_MODEL:-Qwen/Qwen3-1.7B}"
 ADAM_MULTI_OUTPUT="${ADAM_MULTI_OUTPUT:-outputs/qwen17b_7x7_adam_multirlvr}"
 MUON_MULTI_OUTPUT="${MUON_MULTI_OUTPUT:-outputs/qwen17b_7x7_muon_multirlvr}"
 SOFT_MUON_MULTI_OUTPUT="${SOFT_MUON_MULTI_OUTPUT:-outputs/qwen17b_7x7_soft_muon_p05_multirlvr}"
 ADAM_VPO_OUTPUT="${ADAM_VPO_OUTPUT:-outputs/qwen17b_7x7_adam_vpo}"
 EVAL_OUTPUT_DIR="${EVAL_OUTPUT_DIR:-outputs/qwen17b_7x7_eval}"
+INITIAL_EVAL_OUTPUT="${INITIAL_EVAL_OUTPUT:-$EVAL_OUTPUT_DIR/initial.json}"
 
 mkdir -p "$EVAL_OUTPUT_DIR"
 
@@ -33,6 +36,8 @@ Benchmark run config:
   num_processes: ${NUM_PROCESSES:-default}
   checkpoint: $CHECKPOINT
   maze_size: $MAZE_SIZE
+  eval_start: $EVAL_START
+  base_model: $BASE_MODEL
   eval_prompts: $EVAL_PROMPTS
   samples_per_prompt: $SAMPLES_PER_PROMPT
   run_vpo: $RUN_VPO
@@ -43,6 +48,7 @@ Benchmark run config:
   soft_muon_multi_output: $SOFT_MUON_MULTI_OUTPUT
   adam_vpo_output: $ADAM_VPO_OUTPUT
   eval_output_dir: $EVAL_OUTPUT_DIR
+  initial_eval_output: $INITIAL_EVAL_OUTPUT
 EOF
 
 accelerate_launch() {
@@ -52,6 +58,21 @@ accelerate_launch() {
   fi
   "${args[@]}" -m diversity_muon.train_grpo "$@"
 }
+
+if [[ "$EVAL_START" == "1" ]]; then
+  if [[ -f "$INITIAL_EVAL_OUTPUT" ]]; then
+    echo "Reusing initial eval at $INITIAL_EVAL_OUTPUT"
+  else
+    echo "Evaluating shared initial model"
+    python -m diversity_muon.eval_diversity \
+      --model "$BASE_MODEL" \
+      --maze-size "$MAZE_SIZE" \
+      --num-prompts "$EVAL_PROMPTS" \
+      --samples-per-prompt "$SAMPLES_PER_PROMPT" \
+      --seed "$SEED" \
+      --output "$INITIAL_EVAL_OUTPUT"
+  fi
+fi
 
 echo "Running AdamW Multi-RLVR minimum run"
 accelerate_launch \
