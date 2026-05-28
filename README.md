@@ -88,13 +88,32 @@ RUN_MUON=1 ./scripts/run_minimum_comparison.sh
 ```
 
 The 1.7B/7x7 configs also run a small in-training diversity evaluation every
-10 steps, with paper-style route-level best@3/6/9 from 3 multi-answer chains per prompt, and append
-JSONL records to `outputs/<run>/diversity_eval.jsonl`.
+10 steps, with paper-style route-level best@1/3/6/9 from 3 multi-answer
+chains per prompt, and append JSONL records to
+`outputs/<run>/diversity_eval.jsonl`.
 Plot those Figure-6-style curves with:
 
 ```bash
 python scripts/plot_training_diversity.py
 ```
+
+## Evaluation Metric Convention
+
+Each sampled completion is a multi-answer rollout containing `m=3` route
+candidates. `mean_best_at_k` follows the VPO paper's candidate-pool convention,
+not the older "first k flattened routes" shortcut:
+
+- `best@1`: score of the first route in one rollout, averaged across rollouts.
+- `best@3`: best route inside one rollout, averaged across rollouts.
+- `best@6`: best route inside every pair of rollouts, averaged over all rollout pairs.
+- `best@9`: best route inside all three rollouts.
+
+For non-multiples of 3, the evaluator averages over ordered rollout selections
+and takes the first `k` routes after concatenating those rollouts in draw order.
+Both in-training eval and final eval use the same shared implementation. The
+JSON outputs also keep raw `rollouts`, `completion_route_scores`, `route_scores`,
+and `best_at_values`, so alternative post-hoc metrics can be recomputed without
+rerunning generation.
 
 ## Learning-Rate Matching
 

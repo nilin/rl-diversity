@@ -183,7 +183,7 @@ def best_at_k(scores: list[float], k: int) -> float:
     return float(max(scores[: min(k, len(scores))]))
 
 
-TRAIN_BEST_AT_KS = (3, 6, 9)
+TRAIN_BEST_AT_KS = (1, 3, 6, 9)
 
 
 def mean_metric(rows: list[dict[str, float]], key: str) -> float:
