@@ -1,0 +1,3702 @@
+{
+  "model": "outputs/qwen17b_7x7_adam_vpo_seed0/checkpoint-50",
+  "num_prompts": 16,
+  "samples_per_prompt": 3,
+  "mean_diversity": 0.09629629712758792,
+  "mean_best_at_1": 0.0,
+  "mean_best_at_3": 0.03741319477558136,
+  "mean_best_at_6": 0.06961805621782939,
+  "mean_best_at_9": 0.09661458432674408,
+  "mean_route_best_at_1": 0.0,
+  "mean_route_best_at_3": 0.03741319477558136,
+  "mean_route_best_at_6": 0.06961805621782939,
+  "mean_route_best_at_9": 0.09661458432674408,
+  "mean_rollout_best_at_1": 0.04296875,
+  "mean_rollout_best_at_3": 0.09661458432674408,
+  "mean_rollout_best_at_6": 0.09661458432674408,
+  "mean_rollout_best_at_9": 0.09661458432674408,
+  "mean_completion_positive_rate": 0.10416666666666666,
+  "mean_route_positive_rate": 0.034722222222222224,
+  "prompts": [
+    {
+      "seed": 4242,
+      "diversity": 0.0,
+      "rollout_scores": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "completion_scores": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "completion_route_scores": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "completion_route_vectors": [
+        [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ]
+      ],
+      "rollouts": [
+        {
+          "rollout_index": 0,
+          "completion": "The maze is a 7x7 grid with start at S and end at E. There are several key tiles to collect: G (Gold), D (Diamond), B (Bonus), and avoid L (Lava). The goal is to reach E without stepping on lava and collect as many items as possible before reaching the end.\n\n### Route_1\n<route_1>UP LEFT LEFT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_1>\n\n### Route_2\n<route_2>DOWN LEFT LEFT DOWN RIGHT RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT</route_2>\n\n### Route_3\n<route_3>RIGHT RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT</route_3>",
+          "score": 0.0,
+          "route_scores": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "route_vectors": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ]
+        },
+        {
+          "rollout_index": 1,
+          "completion": "<route_1>UP LEFT LEFT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_1>\n<route_2>DOWN RIGHT RIGHT DOWN LEFT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_2>\n<route_3>RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_3>",
+          "score": 0.0,
+          "route_scores": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "route_vectors": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ]
+        },
+        {
+          "rollout_index": 2,
+          "completion": "The maze is a 7x7 grid with the following layout:\n\n```\nRow 0: G . G . . . S\nRow 1: G G . . . . .\nRow 2: G . L . L . .\nRow 3: # . . B . . .\nRow 4: . . L . L . D\nRow 5: . . . . . D D\nRow 6: E . . . . . D\n```\n\n### Key points:\n- **S** is at (0, 6)\n- **E** is at (6, 0)\n- **G** (Gold), **D** (Diamond), **B** (Bonus) are scattered\n- **L** (Lava) is dangerous and must be avoided\n- **#** is a wall (cannot enter)\n- You must collect all items before reaching E\n\n---\n\n### Route 1:\n<route_1>RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_1>\n\n---\n\n### Route 2:\n<route_2>DOWN LEFT DOWN LEFT DOWN LEFT DOWN LEFT DOWN LEFT DOWN LEFT DOWN LEFT DOWN LEFT DOWN LEFT DOWN LEFT DOWN LEFT</route",
+          "score": 0.0,
+          "route_scores": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "route_vectors": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ]
+        }
+      ],
+      "route_scores": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "best_at_values": {
+        "1": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "3": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "6": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "9": [
+          0.0
+        ]
+      },
+      "completion_positive_rate": 0.0,
+      "route_positive_rate": 0.0,
+      "best_at_1": 0.0,
+      "best_at_3": 0.0,
+      "best_at_6": 0.0,
+      "best_at_9": 0.0,
+      "route_best_at_1": 0.0,
+      "route_best_at_3": 0.0,
+      "route_best_at_6": 0.0,
+      "route_best_at_9": 0.0,
+      "rollout_best_at_1": 0.0,
+      "rollout_best_at_3": 0.0,
+      "rollout_best_at_6": 0.0,
+      "rollout_best_at_9": 0.0
+    },
+    {
+      "seed": 4243,
+      "diversity": 0.3555555608537462,
+      "rollout_scores": [
+        0.0,
+        0.0,
+        0.4000000059604645
+      ],
+      "completion_scores": [
+        0.0,
+        0.0,
+        0.4000000059604645
+      ],
+      "completion_route_scores": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.4000000059604645
+        ]
+      ],
+      "completion_route_vectors": [
+        [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.6000000238418579
+          ]
+        ]
+      ],
+      "rollouts": [
+        {
+          "rollout_index": 0,
+          "completion": "The maze is 7x7 with S at (0,5) and E at (6,0). There are several key tiles to collect: 3 Gold (G), 3 Diamond (D), 5 Lava (L), and 1 Bonus (B). The challenge is to navigate from S to E, collecting items while avoiding lava, and reaching E before the 19-step limit.\n\n### Route_1\n<route_1>LEFT DOWN LEFT DOWN RIGHT RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_1>\n\n### Route_2\n<route_2>DOWN RIGHT DOWN RIGHT RIGHT LEFT DOWN RIGHT DOWN LEFT DOWN RIGHT RIGHT DOWN RIGHT DOWN</route_2>\n\n### Route_3\n<route_3>RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_3>",
+          "score": 0.0,
+          "route_scores": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "route_vectors": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ]
+        },
+        {
+          "rollout_index": 1,
+          "completion": "The maze is a 7x7 grid with starting point S at (0,5), ending point E at (6,0). There are several gold (G), diamond (D), lava (L), and bonus (B) tiles. The challenge is to find paths that avoid lava, collect items, and reach E in 19 steps.\n\n### Route 1:\n<route_1>UP LEFT LEFT DOWN LEFT DOWN RIGHT DOWN RIGHT RIGHT DOWN RIGHT DOWN RIGHT RIGHT</route_1>\n\n### Route 2:\n<route_2>DOWN RIGHT RIGHT LEFT DOWN LEFT DOWN RIGHT DOWN RIGHT RIGHT LEFT DOWN RIGHT RIGHT</route_2>\n\n### Route 3:\n<route_3>LEFT DOWN LEFT DOWN RIGHT RIGHT DOWN LEFT DOWN RIGHT RIGHT DOWN RIGHT DOWN RIGHT</route_3>",
+          "score": 0.0,
+          "route_scores": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "route_vectors": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ]
+        },
+        {
+          "rollout_index": 2,
+          "completion": "The maze is a 7x7 grid with S at (0,5), E at (6,0). There are 3 Gold (G), 3 Diamond (D), 5 Lava (L), and 1 Bonus (B) tiles. The goal is to navigate from S to E while collecting items and avoiding lava. Each route must be exactly 19 moves long and must end at E.\n\n### <route_1>UP LEFT LEFT DOWN LEFT LEFT DOWN LEFT DOWN LEFT DOWN LEFT DOWN LEFT DOWN LEFT DOWN</route_1>\n\n### <route_2>DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN</route_2>\n\n### <route_3>LEFT DOWN LEFT DOWN LEFT DOWN LEFT DOWN LEFT DOWN LEFT DOWN LEFT DOWN LEFT DOWN LEFT</route_3>",
+          "score": 0.4000000059604645,
+          "route_scores": [
+            0.0,
+            0.0,
+            0.4000000059604645
+          ],
+          "route_vectors": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.6000000238418579
+            ]
+          ]
+        }
+      ],
+      "route_scores": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.4000000059604645
+      ],
+      "best_at_values": {
+        "1": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "3": [
+          0.0,
+          0.0,
+          0.4000000059604645
+        ],
+        "6": [
+          0.0,
+          0.4000000059604645,
+          0.4000000059604645
+        ],
+        "9": [
+          0.4000000059604645
+        ]
+      },
+      "completion_positive_rate": 0.3333333333333333,
+      "route_positive_rate": 0.1111111111111111,
+      "best_at_1": 0.0,
+      "best_at_3": 0.13333333532015482,
+      "best_at_6": 0.26666667064030963,
+      "best_at_9": 0.4000000059604645,
+      "route_best_at_1": 0.0,
+      "route_best_at_3": 0.13333333532015482,
+      "route_best_at_6": 0.26666667064030963,
+      "route_best_at_9": 0.4000000059604645,
+      "rollout_best_at_1": 0.0,
+      "rollout_best_at_3": 0.4000000059604645,
+      "rollout_best_at_6": 0.4000000059604645,
+      "rollout_best_at_9": 0.4000000059604645
+    },
+    {
+      "seed": 4244,
+      "diversity": 0.0,
+      "rollout_scores": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "completion_scores": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "completion_route_scores": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "completion_route_vectors": [
+        [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ]
+      ],
+      "rollouts": [
+        {
+          "rollout_index": 0,
+          "completion": "The maze is a 7x7 grid with S at the top-left corner and E at the bottom-right. There are several tiles to collect: 4 Gold (G), 5 Diamond (D), 5 Lava (L), and 1 Bonus (B). The challenge is to navigate from S to E, collecting items while avoiding lava, and reaching E without stepping on lava. The path must be 19 steps long, and the score is zero if the path doesn't reach E.\n\n### Route 1:\n<route_1>UP LEFT LEFT DOWN DOWN RIGHT RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT RIGHT DOWN</route_1>\n\n### Route 2:\n<route_2>DOWN RIGHT RIGHT DOWN LEFT LEFT LEFT DOWN RIGHT RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_2>\n\n### Route 3:\n<route_3>LEFT DOWN RIGHT DOWN RIGHT RIGHT LEFT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT</route_3>",
+          "score": 0.0,
+          "route_scores": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "route_vectors": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ]
+        },
+        {
+          "rollout_index": 1,
+          "completion": "The maze is a 7x7 grid with the start at S and end at E. There are multiple gold (G), diamonds (D), lava (L), and a bonus (B) tile. The goal is to navigate from S to E while collecting gold and diamonds, avoiding lava, and reaching E before collecting any items.\n\n### Route 1:\n<route_1>UP LEFT LEFT DOWN RIGHT RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_1>\n\n### Route 2:\n<route_2>DOWN RIGHT RIGHT DOWN LEFT LEFT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_2>\n\n### Route 3:\n<route_3>LEFT DOWN LEFT DOWN RIGHT RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_3>",
+          "score": 0.0,
+          "route_scores": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "route_vectors": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ]
+        },
+        {
+          "rollout_index": 2,
+          "completion": "The maze is a 7x7 grid with starting point S at (0, 5), ending point E at (6, 0). There are several key tiles to collect: 4 Gold (G), 5 Diamonds (D), 5 Lava (L), and 1 Bonus (B). The goal is to navigate from S to E while avoiding lava and collecting items, with a 19-step limit.\n\n### Route 1\n<route_1>UP LEFT LEFT DOWN DOWN RIGHT RIGHT RIGHT RIGHT DOWN DOWN LEFT LEFT</route_1>\n\n### Route 2\n<route_2>DOWN LEFT LEFT DOWN RIGHT RIGHT RIGHT DOWN RIGHT RIGHT RIGHT DOWN LEFT LEFT</route_2>\n\n### Route 3\n<route_3>RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN LEFT LEFT DOWN RIGHT RIGHT RIGHT</route_3>",
+          "score": 0.0,
+          "route_scores": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "route_vectors": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ]
+        }
+      ],
+      "route_scores": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "best_at_values": {
+        "1": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "3": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "6": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "9": [
+          0.0
+        ]
+      },
+      "completion_positive_rate": 0.0,
+      "route_positive_rate": 0.0,
+      "best_at_1": 0.0,
+      "best_at_3": 0.0,
+      "best_at_6": 0.0,
+      "best_at_9": 0.0,
+      "route_best_at_1": 0.0,
+      "route_best_at_3": 0.0,
+      "route_best_at_6": 0.0,
+      "route_best_at_9": 0.0,
+      "rollout_best_at_1": 0.0,
+      "rollout_best_at_3": 0.0,
+      "rollout_best_at_6": 0.0,
+      "rollout_best_at_9": 0.0
+    },
+    {
+      "seed": 4245,
+      "diversity": 0.0,
+      "rollout_scores": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "completion_scores": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "completion_route_scores": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "completion_route_vectors": [
+        [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ]
+      ],
+      "rollouts": [
+        {
+          "rollout_index": 0,
+          "completion": "The maze is a 7x7 grid with start at S, end at E. There are several key points to note:\n\n- **S** is at (0, 5)\n- **E** is at (6, 0)\n- **D** and **G** are collectible items\n- **L** is lava (cannot step on)\n- **B** is a bonus that multiplies scores\n- The path must be 19 moves long and end at E\n\n### Route 1\n<route_1>UP LEFT LEFT DOWN LEFT DOWN RIGHT DOWN RIGHT RIGHT DOWN RIGHT DOWN DOWN RIGHT</route_1>\n\n### Route 2\n<route_2>DOWN RIGHT RIGHT DOWN LEFT LEFT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT</route_2>\n\n### Route 3\n<route_3>LEFT DOWN RIGHT DOWN RIGHT RIGHT DOWN RIGHT DOWN LEFT DOWN RIGHT RIGHT DOWN RIGHT</route_3>",
+          "score": 0.0,
+          "route_scores": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "route_vectors": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ]
+        },
+        {
+          "rollout_index": 1,
+          "completion": "The maze is a 7x7 grid with starting point S at (0, 5), ending point E at (6, 0). There are several tiles to collect: 5 Gold (G), 5 Diamond (D), 4 Lava (L), and 1 Bonus (B). The goal is to reach E while avoiding lava and collecting items before reaching E.\n\n### Route_1:\n<route_1>UP LEFT LEFT DOWN LEFT DOWN LEFT RIGHT DOWN RIGHT DOWN RIGHT LEFT DOWN</route_1>\n\n### Route_2:\n<route_2>DOWN LEFT LEFT DOWN LEFT DOWN LEFT RIGHT DOWN RIGHT DOWN RIGHT LEFT DOWN</route_2>\n\n### Route_3:\n<route_3>LEFT DOWN LEFT DOWN LEFT DOWN LEFT RIGHT DOWN RIGHT DOWN RIGHT LEFT DOWN</route_3>",
+          "score": 0.0,
+          "route_scores": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "route_vectors": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ]
+        },
+        {
+          "rollout_index": 2,
+          "completion": "The maze is a 7x7 grid with starting point S at (0,5), ending point E at (6,0). There are several tiles to collect: 5 Gold (G), 5 Diamond (D), 4 Lava (L), and 1 Bonus (B). The goal is to navigate from S to E, collecting items before reaching E, while avoiding lava.\n\n### Route 1\n<route_1>UP LEFT LEFT DOWN DOWN RIGHT RIGHT RIGHT RIGHT DOWN DOWN RIGHT RIGHT DOWN</route_1>\n\n### Route 2\n<route_2>DOWN LEFT LEFT DOWN DOWN LEFT LEFT DOWN RIGHT RIGHT RIGHT RIGHT RIGHT RIGHT DOWN</route_2>\n\n### Route 3\n<route_3>RIGHT RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT</route_3>",
+          "score": 0.0,
+          "route_scores": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "route_vectors": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ]
+        }
+      ],
+      "route_scores": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "best_at_values": {
+        "1": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "3": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "6": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "9": [
+          0.0
+        ]
+      },
+      "completion_positive_rate": 0.0,
+      "route_positive_rate": 0.0,
+      "best_at_1": 0.0,
+      "best_at_3": 0.0,
+      "best_at_6": 0.0,
+      "best_at_9": 0.0,
+      "route_best_at_1": 0.0,
+      "route_best_at_3": 0.0,
+      "route_best_at_6": 0.0,
+      "route_best_at_9": 0.0,
+      "rollout_best_at_1": 0.0,
+      "rollout_best_at_3": 0.0,
+      "rollout_best_at_6": 0.0,
+      "rollout_best_at_9": 0.0
+    },
+    {
+      "seed": 4246,
+      "diversity": 0.0,
+      "rollout_scores": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "completion_scores": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "completion_route_scores": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "completion_route_vectors": [
+        [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ]
+      ],
+      "rollouts": [
+        {
+          "rollout_index": 0,
+          "completion": "The maze is a 7x7 grid with starting point S at (0,5), ending point E at (6,0). There are several key tiles to collect: G (Gold), D (Diamond), B (Bonus), and avoid L (Lava). The goal is to reach E without stepping on lava and collecting items before reaching E.\n\n### Route_1\n<route_1>UP LEFT LEFT DOWN LEFT DOWN LEFT DOWN RIGHT DOWN RIGHT DOWN RIGHT RIGHT DOWN RIGHT</route_1>\n\n### Route_2\n<route_2>DOWN RIGHT LEFT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT DOWN LEFT DOWN RIGHT</route_2>\n\n### Route_3\n<route_3>LEFT DOWN RIGHT DOWN RIGHT LEFT DOWN RIGHT DOWN RIGHT RIGHT DOWN RIGHT DOWN RIGHT</route_3>",
+          "score": 0.0,
+          "route_scores": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "route_vectors": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ]
+        },
+        {
+          "rollout_index": 1,
+          "completion": "The maze is 7x7 with the start at S and end at E. There are multiple paths to consider, including avoiding lava and collecting items. Here are three different routes:\n\n<route_1>UP LEFT LEFT DOWN RIGHT DOWN RIGHT RIGHT DOWN RIGHT DOWN</route_1>\n<route_2>DOWN LEFT LEFT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT</route_2>\n<route_3>UP RIGHT RIGHT DOWN LEFT LEFT DOWN RIGHT DOWN RIGHT DOWN</route_3>",
+          "score": 0.0,
+          "route_scores": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "route_vectors": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ]
+        },
+        {
+          "rollout_index": 2,
+          "completion": "The maze is a 7x7 grid with starting point S at (0, 5), ending point E at (6, 0). There are several obstacles (walls, lava), and collectibles (Gold, Diamond, Bonus). The challenge is to navigate from S to E, collecting items before reaching E, avoiding lava, and using 21 steps.\n\n### Route 1\n<route_1>UP LEFT LEFT DOWN LEFT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_1>\n\n### Route 2\n<route_2>DOWN LEFT LEFT LEFT DOWN LEFT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_2>\n\n### Route 3\n<route_3>LEFT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT</route_3>",
+          "score": 0.0,
+          "route_scores": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "route_vectors": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ]
+        }
+      ],
+      "route_scores": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "best_at_values": {
+        "1": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "3": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "6": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "9": [
+          0.0
+        ]
+      },
+      "completion_positive_rate": 0.0,
+      "route_positive_rate": 0.0,
+      "best_at_1": 0.0,
+      "best_at_3": 0.0,
+      "best_at_6": 0.0,
+      "best_at_9": 0.0,
+      "route_best_at_1": 0.0,
+      "route_best_at_3": 0.0,
+      "route_best_at_6": 0.0,
+      "route_best_at_9": 0.0,
+      "rollout_best_at_1": 0.0,
+      "rollout_best_at_3": 0.0,
+      "rollout_best_at_6": 0.0,
+      "rollout_best_at_9": 0.0
+    },
+    {
+      "seed": 4247,
+      "diversity": 0.3888888888888889,
+      "rollout_scores": [
+        0.4375,
+        0.0,
+        0.0
+      ],
+      "completion_scores": [
+        0.4375,
+        0.0,
+        0.0
+      ],
+      "completion_route_scores": [
+        [
+          0.0,
+          0.0,
+          0.4375
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "completion_route_vectors": [
+        [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.75
+          ]
+        ],
+        [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ]
+      ],
+      "rollouts": [
+        {
+          "rollout_index": 0,
+          "completion": "The maze is a 7x7 grid with starting point S at position (0,0). The goal is to reach E at (6,6) while collecting gold (G), diamonds (D), and bonus (B) tiles, avoiding lava (L). The path must be 19 moves long and must end at E.\n\n### Route 1:\n<route_1>UP LEFT LEFT DOWN RIGHT RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_1>\n\n### Route 2:\n<route_2>DOWN RIGHT RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_2>\n\n### Route 3:\n<route_3>RIGHT DOWN LEFT RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_3>",
+          "score": 0.4375,
+          "route_scores": [
+            0.0,
+            0.0,
+            0.4375
+          ],
+          "route_vectors": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.75
+            ]
+          ]
+        },
+        {
+          "rollout_index": 1,
+          "completion": "The maze is a 7x7 grid with starting point S at (0,0), ending point E at (6,6). There are several gold (G), diamond (D), and bonus (B) tiles to collect, and lava (L) tiles to avoid. The challenge is to find paths that collect items before reaching E, while avoiding lava and staying within the grid.\n\n### Route 1:  \n<route_1>UP RIGHT DOWN LEFT DOWN LEFT RIGHT DOWN RIGHT DOWN RIGHT RIGHT DOWN RIGHT DOWN RIGHT</route_1>\n\n### Route 2:  \n<route_2>DOWN LEFT DOWN LEFT RIGHT RIGHT DOWN RIGHT DOWN RIGHT RIGHT RIGHT DOWN RIGHT DOWN RIGHT</route_2>\n\n### Route 3:  \n<route_3>RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT RIGHT DOWN RIGHT DOWN RIGHT</route_3>",
+          "score": 0.0,
+          "route_scores": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "route_vectors": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ]
+        },
+        {
+          "rollout_index": 2,
+          "completion": "The maze is a 7x7 grid with starting point S at (0,0) and ending point E at (6,6). The grid contains:\n- **Gold (G)**: 3 tiles at (0,3), (1,5), (1,6)\n- **Diamond (D)**: 2 tiles at (2,2), (3,2)\n- **Lava (L)**: 4 tiles at (2,2), (2,3), (3,3), (3,4)\n- **Bonus (B)**: 1 tile at (3,1)\n- **Obstacles (walls)**: All other tiles\n\nKey paths:\n- **S** is at (0,0)\n- **E** is at (6,6)\n- **Avoid Lava (L)** and **do not step on Lava**\n- **Collect G, D, B** before reaching E\n- **Only collect items before reaching E**\n\n### Route 1: <route_1>UP LEFT DOWN LEFT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_1>\n\n### Route 2: <route_2>DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT",
+          "score": 0.0,
+          "route_scores": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "route_vectors": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ]
+        }
+      ],
+      "route_scores": [
+        0.0,
+        0.0,
+        0.4375,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "best_at_values": {
+        "1": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "3": [
+          0.4375,
+          0.0,
+          0.0
+        ],
+        "6": [
+          0.4375,
+          0.4375,
+          0.0
+        ],
+        "9": [
+          0.4375
+        ]
+      },
+      "completion_positive_rate": 0.3333333333333333,
+      "route_positive_rate": 0.1111111111111111,
+      "best_at_1": 0.0,
+      "best_at_3": 0.14583333333333334,
+      "best_at_6": 0.2916666666666667,
+      "best_at_9": 0.4375,
+      "route_best_at_1": 0.0,
+      "route_best_at_3": 0.14583333333333334,
+      "route_best_at_6": 0.2916666666666667,
+      "route_best_at_9": 0.4375,
+      "rollout_best_at_1": 0.4375,
+      "rollout_best_at_3": 0.4375,
+      "rollout_best_at_6": 0.4375,
+      "rollout_best_at_9": 0.4375
+    },
+    {
+      "seed": 4248,
+      "diversity": 0.0,
+      "rollout_scores": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "completion_scores": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "completion_route_scores": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "completion_route_vectors": [
+        [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ]
+      ],
+      "rollouts": [
+        {
+          "rollout_index": 0,
+          "completion": "The maze is a 7x7 grid with starting point S at (0, 5), ending point E at (6, 0). There are several obstacles (Lava) and collectibles (G, D, B). The challenge is to find paths that avoid lava and collect items before reaching E.\n\n### Route 1\n<route_1>UP LEFT LEFT DOWN RIGHT RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN DOWN</route_1>\n\n### Route 2\n<route_2>DOWN RIGHT RIGHT DOWN LEFT LEFT DOWN RIGHT DOWN RIGHT RIGHT DOWN DOWN</route_2>\n\n### Route 3\n<route_3>LEFT DOWN LEFT DOWN RIGHT RIGHT DOWN RIGHT DOWN RIGHT LEFT DOWN DOWN</route_3>",
+          "score": 0.0,
+          "route_scores": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "route_vectors": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ]
+        },
+        {
+          "rollout_index": 1,
+          "completion": "The maze is a 7x7 grid with start at S, end at E, and contains various tiles: Gold (G), Diamond (D), Bonus (B), and Lava (L). The challenge is to navigate from S to E while collecting items and avoiding lava. The key is to find paths that avoid lava and collect items before reaching E.\n\n### Route 1:\n<route_1>UP LEFT LEFT DOWN RIGHT RIGHT RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_1>\n\n### Route 2:\n<route_2>DOWN RIGHT RIGHT RIGHT DOWN LEFT LEFT LEFT DOWN RIGHT RIGHT DOWN</route_2>\n\n### Route 3:\n<route_3>LEFT DOWN RIGHT DOWN RIGHT RIGHT DOWN RIGHT LEFT DOWN RIGHT DOWN</route_3>",
+          "score": 0.0,
+          "route_scores": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "route_vectors": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ]
+        },
+        {
+          "rollout_index": 2,
+          "completion": "The maze is a 7x7 grid with starting point S at (0,5), ending point E at (6,0). There are several obstacles (Lava) and collectibles (G, D, B). The goal is to navigate from S to E while collecting as many items as possible and avoiding lava.\n\n### Route 1:\n<route_1>UP LEFT LEFT DOWN LEFT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT RIGHT</route_1>\n\n### Route 2:\n<route_2>DOWN LEFT LEFT DOWN LEFT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT RIGHT</route_2>\n\n### Route 3:\n<route_3>DOWN RIGHT RIGHT DOWN LEFT LEFT DOWN DOWN RIGHT RIGHT DOWN RIGHT DOWN RIGHT</route_3>",
+          "score": 0.0,
+          "route_scores": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "route_vectors": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ]
+        }
+      ],
+      "route_scores": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "best_at_values": {
+        "1": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "3": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "6": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "9": [
+          0.0
+        ]
+      },
+      "completion_positive_rate": 0.0,
+      "route_positive_rate": 0.0,
+      "best_at_1": 0.0,
+      "best_at_3": 0.0,
+      "best_at_6": 0.0,
+      "best_at_9": 0.0,
+      "route_best_at_1": 0.0,
+      "route_best_at_3": 0.0,
+      "route_best_at_6": 0.0,
+      "route_best_at_9": 0.0,
+      "rollout_best_at_1": 0.0,
+      "rollout_best_at_3": 0.0,
+      "rollout_best_at_6": 0.0,
+      "rollout_best_at_9": 0.0
+    },
+    {
+      "seed": 4249,
+      "diversity": 0.0,
+      "rollout_scores": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "completion_scores": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "completion_route_scores": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "completion_route_vectors": [
+        [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ]
+      ],
+      "rollouts": [
+        {
+          "rollout_index": 0,
+          "completion": "The maze is a 7x7 grid with starting point S at (0,0), ending point E at (6,6). There are several key tiles to collect: 4 Gold (G), 5 Diamond (D), 4 Lava (L), and 1 Bonus (B). The challenge is to navigate from S to E while avoiding lava and collecting items, with a 19-step limit.\n\n### Route_1\n<route_1>UP LEFT LEFT DOWN RIGHT RIGHT RIGHT DOWN RIGHT DOWN RIGHT RIGHT RIGHT RIGHT DOWN</route_1>\n\n### Route_2\n<route_2>DOWN RIGHT RIGHT DOWN LEFT LEFT LEFT DOWN RIGHT RIGHT RIGHT RIGHT DOWN RIGHT DOWN</route_2>\n\n### Route_3\n<route_3>LEFT RIGHT DOWN RIGHT RIGHT DOWN LEFT LEFT RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT</route_3>",
+          "score": 0.0,
+          "route_scores": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "route_vectors": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ]
+        },
+        {
+          "rollout_index": 1,
+          "completion": "The maze is a 7x7 grid with starting point S at (0,0), ending point E at (6,6). There are several key tiles to collect: 4 Gold (G), 5 Diamond (D), 4 Lava (L), and 1 Bonus (B). The challenge is to navigate from S to E, collecting items while avoiding lava, and reaching E without stepping on lava.\n\n### Route 1\n<route_1>UP RIGHT RIGHT DOWN LEFT DOWN LEFT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_1>\n\n### Route 2\n<route_2>DOWN LEFT LEFT DOWN LEFT DOWN LEFT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT</route_2>\n\n### Route 3\n<route_3>RIGHT DOWN RIGHT DOWN LEFT DOWN LEFT RIGHT RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT</route_3>",
+          "score": 0.0,
+          "route_scores": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "route_vectors": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ]
+        },
+        {
+          "rollout_index": 2,
+          "completion": "The maze has a starting point S at the top-left, and an exit E at the bottom-right. There are several key tiles to collect: 4 Gold (G), 5 Diamonds (D), 4 Lava (L), and 1 Bonus (B). The challenge is to navigate from S to E while avoiding lava and collecting items, while staying within 19 steps.\n\n### Route_1\n<route_1>UP LEFT LEFT DOWN LEFT DOWN RIGHT RIGHT RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT RIGHT</route_1>\n\n### Route_2\n<route_2>DOWN RIGHT RIGHT LEFT LEFT DOWN RIGHT RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT DOWN RIGHT</route_2>\n\n### Route_3\n<route_3>LEFT DOWN RIGHT DOWN RIGHT RIGHT RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_3>",
+          "score": 0.0,
+          "route_scores": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "route_vectors": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ]
+        }
+      ],
+      "route_scores": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "best_at_values": {
+        "1": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "3": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "6": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "9": [
+          0.0
+        ]
+      },
+      "completion_positive_rate": 0.0,
+      "route_positive_rate": 0.0,
+      "best_at_1": 0.0,
+      "best_at_3": 0.0,
+      "best_at_6": 0.0,
+      "best_at_9": 0.0,
+      "route_best_at_1": 0.0,
+      "route_best_at_3": 0.0,
+      "route_best_at_6": 0.0,
+      "route_best_at_9": 0.0,
+      "rollout_best_at_1": 0.0,
+      "rollout_best_at_3": 0.0,
+      "rollout_best_at_6": 0.0,
+      "rollout_best_at_9": 0.0
+    },
+    {
+      "seed": 4250,
+      "diversity": 0.0,
+      "rollout_scores": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "completion_scores": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "completion_route_scores": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "completion_route_vectors": [
+        [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ]
+      ],
+      "rollouts": [
+        {
+          "rollout_index": 0,
+          "completion": "The maze is a 7x7 grid with a starting point S at (0,5), an exit E at (6,0), and several collectible items: D (Diamond), G (Gold), B (Bonus), and L (Lava). The challenge is to navigate from S to E, collecting items before reaching E, avoiding lava, and ensuring all paths have 19 steps.\n\n### Route 1\n<route_1>UP LEFT LEFT DOWN RIGHT RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_1>\n\n### Route 2\n<route_2>DOWN LEFT LEFT DOWN RIGHT RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_2>\n\n### Route 3\n<route_3>RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_3>",
+          "score": 0.0,
+          "route_scores": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "route_vectors": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ]
+        },
+        {
+          "rollout_index": 1,
+          "completion": "The maze is a 7x7 grid with starting point S at (0,5), ending point E at (6,0). There are several tiles to collect: Gold (G) at (5,6), (5,5), (5,4), (4,4), (3,4), (2,4), (1,4), (0,4), (0,3), (0,2), (0,1), (0,0); Diamond (D) at (0,1), (1,0), (1,1); Lava (L) at (2,2), (3,2), (4,2); and a Bonus (B) at (3,4). The goal is to reach E while collecting as many items as possible without stepping on lava.\n\n### Route_1\n<route_1>LEFT LEFT LEFT LEFT DOWN DOWN DOWN DOWN RIGHT RIGHT RIGHT RIGHT RIGHT RIGHT RIGHT RIGHT</route_1>\n\n### Route_2\n<route_2>DOWN DOWN DOWN RIGHT RIGHT RIGHT RIGHT LEFT LEFT LEFT LEFT LEFT DOWN DOWN DOWN DOWN</route_2>\n\n### Route_3\n<route_3>RIGHT RIGHT RIGHT DOWN DOWN DOWN LEFT LEFT LEFT LEFT RIGHT RIGHT RIGHT",
+          "score": 0.0,
+          "route_scores": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "route_vectors": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ]
+        },
+        {
+          "rollout_index": 2,
+          "completion": "The maze is a 7x7 grid with starting point S at (0,5), ending point E at (6,0). There are several tiles to collect: 5 Gold (G), 4 Diamond (D), 3 Lava (L), and 1 Bonus (B). The key is to navigate through the maze, collect items, avoid lava, and reach E without stepping on lava.\n\n### Route 1\n<route_1>UP LEFT DOWN LEFT DOWN RIGHT RIGHT RIGHT RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_1>\n\n### Route 2\n<route_2>DOWN RIGHT DOWN LEFT LEFT DOWN RIGHT RIGHT RIGHT RIGHT DOWN RIGHT DOWN</route_2>\n\n### Route 3\n<route_3>LEFT DOWN RIGHT LEFT DOWN RIGHT DOWN RIGHT DOWN RIGHT RIGHT RIGHT DOWN</route_3>",
+          "score": 0.0,
+          "route_scores": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "route_vectors": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ]
+        }
+      ],
+      "route_scores": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "best_at_values": {
+        "1": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "3": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "6": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "9": [
+          0.0
+        ]
+      },
+      "completion_positive_rate": 0.0,
+      "route_positive_rate": 0.0,
+      "best_at_1": 0.0,
+      "best_at_3": 0.0,
+      "best_at_6": 0.0,
+      "best_at_9": 0.0,
+      "route_best_at_1": 0.0,
+      "route_best_at_3": 0.0,
+      "route_best_at_6": 0.0,
+      "route_best_at_9": 0.0,
+      "rollout_best_at_1": 0.0,
+      "rollout_best_at_3": 0.0,
+      "rollout_best_at_6": 0.0,
+      "rollout_best_at_9": 0.0
+    },
+    {
+      "seed": 4251,
+      "diversity": 0.3333333333333333,
+      "rollout_scores": [
+        0.0,
+        0.375,
+        0.0
+      ],
+      "completion_scores": [
+        0.0,
+        0.375,
+        0.0
+      ],
+      "completion_route_scores": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.375
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "completion_route_vectors": [
+        [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.5
+          ]
+        ],
+        [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ]
+      ],
+      "rollouts": [
+        {
+          "rollout_index": 0,
+          "completion": "The maze is a 7x7 grid with starting point S at (0,0), ending point E at (6,6). There are several key elements to note:\n\n- **S** is at (0,0).\n- **E** is at (6,6).\n- **G** (Gold), **D** (Diamond), and **B** (Bonus) are scattered across the grid.\n- **L** (Lava) is a dangerous tile that must be avoided.\n- **B** tiles multiply your score when visited.\n\nHere are three different routes from S to E, each with 19 steps and avoiding lava:\n\n<route_1>UP RIGHT RIGHT DOWN RIGHT DOWN RIGHT RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_1>\n<route_2>DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_2>\n<route_3>LEFT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_3>",
+          "score": 0.0,
+          "route_scores": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "route_vectors": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ]
+        },
+        {
+          "rollout_index": 1,
+          "completion": "The maze is a 7x7 grid with starting point S at (0,0), ending point E at (6,6). There are:\n\n- 3 Gold (G) tiles\n- 4 Diamond (D) tiles\n- 4 Lava (L) tiles\n- 1 Bonus (B) tile\n\nThe path must avoid lava and collect items before reaching E. The challenge is to find 3 different routes that navigate from S to E, collect items, and avoid lava.\n\n### Route_1\n<route_1>UP LEFT LEFT DOWN RIGHT RIGHT DOWN RIGHT DOWN RIGHT RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_1>\n\n### Route_2\n<route_2>DOWN RIGHT RIGHT DOWN LEFT LEFT DOWN RIGHT RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_2>\n\n### Route_3\n<route_3>RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_3>",
+          "score": 0.375,
+          "route_scores": [
+            0.0,
+            0.0,
+            0.375
+          ],
+          "route_vectors": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.5
+            ]
+          ]
+        },
+        {
+          "rollout_index": 2,
+          "completion": "The maze is 7x7 with S at the top-left corner and E at the bottom-right. There are multiple paths to consider, but the key obstacles are the lava (L) tiles and the need to collect G, D, and B tiles before reaching E. The B tile multiplies scores, so it's worth exploring.\n\n### Route 1\n<route_1>UP LEFT LEFT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_1>\n\n### Route 2\n<route_2>DOWN RIGHT RIGHT DOWN LEFT LEFT DOWN RIGHT DOWN RIGHT RIGHT DOWN</route_2>\n\n### Route 3\n<route_3>UP RIGHT DOWN LEFT DOWN RIGHT DOWN RIGHT LEFT DOWN RIGHT RIGHT DOWN</route_3>",
+          "score": 0.0,
+          "route_scores": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "route_vectors": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ]
+        }
+      ],
+      "route_scores": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.375,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "best_at_values": {
+        "1": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "3": [
+          0.0,
+          0.375,
+          0.0
+        ],
+        "6": [
+          0.375,
+          0.0,
+          0.375
+        ],
+        "9": [
+          0.375
+        ]
+      },
+      "completion_positive_rate": 0.3333333333333333,
+      "route_positive_rate": 0.1111111111111111,
+      "best_at_1": 0.0,
+      "best_at_3": 0.125,
+      "best_at_6": 0.25,
+      "best_at_9": 0.375,
+      "route_best_at_1": 0.0,
+      "route_best_at_3": 0.125,
+      "route_best_at_6": 0.25,
+      "route_best_at_9": 0.375,
+      "rollout_best_at_1": 0.0,
+      "rollout_best_at_3": 0.375,
+      "rollout_best_at_6": 0.375,
+      "rollout_best_at_9": 0.375
+    },
+    {
+      "seed": 4252,
+      "diversity": 0.4629629709654384,
+      "rollout_scores": [
+        0.25,
+        0.3333333432674408,
+        0.0
+      ],
+      "completion_scores": [
+        0.25,
+        0.3333333432674408,
+        0.0
+      ],
+      "completion_route_scores": [
+        [
+          0.0,
+          0.25,
+          0.0
+        ],
+        [
+          0.0,
+          0.3333333432674408,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "completion_route_vectors": [
+        [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.3333333432674408
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ]
+      ],
+      "rollouts": [
+        {
+          "rollout_index": 0,
+          "completion": "The maze is a 7x7 grid with starting point S at (0,0), ending point E at (6,6). There are several tiles to collect: 4 Gold (G), 4 Diamond (D), 3 Lava (L), and 1 Bonus (B). The path must avoid lava and reach E. The key is to find a path that collects items and avoids lava while reaching E in 19 steps.\n\n### Route 1\n<route_1>UP LEFT LEFT DOWN RIGHT RIGHT RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_1>\n\n### Route 2\n<route_2>DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN LEFT LEFT DOWN RIGHT RIGHT DOWN RIGHT DOWN RIGHT</route_2>\n\n### Route 3\n<route_3>LEFT DOWN RIGHT DOWN RIGHT RIGHT LEFT DOWN RIGHT RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT</route_3>",
+          "score": 0.25,
+          "route_scores": [
+            0.0,
+            0.25,
+            0.0
+          ],
+          "route_vectors": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ]
+        },
+        {
+          "rollout_index": 1,
+          "completion": "The maze is a 7x7 grid where S is at the top-left corner (0,0), and E is at the bottom-right corner (6,6). The grid has:\n- S (start)\n- G (Gold)\n- D (Diamond)\n- B (Bonus)\n- L (Lava)\n- E (end)\n\nThe challenge is to navigate from S to E, collecting G, D, and B tiles, while avoiding lava. Each route must be exactly 19 moves long and end at E.\n\n### Route 1\n<route_1>UP LEFT LEFT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_1>\n\n### Route 2\n<route_2>DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN DOWN LEFT DOWN RIGHT RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT</route_2>\n\n### Route 3\n<route_3>LEFT DOWN RIGHT DOWN LEFT DOWN RIGHT DOWN LEFT DOWN RIGHT DOWN RIGHT DOWN LEFT DOWN RIGHT DOWN RIGHT</route_3>",
+          "score": 0.3333333432674408,
+          "route_scores": [
+            0.0,
+            0.3333333432674408,
+            0.0
+          ],
+          "route_vectors": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.3333333432674408
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ]
+        },
+        {
+          "rollout_index": 2,
+          "completion": "The maze is a 7x7 grid with starting point S at (0,0), ending at E at (6,6). There are several key tiles to collect: 4 Gold (G), 4 Diamond (D), 3 Lava (L), and 1 Bonus (B). The challenge is to navigate from S to E while collecting items and avoiding lava.\n\n### Route 1\n<route_1>UP RIGHT DOWN LEFT DOWN RIGHT DOWN RIGHT RIGHT DOWN RIGHT DOWN RIGHT RIGHT RIGHT DOWN</route_1>\n\n### Route 2\n<route_2>DOWN LEFT DOWN LEFT RIGHT RIGHT DOWN RIGHT RIGHT RIGHT DOWN RIGHT DOWN RIGHT RIGHT DOWN</route_2>\n\n### Route 3\n<route_3>LEFT DOWN RIGHT DOWN RIGHT RIGHT DOWN RIGHT DOWN RIGHT RIGHT DOWN RIGHT DOWN RIGHT RIGHT DOWN</route_3>",
+          "score": 0.0,
+          "route_scores": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "route_vectors": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ]
+        }
+      ],
+      "route_scores": [
+        0.0,
+        0.25,
+        0.0,
+        0.0,
+        0.3333333432674408,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "best_at_values": {
+        "1": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "3": [
+          0.25,
+          0.3333333432674408,
+          0.0
+        ],
+        "6": [
+          0.3333333432674408,
+          0.25,
+          0.3333333432674408
+        ],
+        "9": [
+          0.3333333432674408
+        ]
+      },
+      "completion_positive_rate": 0.6666666666666666,
+      "route_positive_rate": 0.2222222222222222,
+      "best_at_1": 0.0,
+      "best_at_3": 0.1944444477558136,
+      "best_at_6": 0.3055555621782939,
+      "best_at_9": 0.3333333432674408,
+      "route_best_at_1": 0.0,
+      "route_best_at_3": 0.1944444477558136,
+      "route_best_at_6": 0.3055555621782939,
+      "route_best_at_9": 0.3333333432674408,
+      "rollout_best_at_1": 0.25,
+      "rollout_best_at_3": 0.3333333432674408,
+      "rollout_best_at_6": 0.3333333432674408,
+      "rollout_best_at_9": 0.3333333432674408
+    },
+    {
+      "seed": 4253,
+      "diversity": 0.0,
+      "rollout_scores": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "completion_scores": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "completion_route_scores": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "completion_route_vectors": [
+        [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ]
+      ],
+      "rollouts": [
+        {
+          "rollout_index": 0,
+          "completion": "The maze is a 7x7 grid with starting point S at (0, 5), ending point E at (6, 0). There are multiple tiles to collect: 5 Gold (G), 5 Diamond (D), 5 Lava (L), and 1 Bonus (B). The goal is to navigate from S to E, collecting items before reaching E, avoiding lava, and making sure to reach E. Each route must be 19 steps long.\n\n### Route 1\n<route_1>UP LEFT LEFT DOWN LEFT DOWN LEFT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_1>\n\n### Route 2\n<route_2>DOWN RIGHT RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN</route_2>\n\n### Route 3\n<route_3>LEFT DOWN LEFT DOWN LEFT DOWN LEFT DOWN RIGHT RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT</route_3>",
+          "score": 0.0,
+          "route_scores": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "route_vectors": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ]
+        },
+        {
+          "rollout_index": 1,
+          "completion": "The maze is a 7x7 grid with starting point S at (0,5), ending point E at (6,0). There are several tiles to collect: 5 Gold (G), 5 Diamond (D), 5 Lava (L), and 1 Bonus (B). The challenge is to navigate from S to E while avoiding lava and collecting items, with a 19-step limit.\n\n### Route 1:\n<route_1>UP LEFT LEFT DOWN DOWN RIGHT RIGHT RIGHT RIGHT DOWN DOWN LEFT LEFT</route_1>\n\n### Route 2:\n<route_2>DOWN LEFT LEFT DOWN DOWN RIGHT RIGHT RIGHT RIGHT DOWN DOWN RIGHT RIGHT</route_2>\n\n### Route 3:\n<route_3>LEFT DOWN LEFT DOWN RIGHT RIGHT RIGHT RIGHT DOWN DOWN RIGHT RIGHT</route_3>",
+          "score": 0.0,
+          "route_scores": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "route_vectors": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ]
+        },
+        {
+          "rollout_index": 2,
+          "completion": "The maze is a 7x7 grid with starting point S at (0, 5), ending at E at (3, 0). There are multiple gold (G), diamond (D), lava (L), and bonus (B) tiles. The goal is to navigate from S to E, collecting gold and diamonds while avoiding lava, and reaching E without stepping on lava.\n\n### Route_1:\n<route_1>UP LEFT LEFT DOWN DOWN LEFT DOWN RIGHT RIGHT RIGHT RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_1>\n\n### Route_2:\n<route_2>DOWN LEFT LEFT RIGHT RIGHT RIGHT RIGHT DOWN DOWN LEFT RIGHT DOWN RIGHT RIGHT DOWN RIGHT</route_2>\n\n### Route_3:\n<route_3>LEFT DOWN LEFT DOWN RIGHT RIGHT RIGHT DOWN RIGHT DOWN LEFT RIGHT DOWN RIGHT RIGHT DOWN</route_3>",
+          "score": 0.0,
+          "route_scores": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "route_vectors": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ]
+        }
+      ],
+      "route_scores": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "best_at_values": {
+        "1": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "3": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "6": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "9": [
+          0.0
+        ]
+      },
+      "completion_positive_rate": 0.0,
+      "route_positive_rate": 0.0,
+      "best_at_1": 0.0,
+      "best_at_3": 0.0,
+      "best_at_6": 0.0,
+      "best_at_9": 0.0,
+      "route_best_at_1": 0.0,
+      "route_best_at_3": 0.0,
+      "route_best_at_6": 0.0,
+      "route_best_at_9": 0.0,
+      "rollout_best_at_1": 0.0,
+      "rollout_best_at_3": 0.0,
+      "rollout_best_at_6": 0.0,
+      "rollout_best_at_9": 0.0
+    },
+    {
+      "seed": 4254,
+      "diversity": 0.0,
+      "rollout_scores": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "completion_scores": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "completion_route_scores": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "completion_route_vectors": [
+        [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ]
+      ],
+      "rollouts": [
+        {
+          "rollout_index": 0,
+          "completion": "The maze is a 7x7 grid with starting point S at (0,5), ending point E at (6,0). There are several key tiles to collect: 5 Gold (G), 5 Diamond (D), 5 Lava (L), and 1 Bonus (B). The path must avoid lava and reach E, collecting items before that.\n\n### Route_1:\n<route_1>UP LEFT LEFT DOWN LEFT DOWN RIGHT RIGHT DOWN RIGHT DOWN</route_1>\n\n### Route_2:\n<route_2>DOWN RIGHT RIGHT DOWN LEFT LEFT DOWN RIGHT RIGHT DOWN RIGHT</route_2>\n\n### Route_3:\n<route_3>LEFT DOWN RIGHT DOWN LEFT RIGHT DOWN RIGHT RIGHT DOWN LEFT</route_3>",
+          "score": 0.0,
+          "route_scores": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "route_vectors": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ]
+        },
+        {
+          "rollout_index": 1,
+          "completion": "The maze is a 7x7 grid with starting point S at (0, 5), ending point E at (6, 0). There are multiple tiles to collect: 5 Gold (G), 5 Diamond (D), 5 Lava (L), and 1 Bonus (B). You must avoid lava and reach E. Each route has a 19-step limit, and you must collect items before reaching E.\n\n### Route 1\n<route_1>UP LEFT DOWN LEFT DOWN RIGHT DOWN RIGHT RIGHT DOWN DOWN RIGHT DOWN RIGHT RIGHT</route_1>\n\n### Route 2\n<route_2>DOWN RIGHT DOWN RIGHT LEFT RIGHT RIGHT DOWN LEFT RIGHT DOWN RIGHT DOWN RIGHT</route_2>\n\n### Route 3\n<route_3>LEFT DOWN RIGHT DOWN RIGHT DOWN LEFT RIGHT DOWN RIGHT RIGHT RIGHT DOWN RIGHT DOWN</route_3>",
+          "score": 0.0,
+          "route_scores": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "route_vectors": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ]
+        },
+        {
+          "rollout_index": 2,
+          "completion": "The maze is a 7x7 grid with starting point S at (0, 5), ending point E at (6, 0). There are several tiles to collect: 5 Gold (G), 5 Diamond (D), 5 Lava (L), and 1 Bonus (B). The challenge is to navigate from S to E, collecting items while avoiding lava and ensuring you reach E before being blocked.\n\n### Route_1:\n<route_1>UP LEFT LEFT DOWN LEFT DOWN RIGHT RIGHT DOWN RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT</route_1>\n\n### Route_2:\n<route_2>DOWN LEFT LEFT DOWN LEFT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT</route_2>\n\n### Route_3:\n<route_3>RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_3>",
+          "score": 0.0,
+          "route_scores": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "route_vectors": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ]
+        }
+      ],
+      "route_scores": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "best_at_values": {
+        "1": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "3": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "6": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "9": [
+          0.0
+        ]
+      },
+      "completion_positive_rate": 0.0,
+      "route_positive_rate": 0.0,
+      "best_at_1": 0.0,
+      "best_at_3": 0.0,
+      "best_at_6": 0.0,
+      "best_at_9": 0.0,
+      "route_best_at_1": 0.0,
+      "route_best_at_3": 0.0,
+      "route_best_at_6": 0.0,
+      "route_best_at_9": 0.0,
+      "rollout_best_at_1": 0.0,
+      "rollout_best_at_3": 0.0,
+      "rollout_best_at_6": 0.0,
+      "rollout_best_at_9": 0.0
+    },
+    {
+      "seed": 4255,
+      "diversity": 0.0,
+      "rollout_scores": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "completion_scores": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "completion_route_scores": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "completion_route_vectors": [
+        [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ]
+      ],
+      "rollouts": [
+        {
+          "rollout_index": 0,
+          "completion": "The maze is a 7x7 grid with starting point S at (0,0), ending point E at (6,6). There are several tiles to collect: 3 Gold (G), 4 Diamond (D), 1 Bonus (B), and 5 Lava (L). The challenge is to navigate from S to E while avoiding lava, collecting items, and reaching E without stepping on lava.\n\n### Route 1:  \n<route_1>UP RIGHT DOWN LEFT DOWN RIGHT DOWN LEFT DOWN RIGHT DOWN RIGHT DOWN</route_1>\n\n### Route 2:  \n<route_2>DOWN LEFT DOWN LEFT DOWN RIGHT RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_2>\n\n### Route 3:  \n<route_3>LEFT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN LEFT DOWN RIGHT DOWN</route_3>",
+          "score": 0.0,
+          "route_scores": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "route_vectors": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ]
+        },
+        {
+          "rollout_index": 1,
+          "completion": "The maze is a 7x7 grid with starting point S at (0,0), ending point E at (6,6). There are several tiles to collect: 3 Gold (G), 4 Diamond (D), 1 Bonus (B), and 5 Lava (L). The challenge is to navigate from S to E while collecting items and avoiding lava, with a 19-step limit.\n\n### Route 1:\n<route_1>UP LEFT LEFT DOWN RIGHT RIGHT RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_1>\n\n### Route 2:\n<route_2>DOWN RIGHT RIGHT DOWN LEFT LEFT LEFT DOWN RIGHT RIGHT RIGHT DOWN</route_2>\n\n### Route 3:\n<route_3>LEFT DOWN RIGHT DOWN RIGHT RIGHT LEFT DOWN RIGHT RIGHT DOWN RIGHT</route_3>",
+          "score": 0.0,
+          "route_scores": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "route_vectors": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ]
+        },
+        {
+          "rollout_index": 2,
+          "completion": "The maze is a 7x7 grid with starting point S at (0,0), ending point E at (6,6). There are several key tiles to collect: 3 Gold (G), 4 Diamonds (D), 1 Bonus (B), and 5 Lava (L). The goal is to navigate from S to E, collecting items before reaching E, while avoiding lava.\n\n### Route 1:\n<route_1>UP RIGHT DOWN LEFT DOWN RIGHT RIGHT RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_1>\n\n### Route 2:\n<route_2>DOWN LEFT LEFT DOWN RIGHT RIGHT RIGHT DOWN LEFT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_2>\n\n### Route 3:\n<route_3>LEFT DOWN RIGHT DOWN RIGHT RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT</route_3>",
+          "score": 0.0,
+          "route_scores": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "route_vectors": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ]
+        }
+      ],
+      "route_scores": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "best_at_values": {
+        "1": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "3": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "6": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "9": [
+          0.0
+        ]
+      },
+      "completion_positive_rate": 0.0,
+      "route_positive_rate": 0.0,
+      "best_at_1": 0.0,
+      "best_at_3": 0.0,
+      "best_at_6": 0.0,
+      "best_at_9": 0.0,
+      "route_best_at_1": 0.0,
+      "route_best_at_3": 0.0,
+      "route_best_at_6": 0.0,
+      "route_best_at_9": 0.0,
+      "rollout_best_at_1": 0.0,
+      "rollout_best_at_3": 0.0,
+      "rollout_best_at_6": 0.0,
+      "rollout_best_at_9": 0.0
+    },
+    {
+      "seed": 4256,
+      "diversity": 0.0,
+      "rollout_scores": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "completion_scores": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "completion_route_scores": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "completion_route_vectors": [
+        [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ]
+      ],
+      "rollouts": [
+        {
+          "rollout_index": 0,
+          "completion": "The maze is a 7x7 grid with starting point S at (0,0) and ending point E at (6,6). The maze contains:\n- 5 Gold (G) tiles\n- 4 Diamond (D) tiles\n- 4 Lava (L) tiles\n- 1 Bonus (B) tile\n\nThe key is to navigate from S to E, collecting G, D, and B tiles, while avoiding Lava. Each route must be exactly 19 steps long and end at E.\n\n### Route 1\n<route_1>UP RIGHT DOWN LEFT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_1>\n\n### Route 2\n<route_2>DOWN LEFT DOWN LEFT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_2>\n\n### Route 3\n<route_3>LEFT DOWN RIGHT DOWN LEFT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_3>",
+          "score": 0.0,
+          "route_scores": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "route_vectors": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ]
+        },
+        {
+          "rollout_index": 1,
+          "completion": "The maze is a 7x7 grid with start at S and end at E. There are several key elements to note:\n\n- **S** is at position (0,0).\n- **E** is at position (6,6).\n- There are **5 Gold (G)**, **4 Diamonds (D)**, **4 Lava (L)**, and **1 Bonus (B)** tiles.\n- **Lava (L)** tiles cannot be stepped on, and stepping on them costs the player.\n- **B** tiles multiply the score when collected.\n- The player must reach **E** after collecting items, and if they don't, the score is zero.\n\n### Route 1\n<route_1>UP RIGHT DOWN RIGHT DOWN LEFT LEFT DOWN RIGHT RIGHT DOWN LEFT DOWN RIGHT</route_1>\n\n### Route 2\n<route_2>DOWN RIGHT DOWN RIGHT RIGHT LEFT LEFT DOWN RIGHT RIGHT DOWN RIGHT LEFT DOWN</route_2>\n\n### Route 3\n<route_3>LEFT DOWN RIGHT DOWN RIGHT RIGHT DOWN LEFT RIGHT DOWN RIGHT LEFT DOWN RIGHT</route_3>",
+          "score": 0.0,
+          "route_scores": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "route_vectors": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ]
+        },
+        {
+          "rollout_index": 2,
+          "completion": "The maze is a 7x7 grid with starting point S and ending point E. There are multiple paths to consider, but the key is to avoid lava (L) and collect gold (G), diamonds (D), and bonus (B) tiles. The challenge is to navigate from S to E in 19 steps while collecting items and avoiding lava.\n\n### Route 1\n<route_1>UP LEFT LEFT DOWN RIGHT RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_1>\n\n### Route 2\n<route_2>DOWN LEFT LEFT DOWN RIGHT RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_2>\n\n### Route 3\n<route_3>LEFT DOWN LEFT DOWN RIGHT RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_3>",
+          "score": 0.0,
+          "route_scores": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "route_vectors": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ]
+        }
+      ],
+      "route_scores": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "best_at_values": {
+        "1": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "3": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "6": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "9": [
+          0.0
+        ]
+      },
+      "completion_positive_rate": 0.0,
+      "route_positive_rate": 0.0,
+      "best_at_1": 0.0,
+      "best_at_3": 0.0,
+      "best_at_6": 0.0,
+      "best_at_9": 0.0,
+      "route_best_at_1": 0.0,
+      "route_best_at_3": 0.0,
+      "route_best_at_6": 0.0,
+      "route_best_at_9": 0.0,
+      "rollout_best_at_1": 0.0,
+      "rollout_best_at_3": 0.0,
+      "rollout_best_at_6": 0.0,
+      "rollout_best_at_9": 0.0
+    },
+    {
+      "seed": 4257,
+      "diversity": 0.0,
+      "rollout_scores": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "completion_scores": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "completion_route_scores": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "completion_route_vectors": [
+        [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        ]
+      ],
+      "rollouts": [
+        {
+          "rollout_index": 0,
+          "completion": "The maze is a 7x7 grid with starting point S at (0,0), ending point E at (6,6). There are several obstacles (walls, lava), and collectible items (Gold, Diamond, Bonus). The challenge is to find 3 different paths from S to E, collecting items before reaching E.\n\n### Route 1\n<route_1>UP LEFT LEFT DOWN LEFT DOWN RIGHT RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_1>\n\n### Route 2\n<route_2>DOWN RIGHT RIGHT DOWN LEFT LEFT DOWN RIGHT RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_2>\n\n### Route 3\n<route_3>LEFT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT RIGHT DOWN LEFT DOWN RIGHT DOWN RIGHT DOWN</route_3>",
+          "score": 0.0,
+          "route_scores": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "route_vectors": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ]
+        },
+        {
+          "rollout_index": 1,
+          "completion": "<route_1>UP LEFT LEFT DOWN RIGHT LEFT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_1>\n<route_2>DOWN LEFT LEFT DOWN RIGHT LEFT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_2>\n<route_3>LEFT DOWN RIGHT DOWN RIGHT LEFT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN RIGHT DOWN</route_3>",
+          "score": 0.0,
+          "route_scores": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "route_vectors": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ]
+        },
+        {
+          "rollout_index": 2,
+          "completion": "The maze is a 7x7 grid with starting point S at (0,0), ending point E at (6,6). There are several obstacles (Lava, walls), and collectible items (Gold, Diamond, Bonus). The key is to navigate through the maze, collect items, and reach E without stepping on lava.\n\n### Route 1\n<route_1>UP LEFT LEFT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT DOWN RIGHT RIGHT",
+          "score": 0.0,
+          "route_scores": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "route_vectors": [
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          ]
+        }
+      ],
+      "route_scores": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "best_at_values": {
+        "1": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "3": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "6": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "9": [
+          0.0
+        ]
+      },
+      "completion_positive_rate": 0.0,
+      "route_positive_rate": 0.0,
+      "best_at_1": 0.0,
+      "best_at_3": 0.0,
+      "best_at_6": 0.0,
+      "best_at_9": 0.0,
+      "route_best_at_1": 0.0,
+      "route_best_at_3": 0.0,
+      "route_best_at_6": 0.0,
+      "route_best_at_9": 0.0,
+      "rollout_best_at_1": 0.0,
+      "rollout_best_at_3": 0.0,
+      "rollout_best_at_6": 0.0,
+      "rollout_best_at_9": 0.0
+    }
+  ]
+}
