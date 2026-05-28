@@ -8,6 +8,21 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 
+RUN_LABELS = {
+    "qwen17b_7x7_adam_multirlvr": "AdamW Multi-RLVR",
+    "qwen17b_7x7_adam_vpo": "AdamW VPO",
+    "qwen17b_7x7_muon_multirlvr": "Muon Multi-RLVR",
+    "qwen17b_7x7_soft_muon_p05_multirlvr": "Soft-Muon p=0.5 (buggy coeffs)",
+}
+
+RUN_COLORS = {
+    "qwen17b_7x7_adam_multirlvr": "#4C78A8",
+    "qwen17b_7x7_adam_vpo": "#E45756",
+    "qwen17b_7x7_muon_multirlvr": "#F58518",
+    "qwen17b_7x7_soft_muon_p05_multirlvr": "#B279A2",
+}
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Plot in-training diversity_eval.jsonl files.")
     parser.add_argument(
@@ -52,22 +67,40 @@ def load_rows(input_glob: str) -> pd.DataFrame:
 
 
 def plot(rows: pd.DataFrame, output_path: Path) -> None:
-    fig, axis = plt.subplots(figsize=(8.2, 5.2))
-    for run, subset in rows.sort_values("step").groupby("run"):
-        axis.plot(
-            subset["step"],
-            subset["mean_chain_diversity"],
-            marker="o",
-            linewidth=2.0,
-            label=run,
-        )
-    axis.set_xlabel("training step")
-    axis.set_ylabel("mean pairwise L1 diversity")
-    axis.set_title("Reward-Space Diversity Over Training")
-    axis.grid(True, axis="y", alpha=0.25)
-    axis.legend()
-    fig.tight_layout()
-    fig.savefig(output_path, dpi=180)
+    panels = [
+        ("mean_chain_diversity", "Mean chain diversity", "pairwise L1"),
+        ("mean_pooled_diversity", "Mean pooled diversity", "pairwise L1"),
+        ("mean_best_at_3", "Mean best@3", "scalar reward"),
+        ("mean_best_at_12", "Mean best@12", "scalar reward"),
+    ]
+
+    fig, axes = plt.subplots(2, 2, figsize=(11.8, 7.8), sharex=True)
+    handles = []
+    labels = []
+    for axis, (column, title, ylabel) in zip(axes.flat, panels, strict=True):
+        for run, subset in rows.sort_values(["run", "step"]).groupby("run"):
+            (line,) = axis.plot(
+                subset["step"],
+                subset[column],
+                marker="o",
+                linewidth=2.0,
+                label=RUN_LABELS.get(run, run),
+                color=RUN_COLORS.get(run),
+            )
+            if column == panels[0][0]:
+                handles.append(line)
+                labels.append(RUN_LABELS.get(run, run))
+        axis.set_title(title)
+        axis.set_ylabel(ylabel)
+        axis.grid(True, axis="y", alpha=0.25)
+
+    for axis in axes[-1]:
+        axis.set_xlabel("training step")
+
+    fig.suptitle("In-Training Diversity Eval")
+    fig.legend(handles, labels, loc="lower center", ncols=2)
+    fig.tight_layout(rect=(0, 0.13, 1, 0.95))
+    fig.savefig(output_path, dpi=180, bbox_inches="tight")
     plt.close(fig)
 
 
