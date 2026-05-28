@@ -15,7 +15,8 @@ SEED="${SEED:-0}"
 EVAL_START="${EVAL_START:-0}"
 RUN_VPO="${RUN_VPO:-1}"
 RUN_MUON="${RUN_MUON:-0}"
-RUN_SOFT_MUON="${RUN_SOFT_MUON:-1}"
+RUN_SOFT_MUON_P04="${RUN_SOFT_MUON_P04:-1}"
+RUN_SOFT_MUON_P05="${RUN_SOFT_MUON_P05:-1}"
 EVAL_PROMPTS="${EVAL_PROMPTS:-16}"
 SAMPLES_PER_PROMPT="${SAMPLES_PER_PROMPT:-10}"
 MAZE_SIZE="${MAZE_SIZE:-7}"
@@ -23,7 +24,8 @@ CHECKPOINT="${CHECKPOINT:-checkpoint-50}"
 BASE_MODEL="${BASE_MODEL:-Qwen/Qwen3-1.7B}"
 ADAM_MULTI_OUTPUT="${ADAM_MULTI_OUTPUT:-outputs/qwen17b_7x7_adam_multirlvr}"
 MUON_MULTI_OUTPUT="${MUON_MULTI_OUTPUT:-outputs/qwen17b_7x7_muon_multirlvr}"
-SOFT_MUON_MULTI_OUTPUT="${SOFT_MUON_MULTI_OUTPUT:-outputs/qwen17b_7x7_soft_muon_p05_multirlvr}"
+SOFT_MUON_P04_OUTPUT="${SOFT_MUON_P04_OUTPUT:-outputs/qwen17b_7x7_soft_muon_p04_fixed_coeffs_multirlvr}"
+SOFT_MUON_P05_OUTPUT="${SOFT_MUON_P05_OUTPUT:-outputs/qwen17b_7x7_soft_muon_p05_fixed_coeffs_multirlvr}"
 ADAM_VPO_OUTPUT="${ADAM_VPO_OUTPUT:-outputs/qwen17b_7x7_adam_vpo}"
 EVAL_OUTPUT_DIR="${EVAL_OUTPUT_DIR:-outputs/qwen17b_7x7_eval}"
 INITIAL_EVAL_OUTPUT="${INITIAL_EVAL_OUTPUT:-$EVAL_OUTPUT_DIR/initial.json}"
@@ -42,10 +44,12 @@ Benchmark run config:
   samples_per_prompt: $SAMPLES_PER_PROMPT
   run_vpo: $RUN_VPO
   run_muon: $RUN_MUON
-  run_soft_muon: $RUN_SOFT_MUON
+  run_soft_muon_p04: $RUN_SOFT_MUON_P04
+  run_soft_muon_p05: $RUN_SOFT_MUON_P05
   adam_multi_output: $ADAM_MULTI_OUTPUT
   muon_multi_output: $MUON_MULTI_OUTPUT
-  soft_muon_multi_output: $SOFT_MUON_MULTI_OUTPUT
+  soft_muon_p04_output: $SOFT_MUON_P04_OUTPUT
+  soft_muon_p05_output: $SOFT_MUON_P05_OUTPUT
   adam_vpo_output: $ADAM_VPO_OUTPUT
   eval_output_dir: $EVAL_OUTPUT_DIR
   initial_eval_output: $INITIAL_EVAL_OUTPUT
@@ -79,10 +83,17 @@ accelerate_launch \
   --config configs/qwen17b_7x7_adam_multirlvr.yaml \
   --seed "$SEED"
 
-if [[ "$RUN_SOFT_MUON" == "1" ]]; then
-  echo "Running Soft-Muon Multi-RLVR minimum run"
+if [[ "$RUN_SOFT_MUON_P04" == "1" ]]; then
+  echo "Running fixed Soft-Muon p=0.4 Multi-RLVR minimum run"
   accelerate_launch \
-    --config configs/qwen17b_7x7_soft_muon_p05_multirlvr.yaml \
+    --config configs/qwen17b_7x7_soft_muon_p04_fixed_coeffs_multirlvr.yaml \
+    --seed "$SEED"
+fi
+
+if [[ "$RUN_SOFT_MUON_P05" == "1" ]]; then
+  echo "Running fixed Soft-Muon p=0.5 Multi-RLVR minimum run"
+  accelerate_launch \
+    --config configs/qwen17b_7x7_soft_muon_p05_fixed_coeffs_multirlvr.yaml \
     --seed "$SEED"
 fi
 
@@ -120,15 +131,26 @@ if [[ "$RUN_MUON" == "1" ]]; then
     --output "$EVAL_OUTPUT_DIR/muon_multirlvr.json"
 fi
 
-if [[ "$RUN_SOFT_MUON" == "1" ]]; then
-  echo "Evaluating Soft-Muon Multi-RLVR"
+if [[ "$RUN_SOFT_MUON_P04" == "1" ]]; then
+  echo "Evaluating fixed Soft-Muon p=0.4 Multi-RLVR"
   python -m diversity_muon.eval_diversity \
-    --model "$SOFT_MUON_MULTI_OUTPUT/$CHECKPOINT" \
+    --model "$SOFT_MUON_P04_OUTPUT/$CHECKPOINT" \
     --maze-size "$MAZE_SIZE" \
     --num-prompts "$EVAL_PROMPTS" \
     --samples-per-prompt "$SAMPLES_PER_PROMPT" \
     --seed "$SEED" \
-    --output "$EVAL_OUTPUT_DIR/soft_muon_p05_multirlvr.json"
+    --output "$EVAL_OUTPUT_DIR/soft_muon_p04_fixed_coeffs_multirlvr.json"
+fi
+
+if [[ "$RUN_SOFT_MUON_P05" == "1" ]]; then
+  echo "Evaluating fixed Soft-Muon p=0.5 Multi-RLVR"
+  python -m diversity_muon.eval_diversity \
+    --model "$SOFT_MUON_P05_OUTPUT/$CHECKPOINT" \
+    --maze-size "$MAZE_SIZE" \
+    --num-prompts "$EVAL_PROMPTS" \
+    --samples-per-prompt "$SAMPLES_PER_PROMPT" \
+    --seed "$SEED" \
+    --output "$EVAL_OUTPUT_DIR/soft_muon_p05_fixed_coeffs_multirlvr.json"
 fi
 
 if [[ "$RUN_VPO" == "1" ]]; then
@@ -154,10 +176,16 @@ import os
 eval_dir = Path(os.environ.get("EVAL_OUTPUT_DIR", "outputs/qwen17b_7x7_eval"))
 for path in sorted(eval_dir.glob("*.json")):
     data = json.loads(path.read_text())
+    best_keys = sorted(
+        [key for key in data if key.startswith("mean_best_at_")],
+        key=lambda key: int(key.rsplit("_", 1)[-1]),
+    )
+    best_summary = ", ".join(
+        f"{key.removeprefix('mean_')}={data[key]:.4f}" for key in best_keys
+    )
     print(
         f"{path.stem}: "
         f"diversity={data['mean_diversity']:.4f}, "
-        f"best@30={data['mean_best_at_30']:.4f}, "
-        f"best@10={data['mean_best_at_10']:.4f}"
+        f"{best_summary}"
     )
 PY

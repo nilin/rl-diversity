@@ -6,8 +6,9 @@ SEED="${SEED:-0}"
 EVAL_PROMPTS="${EVAL_PROMPTS:-16}"
 MAZE_SIZE="${MAZE_SIZE:-7}"
 SAMPLES_PER_PROMPT="${SAMPLES_PER_PROMPT:-10}"
-BEST_AT_KS="${BEST_AT_KS:-1,3,6,9,12,15,18,21,24,27,30}"
+BEST_AT_KS="${BEST_AT_KS:-1,2,3,4,5,6,7,8,9,10}"
 OUTPUT_DIR="${OUTPUT_DIR:-outputs/qwen17b_7x7_best_at_curve}"
+RUN_MUON="${RUN_MUON:-0}"
 
 mkdir -p "$OUTPUT_DIR"
 
@@ -19,6 +20,7 @@ Final eval run config:
   maze_size: $MAZE_SIZE
   samples_per_prompt: $SAMPLES_PER_PROMPT
   best_at_ks: $BEST_AT_KS
+  run_muon: $RUN_MUON
   output_dir: $OUTPUT_DIR
 EOF
 
@@ -38,9 +40,12 @@ eval_run() {
 }
 
 eval_run adam_multirlvr outputs/qwen17b_7x7_adam_multirlvr
-eval_run soft_muon_p05_multirlvr outputs/qwen17b_7x7_soft_muon_p05_multirlvr
+eval_run soft_muon_p04_fixed_coeffs_multirlvr outputs/qwen17b_7x7_soft_muon_p04_fixed_coeffs_multirlvr
+eval_run soft_muon_p05_fixed_coeffs_multirlvr outputs/qwen17b_7x7_soft_muon_p05_fixed_coeffs_multirlvr
 eval_run adam_vpo outputs/qwen17b_7x7_adam_vpo
-eval_run muon_multirlvr outputs/qwen17b_7x7_muon_multirlvr
+if [[ "$RUN_MUON" == "1" ]]; then
+  eval_run muon_multirlvr outputs/qwen17b_7x7_muon_multirlvr
+fi
 
 python - <<'PY'
 from __future__ import annotations
