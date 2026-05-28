@@ -41,7 +41,6 @@ eval_run() {
 
 eval_run adam_multirlvr outputs/qwen17b_7x7_adam_multirlvr
 eval_run soft_muon_p04_fixed_coeffs_multirlvr outputs/qwen17b_7x7_soft_muon_p04_fixed_coeffs_multirlvr
-eval_run soft_muon_p05_fixed_coeffs_multirlvr outputs/qwen17b_7x7_soft_muon_p05_fixed_coeffs_multirlvr
 eval_run adam_vpo outputs/qwen17b_7x7_adam_vpo
 if [[ "$RUN_MUON" == "1" ]]; then
   eval_run muon_multirlvr outputs/qwen17b_7x7_muon_multirlvr
