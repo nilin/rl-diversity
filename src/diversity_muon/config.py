@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 from typing import Any
 
@@ -37,6 +37,7 @@ class ExperimentConfig:
     eval_size: int = 64
     maze_size: int = 9
     max_steps: int = 40
+    global_train_batch_size: int | None = 16
     per_device_train_batch_size: int = 4
     gradient_accumulation_steps: int = 4
     num_generations: int = 8
@@ -72,3 +73,43 @@ def load_config(path: str | Path) -> ExperimentConfig:
     with Path(path).open("r", encoding="utf-8") as handle:
         data: dict[str, Any] = yaml.safe_load(handle) or {}
     return ExperimentConfig(**data)
+
+
+def resolve_batch_config(cfg: ExperimentConfig, *, world_size: int) -> ExperimentConfig:
+    """Keep GRPO's effective train batch stable across data-parallel world sizes."""
+    if world_size < 1:
+        raise ValueError(f"world_size must be >= 1, got {world_size}")
+    target = cfg.global_train_batch_size
+    if target is None:
+        return cfg
+    if target < 1:
+        raise ValueError(f"global_train_batch_size must be >= 1, got {target}")
+    if target % world_size != 0:
+        raise ValueError(
+            "global_train_batch_size must be divisible by the number of processes: "
+            f"{target} % {world_size} != 0"
+        )
+    if target % cfg.num_generations != 0:
+        raise ValueError(
+            "global_train_batch_size must be divisible by num_generations: "
+            f"{target} % {cfg.num_generations} != 0"
+        )
+
+    per_process_batch = target // world_size
+    max_per_device = min(cfg.per_device_train_batch_size, per_process_batch)
+    divisors = [
+        per_device
+        for per_device in range(max_per_device, 0, -1)
+        if per_process_batch % per_device == 0
+    ]
+    if not divisors:
+        raise ValueError(
+            f"Could not resolve per-device batch for per-process batch {per_process_batch}"
+        )
+    per_device_train_batch_size = divisors[0]
+    gradient_accumulation_steps = per_process_batch // per_device_train_batch_size
+    return replace(
+        cfg,
+        per_device_train_batch_size=per_device_train_batch_size,
+        gradient_accumulation_steps=gradient_accumulation_steps,
+    )

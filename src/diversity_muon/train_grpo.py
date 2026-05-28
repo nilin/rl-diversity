@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import os
 import sys
 from dataclasses import replace
 
@@ -8,7 +9,7 @@ import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer, set_seed
 from trl import GRPOConfig, GRPOTrainer
 
-from diversity_muon.config import load_config
+from diversity_muon.config import load_config, resolve_batch_config
 from diversity_muon.maze import build_dataset
 from diversity_muon.objectives import MazeReward, RewardConfig
 from diversity_muon.optim import build_optimizer, build_scheduler
@@ -25,6 +26,14 @@ def _resolve_bf16(requested: bool) -> bool:
     return False
 
 
+def _world_size() -> int:
+    return int(os.environ.get("WORLD_SIZE") or os.environ.get("ACCELERATE_NUM_PROCESSES") or "1")
+
+
+def _is_main_process() -> bool:
+    return int(os.environ.get("RANK") or "0") == 0
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", required=True, help="Path to a YAML experiment config.")
@@ -39,6 +48,22 @@ def main() -> None:
         cfg = replace(cfg, output_dir=args.output_dir)
     if args.run_name is not None:
         cfg = replace(cfg, run_name=args.run_name)
+    world_size = _world_size()
+    cfg = resolve_batch_config(cfg, world_size=world_size)
+    if _is_main_process():
+        effective_batch = (
+            world_size * cfg.per_device_train_batch_size * cfg.gradient_accumulation_steps
+        )
+        print(
+            "Resolved train batch: "
+            f"world_size={world_size} "
+            f"global_train_batch_size={cfg.global_train_batch_size} "
+            f"per_device_train_batch_size={cfg.per_device_train_batch_size} "
+            f"gradient_accumulation_steps={cfg.gradient_accumulation_steps} "
+            f"num_generations={cfg.num_generations} "
+            f"effective_batch={effective_batch}",
+            flush=True,
+        )
     set_seed(cfg.seed)
 
     tokenizer = AutoTokenizer.from_pretrained(
