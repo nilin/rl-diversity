@@ -6,16 +6,18 @@ SEED="${SEED:-0}"
 SEED_LABEL="${SEED_LABEL:-seed${SEED}}"
 EVAL_PROMPTS="${EVAL_PROMPTS:-16}"
 MAZE_SIZE="${MAZE_SIZE:-7}"
-SAMPLES_PER_PROMPT="${SAMPLES_PER_PROMPT:-10}"
+SAMPLES_PER_PROMPT="${SAMPLES_PER_PROMPT:-3}"
 BEST_AT_KS="${BEST_AT_KS:-1,2,3,4,5,6,7,8,9,10}"
 OUTPUT_DIR="${OUTPUT_DIR:-outputs/qwen17b_7x7_best_at_curve_${SEED_LABEL}}"
 RUN_MUON="${RUN_MUON:-0}"
+DEVICE="${DEVICE:-auto}"
 ADAM_MULTI_MODEL_DIR="${ADAM_MULTI_MODEL_DIR:-outputs/qwen17b_7x7_adam_multirlvr_${SEED_LABEL}}"
 SOFT_MUON_P04_MODEL_DIR="${SOFT_MUON_P04_MODEL_DIR:-outputs/qwen17b_7x7_soft_muon_p04_fixed_coeffs_multirlvr_${SEED_LABEL}}"
 ADAM_VPO_MODEL_DIR="${ADAM_VPO_MODEL_DIR:-outputs/qwen17b_7x7_adam_vpo_${SEED_LABEL}}"
 MUON_MULTI_MODEL_DIR="${MUON_MULTI_MODEL_DIR:-outputs/qwen17b_7x7_muon_multirlvr_${SEED_LABEL}}"
 
 mkdir -p "$OUTPUT_DIR"
+export OUTPUT_DIR
 
 cat <<EOF
 Final eval run config:
@@ -26,6 +28,7 @@ Final eval run config:
   maze_size: $MAZE_SIZE
   samples_per_prompt: $SAMPLES_PER_PROMPT
   best_at_ks: $BEST_AT_KS
+  device: $DEVICE
   run_muon: $RUN_MUON
   output_dir: $OUTPUT_DIR
   adam_multi_model_dir: $ADAM_MULTI_MODEL_DIR
@@ -45,6 +48,7 @@ eval_run() {
     --num-prompts "$EVAL_PROMPTS" \
     --samples-per-prompt "$SAMPLES_PER_PROMPT" \
     --best-at-ks "$BEST_AT_KS" \
+    --device "$DEVICE" \
     --seed "$SEED" \
     --output "$OUTPUT_DIR/$name.json"
 }

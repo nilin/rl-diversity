@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -48,19 +49,27 @@ def load_rows(input_glob: str) -> pd.DataFrame:
     loaded: list[dict[str, object]] = []
     for path in sorted(Path().glob(input_glob)):
         run = path.parent.name
+        run_base = re.sub(r"_seed\d+$", "", run)
         for line in path.read_text(encoding="utf-8").splitlines():
             if not line.strip():
                 continue
             row = json.loads(line)
+            high_best_key = (
+                "train_eval/mean_best_at_9"
+                if "train_eval/mean_best_at_9" in row
+                else "train_eval/mean_best_at_12"
+            )
             loaded.append(
                 {
                     "run": run,
+                    "run_base": run_base,
                     "step": row["step"],
                     "mean_chain_diversity": row["train_eval/mean_chain_diversity"],
                     "mean_pooled_diversity": row["train_eval/mean_pooled_diversity"],
                     "mean_best_at_3": row["train_eval/mean_best_at_3"],
                     "mean_best_at_6": row["train_eval/mean_best_at_6"],
-                    "mean_best_at_12": row["train_eval/mean_best_at_12"],
+                    "mean_best_at_high": row[high_best_key],
+                    "high_best_k": int(high_best_key.rsplit("_", 1)[-1]),
                 }
             )
     return pd.DataFrame(loaded)
@@ -71,26 +80,33 @@ def plot(rows: pd.DataFrame, output_path: Path) -> None:
         ("mean_chain_diversity", "Mean chain diversity", "pairwise L1"),
         ("mean_pooled_diversity", "Mean pooled diversity", "pairwise L1"),
         ("mean_best_at_3", "Mean best@3", "scalar reward"),
-        ("mean_best_at_12", "Mean best@12", "scalar reward"),
+        ("mean_best_at_high", "Mean high-k best", "scalar reward"),
     ]
 
     fig, axes = plt.subplots(2, 2, figsize=(11.8, 7.8), sharex=True)
     handles = []
     labels = []
     for axis, (column, title, ylabel) in zip(axes.flat, panels, strict=True):
+        title_text = title
         for run, subset in rows.sort_values(["run", "step"]).groupby("run"):
+            run_base = subset["run_base"].iloc[0]
+            label = RUN_LABELS.get(run_base, run)
             (line,) = axis.plot(
                 subset["step"],
                 subset[column],
                 marker="o",
                 linewidth=2.0,
-                label=RUN_LABELS.get(run, run),
-                color=RUN_COLORS.get(run),
+                label=label,
+                color=RUN_COLORS.get(run_base),
             )
             if column == panels[0][0]:
                 handles.append(line)
-                labels.append(RUN_LABELS.get(run, run))
-        axis.set_title(title)
+                labels.append(label)
+        if column == "mean_best_at_high" and "high_best_k" in rows:
+            high_ks = sorted(rows["high_best_k"].dropna().unique())
+            if len(high_ks) == 1:
+                title_text = f"Mean best@{int(high_ks[0])}"
+        axis.set_title(title_text)
         axis.set_ylabel(ylabel)
         axis.grid(True, axis="y", alpha=0.25)
 

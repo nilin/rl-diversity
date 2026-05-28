@@ -41,4 +41,4 @@ bf16: true
 seed: 0
 diversity_eval_steps: 10
 diversity_eval_prompts: 16
-diversity_eval_samples_per_prompt: 4
+diversity_eval_samples_per_prompt: 3

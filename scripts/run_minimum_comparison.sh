@@ -18,10 +18,11 @@ RUN_VPO="${RUN_VPO:-1}"
 RUN_MUON="${RUN_MUON:-0}"
 RUN_SOFT_MUON_P04="${RUN_SOFT_MUON_P04:-1}"
 EVAL_PROMPTS="${EVAL_PROMPTS:-16}"
-SAMPLES_PER_PROMPT="${SAMPLES_PER_PROMPT:-10}"
+SAMPLES_PER_PROMPT="${SAMPLES_PER_PROMPT:-3}"
 MAZE_SIZE="${MAZE_SIZE:-7}"
 CHECKPOINT="${CHECKPOINT:-checkpoint-50}"
 BASE_MODEL="${BASE_MODEL:-Qwen/Qwen3-1.7B}"
+EVAL_DEVICE="${EVAL_DEVICE:-auto}"
 ADAM_MULTI_RUN_NAME="${ADAM_MULTI_RUN_NAME:-qwen17b_7x7_adam_multirlvr_${SEED_LABEL}}"
 MUON_MULTI_RUN_NAME="${MUON_MULTI_RUN_NAME:-qwen17b_7x7_muon_multirlvr_${SEED_LABEL}}"
 SOFT_MUON_P04_RUN_NAME="${SOFT_MUON_P04_RUN_NAME:-qwen17b_7x7_soft_muon_p04_fixed_coeffs_multirlvr_${SEED_LABEL}}"
@@ -34,6 +35,7 @@ EVAL_OUTPUT_DIR="${EVAL_OUTPUT_DIR:-outputs/qwen17b_7x7_eval_${SEED_LABEL}}"
 INITIAL_EVAL_OUTPUT="${INITIAL_EVAL_OUTPUT:-$EVAL_OUTPUT_DIR/initial.json}"
 
 mkdir -p "$EVAL_OUTPUT_DIR"
+export EVAL_OUTPUT_DIR
 
 cat <<EOF
 Benchmark run config:
@@ -46,6 +48,7 @@ Benchmark run config:
   base_model: $BASE_MODEL
   eval_prompts: $EVAL_PROMPTS
   samples_per_prompt: $SAMPLES_PER_PROMPT
+  eval_device: $EVAL_DEVICE
   run_vpo: $RUN_VPO
   run_muon: $RUN_MUON
   run_soft_muon_p04: $RUN_SOFT_MUON_P04
@@ -79,6 +82,7 @@ if [[ "$EVAL_START" == "1" ]]; then
       --maze-size "$MAZE_SIZE" \
       --num-prompts "$EVAL_PROMPTS" \
       --samples-per-prompt "$SAMPLES_PER_PROMPT" \
+      --device "$EVAL_DEVICE" \
       --seed "$SEED" \
       --output "$INITIAL_EVAL_OUTPUT"
   fi
@@ -124,6 +128,7 @@ python -m diversity_muon.eval_diversity \
   --maze-size "$MAZE_SIZE" \
   --num-prompts "$EVAL_PROMPTS" \
   --samples-per-prompt "$SAMPLES_PER_PROMPT" \
+  --device "$EVAL_DEVICE" \
   --seed "$SEED" \
   --output "$EVAL_OUTPUT_DIR/adam_multirlvr.json"
 
@@ -134,6 +139,7 @@ if [[ "$RUN_MUON" == "1" ]]; then
     --maze-size "$MAZE_SIZE" \
     --num-prompts "$EVAL_PROMPTS" \
     --samples-per-prompt "$SAMPLES_PER_PROMPT" \
+    --device "$EVAL_DEVICE" \
     --seed "$SEED" \
     --output "$EVAL_OUTPUT_DIR/muon_multirlvr.json"
 fi
@@ -145,6 +151,7 @@ if [[ "$RUN_SOFT_MUON_P04" == "1" ]]; then
     --maze-size "$MAZE_SIZE" \
     --num-prompts "$EVAL_PROMPTS" \
     --samples-per-prompt "$SAMPLES_PER_PROMPT" \
+    --device "$EVAL_DEVICE" \
     --seed "$SEED" \
     --output "$EVAL_OUTPUT_DIR/soft_muon_p04_fixed_coeffs_multirlvr.json"
 fi
@@ -156,6 +163,7 @@ if [[ "$RUN_VPO" == "1" ]]; then
     --maze-size "$MAZE_SIZE" \
     --num-prompts "$EVAL_PROMPTS" \
     --samples-per-prompt "$SAMPLES_PER_PROMPT" \
+    --device "$EVAL_DEVICE" \
     --seed "$SEED" \
     --output "$EVAL_OUTPUT_DIR/adam_vpo.json"
 fi
