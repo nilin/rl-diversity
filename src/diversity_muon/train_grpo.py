@@ -5,7 +5,7 @@ import sys
 from dataclasses import replace
 
 import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer
+from transformers import AutoModelForCausalLM, AutoTokenizer, set_seed
 from trl import GRPOConfig, GRPOTrainer
 
 from diversity_muon.config import load_config
@@ -39,6 +39,7 @@ def main() -> None:
         cfg = replace(cfg, output_dir=args.output_dir)
     if args.run_name is not None:
         cfg = replace(cfg, run_name=args.run_name)
+    set_seed(cfg.seed)
 
     tokenizer = AutoTokenizer.from_pretrained(
         cfg.model, padding_side="left", trust_remote_code=True, fix_mistral_regex=True
