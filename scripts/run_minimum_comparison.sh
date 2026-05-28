@@ -23,7 +23,8 @@ RUN_VPO="${RUN_VPO:-1}"
 RUN_MUON="${RUN_MUON:-0}"
 RUN_SOFT_MUON_P04="${RUN_SOFT_MUON_P04:-1}"
 EVAL_PROMPTS="${EVAL_PROMPTS:-16}"
-SAMPLES_PER_PROMPT="${SAMPLES_PER_PROMPT:-3}"
+SAMPLES_PER_PROMPT="${SAMPLES_PER_PROMPT:-10}"
+BEST_AT_KS="${BEST_AT_KS:-1,3,6,9,12,15,18,21,24,27,30}"
 MAZE_SIZE="${MAZE_SIZE:-7}"
 CHECKPOINT="${CHECKPOINT:-checkpoint-50}"
 BASE_MODEL="${BASE_MODEL:-Qwen/Qwen3-1.7B}"
@@ -97,6 +98,7 @@ Benchmark run config:
   base_model: $BASE_MODEL
   eval_prompts: $EVAL_PROMPTS
   samples_per_prompt: $SAMPLES_PER_PROMPT
+  best_at_ks: $BEST_AT_KS
   eval_device: $EVAL_DEVICE
   run_vpo: $RUN_VPO
   run_muon: $RUN_MUON
@@ -123,6 +125,7 @@ EOF
         --maze-size "$MAZE_SIZE" \
         --num-prompts "$EVAL_PROMPTS" \
         --samples-per-prompt "$SAMPLES_PER_PROMPT" \
+        --best-at-ks "$BEST_AT_KS" \
         --device "$EVAL_DEVICE" \
         --seed "$SEED" \
         --output "$INITIAL_EVAL_OUTPUT"
@@ -169,6 +172,7 @@ EOF
     --maze-size "$MAZE_SIZE" \
     --num-prompts "$EVAL_PROMPTS" \
     --samples-per-prompt "$SAMPLES_PER_PROMPT" \
+    --best-at-ks "$BEST_AT_KS" \
     --device "$EVAL_DEVICE" \
     --seed "$SEED" \
     --output "$EVAL_OUTPUT_DIR/adam_multirlvr.json"
@@ -180,6 +184,7 @@ EOF
       --maze-size "$MAZE_SIZE" \
       --num-prompts "$EVAL_PROMPTS" \
       --samples-per-prompt "$SAMPLES_PER_PROMPT" \
+      --best-at-ks "$BEST_AT_KS" \
       --device "$EVAL_DEVICE" \
       --seed "$SEED" \
       --output "$EVAL_OUTPUT_DIR/muon_multirlvr.json"
@@ -192,6 +197,7 @@ EOF
       --maze-size "$MAZE_SIZE" \
       --num-prompts "$EVAL_PROMPTS" \
       --samples-per-prompt "$SAMPLES_PER_PROMPT" \
+      --best-at-ks "$BEST_AT_KS" \
       --device "$EVAL_DEVICE" \
       --seed "$SEED" \
       --output "$EVAL_OUTPUT_DIR/soft_muon_p04_fixed_coeffs_multirlvr.json"
@@ -204,6 +210,7 @@ EOF
       --maze-size "$MAZE_SIZE" \
       --num-prompts "$EVAL_PROMPTS" \
       --samples-per-prompt "$SAMPLES_PER_PROMPT" \
+      --best-at-ks "$BEST_AT_KS" \
       --device "$EVAL_DEVICE" \
       --seed "$SEED" \
       --output "$EVAL_OUTPUT_DIR/adam_vpo.json"
