@@ -132,9 +132,9 @@ count. For example, 1 process becomes `4 x 16`, 4 processes stay `4 x 4`, and
 startup and fails if the requested process count cannot preserve the fixed
 global batch.
 
-The 1.7B/7x7 configs also run a small in-training diversity evaluation every
-10 steps, with paper-style route-level best@1/3/6/9 from 3 multi-answer
-chains per prompt, and append JSONL records to
+The 1.7B/7x7 configs also run a lightweight in-training diversity evaluation every
+10 steps on 4 held-out prompts, with paper-style route-level best@1/3/6/9 from
+3 multi-answer chains per prompt, and append JSONL records to
 `outputs/<run>/diversity_eval.jsonl`.
 Each training run also writes one qualitative sampled example at training start
 and training end to `outputs/<run>/rollout_examples.jsonl`, including the
