@@ -15,6 +15,9 @@ RUN_LABELS = {
     "qwen17b_7x7_muon_multirlvr": "Muon Multi-RLVR",
     "qwen17b_7x7_soft_muon_p04_fixed_coeffs_multirlvr": "Soft-Muon p=0.4 fixed",
     "qwen17b_7x7_soft_muon_p05_fixed_coeffs_multirlvr": "Soft-Muon p=0.5 fixed",
+    "qwen17b_7x7_soft_muon_p07_fixed_coeffs_multirlvr": "Soft-Muon p=0.7 fixed",
+    "qwen17b_7x7_soft_muon_p07_fixed_coeffs_multirlvr_lr3x": "Soft-Muon p=0.7 fixed LR 3x",
+    "qwen17b_7x7_soft_muon_p07_fixed_coeffs_multirlvr_lr10x": "Soft-Muon p=0.7 fixed LR 10x",
 }
 
 RUN_COLORS = {
@@ -23,6 +26,9 @@ RUN_COLORS = {
     "qwen17b_7x7_muon_multirlvr": "#F58518",
     "qwen17b_7x7_soft_muon_p04_fixed_coeffs_multirlvr": "#54A24B",
     "qwen17b_7x7_soft_muon_p05_fixed_coeffs_multirlvr": "#B279A2",
+    "qwen17b_7x7_soft_muon_p07_fixed_coeffs_multirlvr": "#72B7B2",
+    "qwen17b_7x7_soft_muon_p07_fixed_coeffs_multirlvr_lr3x": "#9D755D",
+    "qwen17b_7x7_soft_muon_p07_fixed_coeffs_multirlvr_lr10x": "#BAB0AC",
 }
 
 

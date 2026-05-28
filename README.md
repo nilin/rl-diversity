@@ -78,6 +78,14 @@ accelerate launch -m diversity_muon.train_grpo \
   --config configs/qwen17b_7x7_soft_muon_p04_fixed_coeffs_multirlvr.yaml
 ```
 
+Fixed Soft-Muon p=0.7 configs are also available at the base learning rate and
+the 3x/10x learning-rate sweep points:
+
+```bash
+accelerate launch -m diversity_muon.train_grpo \
+  --config configs/qwen17b_7x7_soft_muon_p07_fixed_coeffs_multirlvr.yaml
+```
+
 Optional normal Muon Multi-RLVR, Qwen3-1.7B on 7x7 mazes:
 
 ```bash

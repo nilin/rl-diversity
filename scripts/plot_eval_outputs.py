@@ -13,6 +13,9 @@ RUN_LABELS = {
     "muon_multirlvr": "Muon Multi-RLVR",
     "soft_muon_p04_fixed_coeffs_multirlvr": "Soft-Muon p=0.4 fixed",
     "soft_muon_p05_fixed_coeffs_multirlvr": "Soft-Muon p=0.5 fixed",
+    "soft_muon_p07_fixed_coeffs_multirlvr": "Soft-Muon p=0.7 fixed",
+    "soft_muon_p07_fixed_coeffs_multirlvr_lr3x": "Soft-Muon p=0.7 fixed LR 3x",
+    "soft_muon_p07_fixed_coeffs_multirlvr_lr10x": "Soft-Muon p=0.7 fixed LR 10x",
     "adam_vpo": "AdamW VPO",
 }
 
@@ -21,6 +24,9 @@ RUN_COLORS = {
     "muon_multirlvr": "#F58518",
     "soft_muon_p04_fixed_coeffs_multirlvr": "#54A24B",
     "soft_muon_p05_fixed_coeffs_multirlvr": "#B279A2",
+    "soft_muon_p07_fixed_coeffs_multirlvr": "#72B7B2",
+    "soft_muon_p07_fixed_coeffs_multirlvr_lr3x": "#9D755D",
+    "soft_muon_p07_fixed_coeffs_multirlvr_lr10x": "#BAB0AC",
     "adam_vpo": "#E45756",
 }
 
