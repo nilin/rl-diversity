@@ -27,6 +27,24 @@ EVAL_OUTPUT_DIR="${EVAL_OUTPUT_DIR:-outputs/qwen17b_7x7_eval}"
 
 mkdir -p "$EVAL_OUTPUT_DIR"
 
+cat <<EOF
+Benchmark run config:
+  seed: $SEED
+  num_processes: ${NUM_PROCESSES:-default}
+  checkpoint: $CHECKPOINT
+  maze_size: $MAZE_SIZE
+  eval_prompts: $EVAL_PROMPTS
+  samples_per_prompt: $SAMPLES_PER_PROMPT
+  run_vpo: $RUN_VPO
+  run_muon: $RUN_MUON
+  run_soft_muon: $RUN_SOFT_MUON
+  adam_multi_output: $ADAM_MULTI_OUTPUT
+  muon_multi_output: $MUON_MULTI_OUTPUT
+  soft_muon_multi_output: $SOFT_MUON_MULTI_OUTPUT
+  adam_vpo_output: $ADAM_VPO_OUTPUT
+  eval_output_dir: $EVAL_OUTPUT_DIR
+EOF
+
 accelerate_launch() {
   local args=(accelerate launch)
   if [[ -n "$NUM_PROCESSES" ]]; then

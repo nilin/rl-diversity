@@ -11,6 +11,17 @@ OUTPUT_DIR="${OUTPUT_DIR:-outputs/qwen17b_7x7_best_at_curve}"
 
 mkdir -p "$OUTPUT_DIR"
 
+cat <<EOF
+Final eval run config:
+  seed: $SEED
+  checkpoint: $CHECKPOINT
+  eval_prompts: $EVAL_PROMPTS
+  maze_size: $MAZE_SIZE
+  samples_per_prompt: $SAMPLES_PER_PROMPT
+  best_at_ks: $BEST_AT_KS
+  output_dir: $OUTPUT_DIR
+EOF
+
 eval_run() {
   local name="$1"
   local model_dir="$2"
