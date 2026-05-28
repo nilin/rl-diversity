@@ -1,8 +1,12 @@
 # Diversity in RL Finetuning through Muon Variants
 
-Small experiments for testing whether Muon or Soft-Muon reduces scalar-RL diversity collapse on the VPO paper's Maze-style setting.
+Small experiments for testing whether Muon or Soft-Muon reduces scalar-RL
+diversity collapse on the Maze-style setting from
+[Vector Policy Optimization: Training for Diversity Improves Test-Time Search](https://arxiv.org/abs/2605.22817).
 
-This repo is a fast prototype, not an exact reproduction of the paper. The paper does not release its Maze generator or training code. The implementation here keeps the important mechanism fixed:
+This repo is a fast prototype, not an exact reproduction of the paper. The
+paper does not release its Maze generator or training code. The implementation
+here keeps the important mechanism fixed:
 
 - multi-answer prompts with `m=3` route candidates
 - reward vector `[completion, gold, diamond, avoid_lava]`
@@ -10,6 +14,30 @@ This repo is a fast prototype, not an exact reproduction of the paper. The paper
 - VPO-style set reward from Dirichlet-sampled scalarizations
 - AdamW vs Soft-Muon/Muon optimizer swap
 - reward-space diversity evaluation
+
+## VPO Implementation Notes
+
+The VPO paper trains on multi-answer chains: one model completion contains
+`m=3` candidate answers. Each candidate receives a vector reward `r(x, y)`.
+For Maze, the paper uses four reward components and the scalar GRPO baseline is
+their uniform mean. This repo uses `[completion, gold, diamond, avoid_lava]`,
+also scalarized by the uniform mean for Multi-RLVR.
+
+For VPO, each generated chain is scored as:
+
+```text
+mean over K samples w ~ Dirichlet(1): max route in chain of dot(w, route_reward)
+```
+
+That scalar set reward is then handed to TRL's `GRPOTrainer`, which computes the
+usual group-relative advantage over `num_generations` rollouts. The sampled
+Dirichlet weights are shared across all rollouts of the same prompt inside a
+reward call, matching the paper's requirement that the `G` rollouts in a GRPO
+group be evaluated under the same `K` scalarization draws.
+
+The remaining differences are intentional prototype choices: this uses TRL
+instead of veRL, runs 7x7 Qwen3-1.7B smoke benchmarks by default rather than the
+paper's 9x9/Qwen3-4B Maze setup, and keeps the Maze generator local.
 
 ## Install
 
@@ -106,6 +134,25 @@ python scripts/plot_training_diversity.py
 ```
 
 ## Evaluation Metric Convention
+
+The diversity metrics are reward-space metrics, not text-edit or route-shape
+metrics. Each route candidate is converted into the vector
+`[completion, gold, diamond, avoid_lava]`, with each component in `[0, 1]`.
+Pairwise diversity is the average L1 distance between those vectors, so the
+range is `[0, 4]`. A value of `0` means the candidates scored identically on the
+four reward components, even if their text differs. A larger value means the
+candidate pool covers different reward trade-offs.
+
+There are three related logged fields:
+
+- `maze_reward_space_diversity`: logged during training reward computation; for
+  each multi-answer chain, average pairwise L1 across its `m=3` route vectors,
+  then average over the current reward batch.
+- `train_eval/mean_chain_diversity`: the same per-chain quantity, but computed
+  on the fixed in-training eval prompts.
+- `train_eval/mean_pooled_diversity` and final-eval `mean_diversity`: for each
+  prompt, pool all sampled chains' route vectors together, compute pairwise L1
+  over that larger candidate pool, then average across prompts.
 
 Each sampled completion is a multi-answer rollout containing `m=3` route
 candidates. `mean_best_at_k` follows the VPO paper's candidate-pool convention,

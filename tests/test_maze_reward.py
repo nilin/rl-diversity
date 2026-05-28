@@ -1,3 +1,5 @@
+import numpy as np
+
 from diversity_muon.maze import make_maze
 from diversity_muon.maze_reward import parse_routes, score_completion_routes
 from diversity_muon.objectives import MazeReward, RewardConfig
@@ -93,3 +95,38 @@ def test_vpo_reward_is_scalar():
     )
     assert len(values) == 1
     assert isinstance(values[0], float)
+
+
+def test_vpo_reuses_scalarization_weights_within_prompt_group():
+    class CountingRng:
+        def __init__(self):
+            self.calls = 0
+
+        def dirichlet(self, alpha, size):
+            self.calls += 1
+            weight = np.array([1.0, 0.0, 0.0, 0.0]) if self.calls == 1 else np.array(
+                [0.0, 0.0, 0.0, 1.0]
+            )
+            return np.tile(weight, (size, 1))
+
+    reward = MazeReward(RewardConfig(objective="vpo", vpo_weight_samples=2, seed=123))
+    fake_rng = CountingRng()
+    reward.rng = fake_rng
+
+    values = reward(
+        completions=[
+            "<route_1>RIGHT</route_1><route_2></route_2><route_3></route_3>",
+            "<route_1></route_1><route_2></route_2><route_3></route_3>",
+            "<route_1>RIGHT</route_1><route_2></route_2><route_3></route_3>",
+        ],
+        grid=[["S E"], ["S E"], ["S E"]],
+        start=[[0, 0], [0, 0], [0, 0]],
+        end=[[0, 1], [0, 1], [0, 1]],
+        step_budget=[1, 1, 2],
+        gold_total=[1, 1, 1],
+        diamond_total=[1, 1, 1],
+        lava_total=[1, 1, 1],
+    )
+
+    assert fake_rng.calls == 2
+    assert values == [1.0, 0.0, 1.0]

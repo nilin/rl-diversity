@@ -42,6 +42,7 @@ class MazeReward:
         rewards: list[float] = []
         diversities: list[float] = []
         best_uniforms: list[float] = []
+        vpo_weight_cache: dict[tuple[object, ...], np.ndarray] = {}
         for i, completion in enumerate(completions):
             completion_text = completion_to_text(completion)
             route_vectors = score_completion_routes(
@@ -55,7 +56,21 @@ class MazeReward:
                 lava_total=int(lava_total[i]),
                 expected_routes=self.config.routes,
             )
-            reward = self.score_set(route_vectors)
+            sampled_weights = None
+            if self.config.objective == "vpo":
+                group_key = prompt_group_key(
+                    grid=grid[i],
+                    start=start[i],
+                    end=end[i],
+                    step_budget=int(step_budget[i]),
+                    gold_total=int(gold_total[i]),
+                    diamond_total=int(diamond_total[i]),
+                    lava_total=int(lava_total[i]),
+                )
+                if group_key not in vpo_weight_cache:
+                    vpo_weight_cache[group_key] = self.sample_vpo_weights()
+                sampled_weights = vpo_weight_cache[group_key]
+            reward = self.score_set(route_vectors, sampled_weights=sampled_weights)
             rewards.append(reward)
             diversities.append(pairwise_l1_diversity(route_vectors))
             best_uniforms.append(float(max(np.dot(self.weights, vec) for vec in route_vectors)))
@@ -70,12 +85,18 @@ class MazeReward:
         weights = np.asarray(self.config.scalar_weights, dtype=np.float32)
         return weights / weights.sum()
 
-    def score_set(self, route_vectors: list[np.ndarray]) -> float:
+    def sample_vpo_weights(self) -> np.ndarray:
+        alpha = np.full((4,), self.config.dirichlet_alpha, dtype=np.float32)
+        return self.rng.dirichlet(alpha, size=self.config.vpo_weight_samples)
+
+    def score_set(
+        self, route_vectors: list[np.ndarray], sampled_weights: np.ndarray | None = None
+    ) -> float:
         if self.config.objective == "multirlvr":
             return float(max(np.dot(self.weights, vec) for vec in route_vectors))
         if self.config.objective == "vpo":
-            alpha = np.full((4,), self.config.dirichlet_alpha, dtype=np.float32)
-            sampled_weights = self.rng.dirichlet(alpha, size=self.config.vpo_weight_samples)
+            if sampled_weights is None:
+                sampled_weights = self.sample_vpo_weights()
             values = []
             for weights in sampled_weights:
                 values.append(max(float(np.dot(weights, vec)) for vec in route_vectors))
@@ -93,3 +114,24 @@ def completion_to_text(completion: object) -> str:
     if isinstance(completion, dict):
         return str(completion.get("content", ""))
     return str(completion or "")
+
+
+def prompt_group_key(
+    *,
+    grid: object,
+    start: object,
+    end: object,
+    step_budget: int,
+    gold_total: int,
+    diamond_total: int,
+    lava_total: int,
+) -> tuple[object, ...]:
+    return (
+        tuple(str(row) for row in grid),
+        tuple(int(value) for value in start),
+        tuple(int(value) for value in end),
+        int(step_budget),
+        int(gold_total),
+        int(diamond_total),
+        int(lava_total),
+    )
