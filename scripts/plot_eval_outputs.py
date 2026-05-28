@@ -11,8 +11,6 @@ import pandas as pd
 RUN_LABELS = {
     "adam_multirlvr": "AdamW Multi-RLVR",
     "muon_multirlvr": "Muon Multi-RLVR",
-    "soft_muon_multirlvr": "Soft-Muon Multi-RLVR",
-    "soft_muon_p05_multirlvr": "Soft-Muon p=0.5 (buggy coeffs)",
     "soft_muon_p04_fixed_coeffs_multirlvr": "Soft-Muon p=0.4 fixed",
     "soft_muon_p05_fixed_coeffs_multirlvr": "Soft-Muon p=0.5 fixed",
     "adam_vpo": "AdamW VPO",
@@ -21,8 +19,8 @@ RUN_LABELS = {
 RUN_COLORS = {
     "adam_multirlvr": "#4C78A8",
     "muon_multirlvr": "#F58518",
-    "soft_muon_multirlvr": "#54A24B",
-    "soft_muon_p05_multirlvr": "#B279A2",
+    "soft_muon_p04_fixed_coeffs_multirlvr": "#54A24B",
+    "soft_muon_p05_fixed_coeffs_multirlvr": "#B279A2",
     "adam_vpo": "#E45756",
 }
 

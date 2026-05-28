@@ -17,7 +17,7 @@ soft_muon_power: 0.5
 soft_muon_mix: 1.0
 soft_muon_ns_iterations: 12
 soft_muon_ns_coefficients: [2.0, -1.5, 0.5]
-# Fixed ToolRL weights over phi^0..phi^12 for x^0.5.
+# Fixed constrained-underfit weights over phi^0..phi^12 for x^0.5.
 soft_muon_coefficients:
   - 0.526435170838
   - 0.170757342268

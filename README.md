@@ -43,11 +43,11 @@ accelerate launch -m diversity_muon.train_grpo \
   --config configs/qwen17b_7x7_adam_multirlvr.yaml
 ```
 
-Soft-Muon p=0.5 Multi-RLVR, Qwen3-1.7B on 7x7 mazes:
+Fixed Soft-Muon p=0.4 Multi-RLVR, Qwen3-1.7B on 7x7 mazes:
 
 ```bash
 accelerate launch -m diversity_muon.train_grpo \
-  --config configs/qwen17b_7x7_soft_muon_p05_multirlvr.yaml
+  --config configs/qwen17b_7x7_soft_muon_p04_fixed_coeffs_multirlvr.yaml
 ```
 
 Optional normal Muon Multi-RLVR, Qwen3-1.7B on 7x7 mazes:
@@ -68,10 +68,10 @@ Offline diversity eval for a checkpoint:
 
 ```bash
 python -m diversity_muon.eval_diversity \
-  --model outputs/qwen17b_7x7_soft_muon_p05_multirlvr/checkpoint-40 \
+  --model outputs/qwen17b_7x7_soft_muon_p04_fixed_coeffs_multirlvr_seed0/checkpoint-50 \
   --maze-size 7 \
   --num-prompts 32 \
-  --samples-per-prompt 10
+  --samples-per-prompt 3
 ```
 
 To run the default 7x7 comparison end-to-end:

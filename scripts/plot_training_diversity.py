@@ -13,14 +13,16 @@ RUN_LABELS = {
     "qwen17b_7x7_adam_multirlvr": "AdamW Multi-RLVR",
     "qwen17b_7x7_adam_vpo": "AdamW VPO",
     "qwen17b_7x7_muon_multirlvr": "Muon Multi-RLVR",
-    "qwen17b_7x7_soft_muon_p05_multirlvr": "Soft-Muon p=0.5 (buggy coeffs)",
+    "qwen17b_7x7_soft_muon_p04_fixed_coeffs_multirlvr": "Soft-Muon p=0.4 fixed",
+    "qwen17b_7x7_soft_muon_p05_fixed_coeffs_multirlvr": "Soft-Muon p=0.5 fixed",
 }
 
 RUN_COLORS = {
     "qwen17b_7x7_adam_multirlvr": "#4C78A8",
     "qwen17b_7x7_adam_vpo": "#E45756",
     "qwen17b_7x7_muon_multirlvr": "#F58518",
-    "qwen17b_7x7_soft_muon_p05_multirlvr": "#B279A2",
+    "qwen17b_7x7_soft_muon_p04_fixed_coeffs_multirlvr": "#54A24B",
+    "qwen17b_7x7_soft_muon_p05_fixed_coeffs_multirlvr": "#B279A2",
 }
 
 
