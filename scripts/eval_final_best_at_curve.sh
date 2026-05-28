@@ -2,6 +2,7 @@
 set -euo pipefail
 
 CHECKPOINT="${CHECKPOINT:-checkpoint-40}"
+SEED="${SEED:-0}"
 EVAL_PROMPTS="${EVAL_PROMPTS:-16}"
 MAZE_SIZE="${MAZE_SIZE:-7}"
 SAMPLES_PER_PROMPT="${SAMPLES_PER_PROMPT:-10}"
@@ -21,6 +22,7 @@ eval_run() {
     --num-prompts "$EVAL_PROMPTS" \
     --samples-per-prompt "$SAMPLES_PER_PROMPT" \
     --best-at-ks "$BEST_AT_KS" \
+    --seed "$SEED" \
     --output "$OUTPUT_DIR/$name.json"
 }
 

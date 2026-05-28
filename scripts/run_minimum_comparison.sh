@@ -11,6 +11,7 @@ if [[ "${RUN_LOGGING_ACTIVE:-0}" != "1" ]]; then
 fi
 
 NUM_PROCESSES="${NUM_PROCESSES:-}"
+SEED="${SEED:-0}"
 RUN_VPO="${RUN_VPO:-1}"
 RUN_MUON="${RUN_MUON:-0}"
 RUN_SOFT_MUON="${RUN_SOFT_MUON:-1}"
@@ -36,24 +37,28 @@ accelerate_launch() {
 
 echo "Running AdamW Multi-RLVR minimum run"
 accelerate_launch \
-  --config configs/qwen17b_7x7_adam_multirlvr.yaml
+  --config configs/qwen17b_7x7_adam_multirlvr.yaml \
+  --seed "$SEED"
 
 if [[ "$RUN_SOFT_MUON" == "1" ]]; then
   echo "Running Soft-Muon Multi-RLVR minimum run"
   accelerate_launch \
-    --config configs/qwen17b_7x7_soft_muon_p05_multirlvr.yaml
+    --config configs/qwen17b_7x7_soft_muon_p05_multirlvr.yaml \
+    --seed "$SEED"
 fi
 
 if [[ "$RUN_VPO" == "1" ]]; then
   echo "Running AdamW VPO minimum positive control"
   accelerate_launch \
-    --config configs/qwen17b_7x7_adam_vpo.yaml
+    --config configs/qwen17b_7x7_adam_vpo.yaml \
+    --seed "$SEED"
 fi
 
 if [[ "$RUN_MUON" == "1" ]]; then
   echo "Running Muon Multi-RLVR minimum run"
   accelerate_launch \
-    --config configs/qwen17b_7x7_muon_multirlvr.yaml
+    --config configs/qwen17b_7x7_muon_multirlvr.yaml \
+    --seed "$SEED"
 fi
 
 echo "Evaluating AdamW Multi-RLVR"
@@ -62,6 +67,7 @@ python -m diversity_muon.eval_diversity \
   --maze-size "$MAZE_SIZE" \
   --num-prompts "$EVAL_PROMPTS" \
   --samples-per-prompt "$SAMPLES_PER_PROMPT" \
+  --seed "$SEED" \
   --output "$EVAL_OUTPUT_DIR/adam_multirlvr.json"
 
 if [[ "$RUN_MUON" == "1" ]]; then
@@ -71,6 +77,7 @@ if [[ "$RUN_MUON" == "1" ]]; then
     --maze-size "$MAZE_SIZE" \
     --num-prompts "$EVAL_PROMPTS" \
     --samples-per-prompt "$SAMPLES_PER_PROMPT" \
+    --seed "$SEED" \
     --output "$EVAL_OUTPUT_DIR/muon_multirlvr.json"
 fi
 
@@ -81,6 +88,7 @@ if [[ "$RUN_SOFT_MUON" == "1" ]]; then
     --maze-size "$MAZE_SIZE" \
     --num-prompts "$EVAL_PROMPTS" \
     --samples-per-prompt "$SAMPLES_PER_PROMPT" \
+    --seed "$SEED" \
     --output "$EVAL_OUTPUT_DIR/soft_muon_p05_multirlvr.json"
 fi
 
@@ -91,6 +99,7 @@ if [[ "$RUN_VPO" == "1" ]]; then
     --maze-size "$MAZE_SIZE" \
     --num-prompts "$EVAL_PROMPTS" \
     --samples-per-prompt "$SAMPLES_PER_PROMPT" \
+    --seed "$SEED" \
     --output "$EVAL_OUTPUT_DIR/adam_vpo.json"
 fi
 

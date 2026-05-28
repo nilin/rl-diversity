@@ -20,6 +20,7 @@ def main() -> None:
     parser.add_argument("--num-prompts", type=int, default=32)
     parser.add_argument("--samples-per-prompt", type=int, default=10)
     parser.add_argument("--seed-start", type=int, default=4242)
+    parser.add_argument("--seed", type=int, default=0, help="Random seed for sampled generation.")
     parser.add_argument("--maze-size", type=int, default=9)
     parser.add_argument("--max-new-tokens", type=int, default=256)
     parser.add_argument("--temperature", type=float, default=0.7)
@@ -40,6 +41,10 @@ def main() -> None:
     parser.add_argument("--output", default=None)
     args = parser.parse_args()
     best_at_ks = parse_best_at_ks(args.best_at_ks)
+    np.random.seed(args.seed)
+    torch.manual_seed(args.seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(args.seed)
 
     tokenizer = AutoTokenizer.from_pretrained(
         args.model, padding_side="left", trust_remote_code=True, fix_mistral_regex=True

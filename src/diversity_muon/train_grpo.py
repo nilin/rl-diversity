@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import sys
+from dataclasses import replace
 
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -27,8 +28,11 @@ def _resolve_bf16(requested: bool) -> bool:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", required=True, help="Path to a YAML experiment config.")
+    parser.add_argument("--seed", type=int, default=None, help="Override the config seed.")
     args = parser.parse_args()
     cfg = load_config(args.config)
+    if args.seed is not None:
+        cfg = replace(cfg, seed=args.seed)
 
     tokenizer = AutoTokenizer.from_pretrained(
         cfg.model, padding_side="left", trust_remote_code=True, fix_mistral_regex=True
