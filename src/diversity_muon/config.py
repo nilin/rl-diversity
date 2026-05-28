@@ -37,7 +37,7 @@ class ExperimentConfig:
     eval_size: int = 64
     maze_size: int = 9
     max_steps: int = 40
-    global_train_batch_size: int | None = 16
+    global_train_batch_size: int | None = 64
     per_device_train_batch_size: int = 4
     gradient_accumulation_steps: int = 4
     num_generations: int = 8

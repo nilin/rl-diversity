@@ -123,13 +123,14 @@ after VPO with:
 RUN_MUON=1 ./scripts/run_minimum_comparison.sh
 ```
 
-The configs fix `global_train_batch_size: 16`. `train_grpo.py` rescales
+The configs fix `global_train_batch_size: 64`, matching the old 4-GPU behavior
+of `4 processes x per_device 4 x grad_accum 4`. `train_grpo.py` rescales
 `per_device_train_batch_size` and `gradient_accumulation_steps` from the
-Accelerate world size so the effective GRPO batch stays 16 when changing GPU
-count. For example, the default single-GPU setting is `4 x 4`; with 8 processes
-it becomes `2 x 1`, not an 8x larger batch. The script prints the resolved batch
-settings at startup and fails if the requested process count cannot preserve the
-fixed global batch.
+Accelerate world size so the effective GRPO batch stays 64 when changing GPU
+count. For example, 1 process becomes `4 x 16`, 4 processes stay `4 x 4`, and
+8 processes become `4 x 2`. The script prints the resolved batch settings at
+startup and fails if the requested process count cannot preserve the fixed
+global batch.
 
 The 1.7B/7x7 configs also run a small in-training diversity evaluation every
 10 steps, with paper-style route-level best@1/3/6/9 from 3 multi-answer
