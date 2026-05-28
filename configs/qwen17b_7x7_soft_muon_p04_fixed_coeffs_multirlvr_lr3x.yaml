@@ -1,0 +1,45 @@
+run_name: qwen17b_7x7_soft_muon_p04_fixed_coeffs_multirlvr_lr3x
+model: Qwen/Qwen3-1.7B
+maze_size: 7
+objective: multirlvr
+optimizer: soft_muon
+output_dir: outputs/qwen17b_7x7_soft_muon_p04_fixed_coeffs_multirlvr_lr3x
+train_size: 256
+eval_size: 64
+max_steps: 50
+global_train_batch_size: 64
+per_device_train_batch_size: 4
+gradient_accumulation_steps: 4
+num_generations: 8
+learning_rate: 3.0e-6
+weight_decay: 0.01
+muon_momentum: 0.95
+soft_muon_power: 0.4
+soft_muon_mix: 1.0
+soft_muon_ns_iterations: 12
+soft_muon_ns_coefficients: [2.0, -1.5, 0.5]
+# Fixed constrained-underfit weights over phi^0..phi^12 for x^0.4.
+soft_muon_coefficients:
+  - 0.427359225629
+  - 0.16510668279
+  - 0.0950365524083
+  - 0.0794622422344
+  - 0.0546397807059
+  - 0.0442774112372
+  - 0.0318743547215
+  - 0.0251008327807
+  - 0.0184953624306
+  - 0.014245458414
+  - 0.0137481403409
+  - 0.0
+soft_muon_tail_coefficient: 0.0306539563075
+beta: 1.0e-3
+epsilon: 0.2
+save_steps: 50
+report_to: none
+use_vllm: false
+bf16: true
+seed: 0
+diversity_eval_steps: 10
+diversity_eval_prompts: 4
+diversity_eval_samples_per_prompt: 3
