@@ -13,7 +13,7 @@ from diversity_muon.maze import build_dataset
 from diversity_muon.objectives import MazeReward, RewardConfig
 from diversity_muon.optim import build_optimizer, build_scheduler
 from diversity_muon.prompting import format_chat_prompt
-from diversity_muon.training_eval import DiversityEvalCallback
+from diversity_muon.training_eval import DiversityEvalCallback, RolloutTraceCallback
 
 
 def _resolve_bf16(requested: bool) -> bool:
@@ -123,17 +123,29 @@ def main() -> None:
         eval_dataset=eval_dataset,
         optimizers=(optimizer, scheduler),
     )
-    if cfg.diversity_eval_steps > 0:
-        eval_rows = [
-            dict(row)
-            for row in eval_dataset.select(
-                range(min(cfg.diversity_eval_prompts, len(eval_dataset)))
+    eval_row_count = min(
+        max(cfg.diversity_eval_prompts, cfg.trace_rollout_examples), len(eval_dataset)
+    )
+    eval_rows = [dict(row) for row in eval_dataset.select(range(eval_row_count))]
+    if cfg.trace_rollout_examples > 0:
+        trainer.add_callback(
+            RolloutTraceCallback(
+                tokenizer=tokenizer,
+                rows=eval_rows[: cfg.trace_rollout_examples],
+                output_dir=cfg.output_dir,
+                max_new_tokens=cfg.max_completion_length,
+                temperature=cfg.diversity_eval_temperature,
+                top_p=cfg.diversity_eval_top_p,
+                objective=cfg.objective,
+                vpo_weight_samples=cfg.vpo_weight_samples,
+                seed=cfg.seed,
             )
-        ]
+        )
+    if cfg.diversity_eval_steps > 0:
         trainer.add_callback(
             DiversityEvalCallback(
                 tokenizer=tokenizer,
-                eval_rows=eval_rows,
+                eval_rows=eval_rows[: cfg.diversity_eval_prompts],
                 output_dir=cfg.output_dir,
                 eval_steps=cfg.diversity_eval_steps,
                 samples_per_prompt=cfg.diversity_eval_samples_per_prompt,

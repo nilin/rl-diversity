@@ -65,6 +65,7 @@ class ExperimentConfig:
     diversity_eval_samples_per_prompt: int = 1
     diversity_eval_temperature: float = 0.7
     diversity_eval_top_p: float = 1.0
+    trace_rollout_examples: int = 1
 
 
 def load_config(path: str | Path) -> ExperimentConfig:

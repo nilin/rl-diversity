@@ -10,6 +10,88 @@ from transformers import TrainerCallback
 
 from diversity_muon.eval_diversity import build_prompt_metrics, vector_lists
 from diversity_muon.maze_reward import pairwise_l1_diversity, score_completion_routes
+from diversity_muon.objectives import MazeReward, RewardConfig
+
+
+class RolloutTraceCallback(TrainerCallback):
+    """Save a small qualitative rollout trace at training start and end."""
+
+    def __init__(
+        self,
+        *,
+        tokenizer: Any,
+        rows: list[dict[str, Any]],
+        output_dir: str,
+        max_new_tokens: int,
+        temperature: float,
+        top_p: float,
+        objective: str,
+        vpo_weight_samples: int,
+        seed: int,
+        expected_routes: int = 3,
+    ) -> None:
+        self.tokenizer = tokenizer
+        self.rows = rows
+        self.output_path = Path(output_dir) / "rollout_examples.jsonl"
+        self.max_new_tokens = max_new_tokens
+        self.temperature = temperature
+        self.top_p = top_p
+        self.expected_routes = expected_routes
+        self.reward = MazeReward(
+            RewardConfig(
+                objective=objective,  # type: ignore[arg-type]
+                routes=expected_routes,
+                vpo_weight_samples=vpo_weight_samples,
+                seed=seed,
+            )
+        )
+        self._logged_events: set[str] = set()
+
+    def on_train_begin(self, args, state, control, **kwargs):  # noqa: ANN001
+        return self._maybe_log("train_start", state, control, kwargs)
+
+    def on_train_end(self, args, state, control, **kwargs):  # noqa: ANN001
+        return self._maybe_log("train_end", state, control, kwargs)
+
+    def _maybe_log(self, event: str, state, control, kwargs: dict[str, Any]):  # noqa: ANN001
+        if event in self._logged_events or not self.rows:
+            return control
+        if not getattr(state, "is_world_process_zero", True):
+            return control
+        model = kwargs.get("model")
+        if model is None:
+            return control
+
+        self._logged_events.add(event)
+        self.output_path.parent.mkdir(parents=True, exist_ok=True)
+        with self.output_path.open("a", encoding="utf-8") as handle:
+            records = [
+                sample_rollout_trace(
+                    model=model,
+                    tokenizer=self.tokenizer,
+                    row=row,
+                    reward=self.reward,
+                    event=event,
+                    step=int(state.global_step),
+                    example_index=example_index,
+                    max_new_tokens=self.max_new_tokens,
+                    temperature=self.temperature,
+                    top_p=self.top_p,
+                    expected_routes=self.expected_routes,
+                )
+                for example_index, row in enumerate(self.rows)
+            ]
+            for record in records:
+                handle.write(json.dumps(record, sort_keys=True) + "\n")
+        print(
+            "rollout_trace "
+            f"event={event} "
+            f"step={int(state.global_step)} "
+            f"examples={len(records)} "
+            f"first_reward={records[0]['reward']:.4f}",
+            flush=True,
+        )
+        return control
 
 
 class DiversityEvalCallback(TrainerCallback):
@@ -175,6 +257,68 @@ def evaluate_diversity(
         "train_eval/expected_routes": float(expected_routes),
         "train_eval/prompt_metrics": prompt_metrics,
     }
+
+
+def sample_rollout_trace(
+    *,
+    model,
+    tokenizer,
+    row: dict[str, Any],
+    reward: MazeReward,
+    event: str,
+    step: int,
+    example_index: int,
+    max_new_tokens: int,
+    temperature: float,
+    top_p: float,
+    expected_routes: int = 3,
+) -> dict[str, Any]:
+    weights = np.full((4,), 0.25, dtype=np.float32)
+    was_training = model.training
+    model.eval()
+    try:
+        encoded = tokenizer([row["prompt"]], return_tensors="pt").to(_model_device(model))
+        with torch.no_grad():
+            generated = model.generate(
+                **encoded,
+                do_sample=True,
+                temperature=temperature,
+                top_p=top_p,
+                max_new_tokens=max_new_tokens,
+                pad_token_id=tokenizer.pad_token_id,
+                eos_token_id=tokenizer.eos_token_id,
+            )
+        completion_ids = generated[0, encoded["input_ids"].shape[1] :]
+        completion = tokenizer.decode(completion_ids, skip_special_tokens=True)
+        route_vectors = score_completion_routes(
+            completion,
+            grid=row["grid"],
+            start=row["start"],
+            end=row["end"],
+            step_budget=row["step_budget"],
+            gold_total=row["gold_total"],
+            diamond_total=row["diamond_total"],
+            lava_total=row["lava_total"],
+            expected_routes=expected_routes,
+        )
+        route_scores = [float(np.dot(weights, vec)) for vec in route_vectors]
+        objective_reward = reward.score_set(route_vectors)
+        return {
+            "event": event,
+            "step": step,
+            "example_index": example_index,
+            "seed": int(row["seed"]),
+            "prompt": row["prompt"],
+            "completion": completion,
+            "objective": reward.config.objective,
+            "reward": float(objective_reward),
+            "uniform_route_scores": route_scores,
+            "route_vectors": vector_lists(route_vectors),
+            "chain_diversity": pairwise_l1_diversity(route_vectors),
+        }
+    finally:
+        if was_training:
+            model.train()
 
 
 def best_at_k(scores: list[float], k: int) -> float:

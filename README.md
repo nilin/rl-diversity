@@ -127,6 +127,11 @@ The 1.7B/7x7 configs also run a small in-training diversity evaluation every
 10 steps, with paper-style route-level best@1/3/6/9 from 3 multi-answer
 chains per prompt, and append JSONL records to
 `outputs/<run>/diversity_eval.jsonl`.
+Each training run also writes one qualitative sampled example at training start
+and training end to `outputs/<run>/rollout_examples.jsonl`, including the
+formatted prompt, sampled rollout, objective reward, route vectors, uniform
+route scores, and chain diversity. Set `trace_rollout_examples: 0` in a config
+to disable this, or raise it to log a few examples.
 Plot those Figure-6-style curves with:
 
 ```bash
