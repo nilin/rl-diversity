@@ -80,8 +80,16 @@ To run the default 7x7 comparison end-to-end:
 ./scripts/run_minimum_comparison.sh
 ```
 
-By default this runs AdamW Multi-RLVR, Soft-Muon p=0.5 Multi-RLVR, and AdamW
-VPO. Add normal Muon after VPO with:
+By default this runs seed 0 for AdamW Multi-RLVR, fixed Soft-Muon p=0.4
+Multi-RLVR, and AdamW VPO. To run seeds 0, 1, and 2 in sequence:
+
+```bash
+./scripts/run_minimum_comparison.sh 3
+```
+
+Set `SEED` to change the starting seed. For example, `SEED=4
+./scripts/run_minimum_comparison.sh 2` runs seeds 4 and 5. Add normal Muon
+after VPO with:
 
 ```bash
 RUN_MUON=1 ./scripts/run_minimum_comparison.sh
