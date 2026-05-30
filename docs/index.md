@@ -17,7 +17,12 @@ where `s_i>0` is the corresponding singular value. [Muon](https://kellerjordan.g
 
 ## Diversity collapse in RL
 
-In RL we only get one reward signal per reponse (or a few in the case of VPO). Therefore the estimated policy gradient may not have enough information to estimate 1000s of input-output relationships, so the Muon update becomes dominated by noise. On the other hand collapse of diversity and exploration is a well-known issue that can arise in RL finetuning of LLMs, and methods such as [vector policy optimization (VPO)](https://arxiv.org/abs/2605.22817) seek to ameliorate this. We explore whether [Soft-Muon](https://nilin.github.io/contra-muon-and-soft-muon/) provides an alternative way to encourage diversity and exploration during RL, while being more robust to noisy policy gradients than full Muon.
+In RL we only get one reward signal per reponse (or a few in the case of VPO). Therefore the estimated policy gradient may not have enough information to estimate 1000s of input-output relationships, so the Muon update becomes dominated by noise. On the other hand collapse of diversity and exploration is a well-known issue that can arise in RL finetuning of LLMs, and methods such as [vector policy optimization (VPO)](https://arxiv.org/abs/2605.22817) seek to ameliorate this. 
+
+
+## Soft Muon
+
+We explore whether [Soft-Muon](https://nilin.github.io/contra-muon-and-soft-muon/) provides an alternative way to encourage diversity and exploration during RL, while being more robust to noisy policy gradients than full Muon.
 
 ![Cumulative p=0.4 approximation built from stacked Newton-Schulz iterates.](assets/soft-muon-p04-cumulative-fit.png)
 
