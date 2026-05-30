@@ -13,7 +13,7 @@ The 2D weights `W` in a neural network or transformer represent linear mappings 
 
 `s_i output_i input_i^T`
 
-where `s_i>0` is the corresponding singular value. Muon approximates the transformation of the gradient `G` where all the `s_i` are scaled to the same value. We can think of this as increasing the diversity of the learning signal instead of letting it be dominated by a few relationships `output_i input_i^T` with large singular value.
+where `s_i>0` is the corresponding singular value. [Muon](https://kellerjordan.github.io/posts/muon/) approximates the transformation of the gradient `G` where all the `s_i` are scaled to the same value. We can think of this as increasing the diversity of the learning signal instead of letting it be dominated by a few relationships `output_i input_i^T` with large singular value.
 
 ## Diversity collapse in RL
 
