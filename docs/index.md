@@ -7,9 +7,13 @@ title: RL Diversity with Soft-Muon
 
 2026/5/30
 
-## Muon and diversity
+## Muon diversifies input-output relationships
 
-The 2D weights `W` in a neural network or transformer represent linear mappings from input activations to outputs. Let `G` be the estimated gradient of the loss with respect to such a weight matrix. The SVD `sum_i s_i output_i input_i^T` of a matrix `G` decomposes it into weighted input-output relationships `s_i output_i input_i^T` where `s_i>0` is the corresponding singular value. Muon approximates the transformation of the gradient `G` where all the `s_i` are scaled to the same value. We can think of this as increasing the diversity of the learning signal instead of letting it be dominated by a few relationships `output_i input_i^T` with large singular value.
+The 2D weights `W` in a neural network or transformer represent linear mappings from input activations to outputs. Let `G` be the estimated gradient of the loss with respect to such a weight matrix. The SVD `sum_i s_i output_i input_i^T` of a matrix `G` decomposes it into weighted input-output relationships 
+
+`s_i output_i input_i^T`
+
+where `s_i>0` is the corresponding singular value. Muon approximates the transformation of the gradient `G` where all the `s_i` are scaled to the same value. We can think of this as increasing the diversity of the learning signal instead of letting it be dominated by a few relationships `output_i input_i^T` with large singular value.
 
 ## Diversity collapse in RL
 
