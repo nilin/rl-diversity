@@ -36,6 +36,7 @@ We run 50 steps and sweng learning rates 1e-6, 3e-6, 1e-5 and picked 3e-6 based 
 
 Please see the full experiment settings at [this repo](https://github.com/nilin/rl-diversity).
 
+
 Best@k comparison for 7x7 Maze RLVR runs at learning rate 3e-6, excluding VPO and k=1.
 
 ![Best@k curve comparing AdamW Multi-RLVR, Soft-Muon p=0.4, and VPO at learning rate 3e-6.](assets/best-at-k-lr3e-6-with-vpo.png)
