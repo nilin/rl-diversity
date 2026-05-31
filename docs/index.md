@@ -24,9 +24,10 @@ In RL we only get one reward signal per reponse (or a few in the case of VPO). T
 
 We explore whether [Soft-Muon](https://nilin.github.io/contra-muon-and-soft-muon/) provides an alternative way to encourage diversity and exploration during RL, while being more robust to noisy policy gradients than full Muon.
 
-![Cumulative p=0.4 approximation built from stacked Newton-Schulz iterates.](assets/soft-muon-p04-cumulative-fit.png)
-
-_Fixed p=0.4 Soft-Muon approximation built as a cumulative stack of standard Muon's Newton-Schulz iterates._
+<figure class="small-fit">
+  <img src="assets/soft-muon-p04-cumulative-fit.png" alt="Cumulative p=0.4 approximation built from stacked Newton-Schulz iterates.">
+  <figcaption>Fixed p=0.4 Soft-Muon approximation built as a cumulative stack of standard Muon's Newton-Schulz iterates.</figcaption>
+</figure>
 
 ## Experiment
 

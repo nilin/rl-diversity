@@ -76,6 +76,34 @@
         font-size: 14px;
         line-height: 1.45;
       }
+
+      figure.small-fit {
+        margin: 28px 0 0;
+        padding: 18px;
+        background: #ffffff;
+        border: 1px solid #d9e0e7;
+        border-radius: 8px;
+      }
+
+      figure.small-fit img {
+        width: 60%;
+        margin: 0 auto;
+      }
+
+      figure.small-fit figcaption {
+        max-width: 760px;
+        margin: 12px auto 0;
+        color: #667381;
+        font-size: 14px;
+        line-height: 1.45;
+        text-align: center;
+      }
+
+      @media (max-width: 760px) {
+        figure.small-fit img {
+          width: 100%;
+        }
+      }
     </style>
   </head>
   <body>
