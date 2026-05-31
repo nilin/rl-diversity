@@ -37,7 +37,7 @@ We run 50 steps and swept learning rates 1e-6, 3e-6, 1e-5 and picked 3e-6 based 
 
 Please see the full experiment settings at [this repo](https://github.com/nilin/rl-diversity).
 
-The plot below reports mean best-route score@k for 7x7 Maze RLVR runs at learning rate 3e-6, excluding k=1. Each route gets a scalar reward from `[completion, gold, diamond, avoid_lava]`, then the evaluator takes the best route score in each k-route pool and averages those best scores.
+The plot below reports mean best-route score@k for 7x7 Maze RLVR runs at learning rate 3e-6. To allow comparison with VPO, the Adam and Muon methods also use rollouts with 3 answer attempts (routes), and each rollout is scored by the best score among the 3 attempts. For each k, the mean is over size-k/3 subsets of rollouts, where each subset is graded by the best score among all k answers among the k/3 rollouts. Diverse responses show up as k which increases with k.  
 
 ![Mean best-route score@k curve comparing AdamW Multi-RLVR, Soft-Muon p=0.4, and VPO at learning rate 3e-6.](assets/best-at-k-lr3e-6-with-vpo.png)
 
