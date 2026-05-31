@@ -32,18 +32,17 @@ _Fixed p=0.4 Soft-Muon approximation built as a cumulative stack of standard Muo
 
 We test Soft-Muon for RL in a setting from the [VPO paper](https://arxiv.org/abs/2605.22817). We use a 7x7 version of the Maze benchmark described in the paper. We compare AdamW GRPO baseline vs Muon GRPO vs AdamW VPO. Like the VPO paper we train on multi-answer chains: one model completion contains m=3 candidate answers (routes). We use multi-answer chains for all methods (AdamW baseline, Muon, and AdamW VPO). For the AdamW and Muon GRPO methods, each rollout is scored by the best route among the 3 following the VPO paper (probably not ideal for these methods for late training). VPO additionally receives a vector reward r(x, y) representing a decomposition of the reward into [completion, gold, diamond, avoid_lava], whereas the other methods get the averaged vector reward.
 
-We run 50 steps and sweng learning rates 1e-6, 3e-6, 1e-5 and picked 3e-6 based on the pass@30 for the AdamW GRPO baseline.
+We run 50 steps and swept learning rates 1e-6, 3e-6, 1e-5 and picked 3e-6 based on mean best-route score@30 for the AdamW GRPO baseline.
 
 Please see the full experiment settings at [this repo](https://github.com/nilin/rl-diversity).
 
+The plot below reports mean best-route score@k for 7x7 Maze RLVR runs at learning rate 3e-6, excluding k=1. This is not pass@k: each route gets a continuous scalar reward from `[completion, gold, diamond, avoid_lava]`, then the evaluator takes the best route score in each k-route pool and averages those best scores.
 
-Best@k comparison for 7x7 Maze RLVR runs at learning rate 3e-6, excluding VPO and k=1.
-
-![Best@k curve comparing AdamW Multi-RLVR, Soft-Muon p=0.4, and VPO at learning rate 3e-6.](assets/best-at-k-lr3e-6-with-vpo.png)
+![Mean best-route score@k curve comparing AdamW Multi-RLVR, Soft-Muon p=0.4, and VPO at learning rate 3e-6.](assets/best-at-k-lr3e-6-with-vpo.png)
 
 <!---
 [View the version including AdamW VPO at LR=3e-6](assets/best-at-k-lr3e-6-with-vpo.png).
-![Best@k curve comparing AdamW Multi-RLVR and Soft-Muon p=0.4 at learning rate 3e-6.](assets/best-at-k-lr3e-6.png)
+![Mean best-route score@k curve comparing AdamW Multi-RLVR and Soft-Muon p=0.4 at learning rate 3e-6.](assets/best-at-k-lr3e-6.png)
 --->
 
-_Mean best@k over route pools for AdamW Multi-RLVR and fixed-coefficient Soft-Muon p=0.4._
+_Mean best-route score@k over route pools for AdamW Multi-RLVR, AdamW VPO, and fixed-coefficient Soft-Muon p=0.4._
