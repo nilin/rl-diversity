@@ -48,6 +48,8 @@ The plot below reports mean best-route score@k for 7x7 Maze RLVR runs at learnin
 
 _Mean best-route score@k over route pools for AdamW Multi-RLVR, AdamW VPO, and fixed-coefficient Soft-Muon p=0.4._
 
-## Related methods
+## Discussion and related methods
 
 [Pion](https://arxiv.org/abs/2605.19282) is a high-pass version of Muon which achieves the same goal of suppressing noisy small singular pairs while keeping Muon behavior for leading singular modes. The Pion paper also identifies RL as a relevant setting due to the low-signal regime. These Muon-like methods encourage diversity at the level of the optimizer and may prove to be to complimentary to methods such as [VPO](https://arxiv.org/abs/2605.22817) which modify the loss to encourage diversity.
+
+Interestingly [PufferLib](https://puffer.ai/blog.html) found standard Muon to be a significant improvement over Adam. I think it's likely that PufferLib's classical RL setting with large numbers of rollouts makes it behave more similarly to the pre-training regime with higher signal to noise, and that this regime benefits the standard Muon which applies full strength to all singular modes.
